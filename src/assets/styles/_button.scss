@@ -1,0 +1,9 @@
+@use "variables" as *;
+.btn {
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: transparent;
+  background-color: $point-color;
+  color: #fff;
+  font: 25px bold;
+}
