@@ -1,6 +1,6 @@
 <template>
-    <div>
-헤더
+    <div class="inner">
+        
     </div>
 </template>
 
