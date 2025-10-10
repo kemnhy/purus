@@ -1,3 +1,6 @@
-@use "variables" as *;
-@use "button" as *;
-@use "card" as *;
+@use "./variables" as *;
+@use "./button" as *;
+@use "./card" as *;
+// @import "./variables";
+// @import "./card";
+// @import "./button";
