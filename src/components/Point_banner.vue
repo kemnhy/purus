@@ -1,7 +1,11 @@
 <template>
-    <div>
-포인트베너
+    <div class="point-banner">
+        <div class="text-box">
+            
+        </div>
     </div>
+
+    
 </template>
 
 <script setup>
