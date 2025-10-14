@@ -14,6 +14,7 @@
 
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
+
 .point-banner {
   background-color: $font-color;
   color: #fff;
@@ -24,14 +25,14 @@
 }
 .inner{
   width: 100%;
-  max-width: 1200px;
+  max-width: 1320px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 24px;
 }
 .text{
-  font-size: $medium-txt-2;
+  font-size:$main-title;
   font-weight: 600;
   margin: 0;
 }
