@@ -48,10 +48,9 @@
         color: #fff;
       }
     }
-    // .btn{
-    //   font-weight: bold;
-    //   font-size: 25px;
-    // }
+    .btn{
+      cursor: pointer;
+    }
   }
 }
 </style>

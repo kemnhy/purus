@@ -1,13 +1,130 @@
 <template>
-    <div>
-과정
+  <div class="process-wrap">
+    <div class="inner">
+      <h2 class="title">청소 과정 한눈에</h2>
+      <div class="slide-wrap">
+        <ul class="process">
+          <li
+            :class="[{ click: current === index }]"
+            v-for="(pro, index) in process"
+            :key="pro.id"
+            @click="current = index"
+          >
+            {{ pro.id }} {{ pro.title }}
+          </li>
+        </ul>
+        <div class="slide">
+          <ul class="slide-list">
+            <li
+              v-for="(image, index) in processImg"
+              :key="image.img"
+              :style="{
+                opacity: current === index ? 1 : 0,
+                visibility: current === index ? 'visible' : 'hidden',
+                transition: 'opacity 0.5s ease',
+              }"
+            >
+              <img :src="image.img" :alt="image.alt" />
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup>
+import { onBeforeUnmount, onMounted, ref } from "vue";
 
+const current = ref(0);
+const process = [
+  { id: "01", title: "제품 완전 분해" },
+  { id: "02", title: "전용 세정제로 세척" },
+  { id: "03", title: "고압 스팀 살균 세척" },
+  { id: "04", title: "친환경 UV 살균 소독" },
+  { id: "05", title: "제품 조립" },
+  { id: "06", title: "테스트 작동" },
+];
+const processImg = [
+  { img: "/images/process1.png", alt: "process1" },
+  { img: "/images/process2.png", alt: "process2" },
+  { img: "/images/process3.png", alt: "process3" },
+  { img: "/images/process4.png", alt: "process4" },
+  { img: "/images/process5.png", alt: "process5" },
+  { img: "/images/process6.png", alt: "process6" },
+];
+// slide
+let interval = null;
+onMounted(() => {
+  interval = setInterval(() => {
+    current.value = (current.value + 1) % process.length;
+  }, 2000);
+});
+//
+onBeforeUnmount(() => {
+  clearInterval(interval);
+});
 </script>
 
 <style lang="scss" scoped>
-
+@use "../assets/styles/variables" as *;
+.process-wrap {
+  margin-bottom: 120px;
+  .inner {
+    .title {
+      text-align: center;
+      font-size: $main-title;
+      margin-bottom: 60px;
+    }
+    .slide-wrap {
+      width: 100%;
+      height: 500px;
+      display: flex;
+      border-radius: 30px;
+      overflow: hidden;
+      .process {
+        width: 40%;
+        height: 100%;
+        li {
+          cursor: pointer;
+          width: 100%;
+          height: calc(100% / 6);
+          display: flex;
+          align-items: center;
+          font-size: $medium-txt-1;
+          color: $font-color;
+          background-color: $main-color;
+          padding-left: 35px;
+          transition: all 0.2s ease;
+          &.click {
+            background-color: #daecf8;
+            font-weight: bold;
+          }
+        }
+      }
+      .slide {
+        width: 60%;
+        height: 100%;
+        .slide-list {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          li {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+            img {
+              width: 100%;
+              height: 100%;
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>
