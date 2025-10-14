@@ -7,7 +7,7 @@
       <div class="esti_wrap">
         <!-- 영역 이름 -->
         <div class="esti_title">
-          <p><i class="fa-solid fa-arrow-left"></i></p>
+          <router-link to="/"><i class="fa-solid fa-arrow-left"></i></router-link>
           <p>견적 확인</p>
           <p></p>
         </div>
@@ -71,9 +71,11 @@
             <p>견적 금액</p>
             <span>(VAT 포함)</span>
           </div>
-          <div class="price_num">{{}}원</div>
+          <div class="price_num">
+            {{ typeof totalPrice === "number" ? totalPrice.toLocaleString() + "원" : totalPrice }}
+          </div>
         </div>
-        <button class="btn">가능한 일정 확인하기</button>
+        <router-link to="/estimate02" class="btn">가능한 일정 확인하기</router-link>
       </div>
     </div>
   </div>
@@ -82,6 +84,8 @@
 <script setup>
 import Header_w from "@/components/Header_w.vue";
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 // 브랜드 목록
 const brandList = [
   { name: "카이저(KAISER)", price: 90000 },
@@ -105,6 +109,19 @@ const gaugeWidth = computed(() => {
   if (selectedIndex.value !== null) return "66%"; // 2단계
   return "33%"; // 1단계 (브랜드 선택 시작)
 });
+
+// 💰 견적 금액 계산
+const totalPrice = computed(() => {
+  if (selectedIndex.value === null) return 0;
+
+  const brandPrice = brandList[selectedIndex.value]?.price;
+  const sizePrice = selectedI.value !== null ? sizeList[selectedI.value]?.price || 0 : 0;
+
+  // 브랜드가 '그 외'면 문자열 반환
+  if (typeof brandPrice !== "number") return brandPrice;
+
+  return brandPrice + sizePrice;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -118,13 +135,14 @@ const gaugeWidth = computed(() => {
 // 영역 이름
 .esti_title {
   display: flex;
-  height: 70px;
+  height: 60px;
   // background-color: aliceblue;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid $grey-color;
-  margin-bottom: 20px;
-  p {
+  margin-bottom: 15px;
+  p,
+  i {
     font-size: $esti-large-txt;
     font-weight: bold;
     color: $font-color;
@@ -133,7 +151,7 @@ const gaugeWidth = computed(() => {
 // 게이지
 .esti_gauge {
   position: relative;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   width: 100%;
   height: 15px;
   border-radius: 10px;
@@ -150,8 +168,11 @@ const gaugeWidth = computed(() => {
     transition: width 0.4s ease;
   }
 }
-.esti_select{
-  
+// 영역에 스크롤
+.esti_select {
+  max-height: calc(100vh - 390px);
+  overflow-y: auto;
+  padding-bottom: 20px;
 }
 // 브랜드 선택, 용량 선택
 .esti_brand,
@@ -171,7 +192,7 @@ const gaugeWidth = computed(() => {
   div {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
   }
   .brand_list,
   .size_list {
@@ -223,7 +244,7 @@ const gaugeWidth = computed(() => {
   border-top: 1px solid $grey-color;
   position: fixed;
   bottom: 0;
-  padding: 20px;
+  padding: 20px 0;
   .price_txt {
     display: flex;
     justify-content: space-between;
@@ -244,6 +265,8 @@ const gaugeWidth = computed(() => {
     }
   }
   .btn {
+    display: inline-block;
+    text-align: center;
     margin: auto;
     width: 100%;
     font-weight: 600;
