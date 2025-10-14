@@ -1,5 +1,5 @@
 <template>
-  <div class="side-menu">
+  <div class="side-menu" :style="{ right: sideMenuRight }">
     <ul>
       <li>
         <a href="#"><img src="/public/images/logo.png" alt="logo" /></a>
@@ -12,10 +12,15 @@
         >
       </li>
     </ul>
+    <button class="close" @click="sideMenuRight = '-1000px'">⨉</button>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+
+const sideMenuRight = ref(0)
+</script>
 
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
@@ -23,7 +28,7 @@
   padding: 30px;
   position: absolute;
   top: 0;
-  right: 0;
+  transition: all 1s ease;
   z-index: 99999;
   width: 18%;
   height: 100vh;
@@ -36,13 +41,14 @@
     li {
       width: 100%;
       img {
-        width: 50%;
+        width: 45%;
       }
       a {
         width: 100%;
         color: #111;
-        font-size: $medium-txt-1;
+        font-size: $medium-txt-2;
         .btn {
+          margin-top: 50px;
           width: 100%;
           display: flex;
           align-items: center;
@@ -50,6 +56,15 @@
         }
       }
     }
+  }
+  .close{
+    border: none;
+    background: none;
+    font-size: $medium-txt-2;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    cursor: pointer;
   }
 }
 </style>

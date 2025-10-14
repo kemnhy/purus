@@ -5,7 +5,6 @@
       <Side_menu />
       <Visual />
     </div>
-
     <Care_reason />
     <Main_banner />
     <Service />
@@ -36,8 +35,10 @@ import Side_menu from "@/components/Side_menu.vue";
 import Visual from "@/components/Visual.vue";
 </script>
 <style lang="scss" scoped>
-.top_wrap{
-    height: 100vh;
-    position: relative;
+.top_wrap {
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  position: relative;
 }
 </style>
