@@ -3,10 +3,10 @@
     <div class="inner">
       <div class="txt">
         <div class="banner-title">
-          <p>Purus에 OO 기사님이 오셨어요!</p>
+          <p>Purus에  제빙기사님이 오셨어요!</p>
           <h2>
-            이러한 불편사항 <br />
-            Purus가 해결해드립니다!
+            불편사항은
+            Purus에게 맡겨주세요!
           </h2>
         </div>
         <div class="animation-txt">
@@ -38,18 +38,20 @@
   background-color: $sub-color;
   .inner {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     .txt {
       width: 60%;
       .banner-title {
         margin-left: 120px;
         p {
-          font-size: $medium-txt-1;
+          font-size: $medium-txt-2;
         }
         h2 {
           color: $point-color;
-          font-size: 60px;
-          padding: 35px 0 75px 0;
+          font-size: 50px;
+          padding: 35px 0 65px 0;
+          max-width: 480px;
+          line-height: 1.1;
         }
       }
       .animation-txt {
@@ -57,12 +59,12 @@
         flex-direction: column;
         gap: 28px;
         .box {
-          width: 580px;
-          height: 130px;
+          width: 550px;
+          height: 110px;
           background-color: $font-color;
           border-radius: 100px;
           &:first-child{
-            margin-left: 120px;
+            margin-left: 150px;
           }
           &:nth-child(2){
             background-color: $point-color;
@@ -78,6 +80,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            line-height: 1.2;
           }
         }
       }
@@ -89,7 +92,7 @@
       display: flex;
       justify-content: flex-end;
       img {
-        width: 95%;
+        width: 90%;
         display: block;
       }
     }
