@@ -1,17 +1,19 @@
 <template>
-  <div class="faq">
-    <h1 class="faq-title">F A Q</h1>
+  <div class="inner">
+    <div class="faq">
+      <h1 class="faq-title">F A Q</h1>
 
-    <div class="faq-item" v-for="(item, index) in faqList" :key="index" :class="{ active: activeIndex === index }">
-      <div class="faq-question" @click="toggleFAQ(index)">
-        <span class="faq-arrow">
-          {{ activeIndex === index ? "▲" : "▼" }}
-        </span>
-        {{ item.question }}
-      </div>
+      <div class="faq-item" v-for="(item, index) in faqList" :key="index" :class="{ active: activeIndex === index }">
+        <div class="faq-question" @click="toggleFAQ(index)">
+          <span class="faq-arrow">
+            <i class="fa-solid fa-angle-down"></i>
+          </span>
+          {{ item.question }}
+        </div>
 
-      <div class="faq-answer" v-if="activeIndex === index">
-        {{ item.answer }}
+        <div class="faq-answer" v-if="activeIndex === index">
+          {{ item.answer }}
+        </div>
       </div>
     </div>
   </div>
@@ -74,7 +76,7 @@ export default {
 .faq {
   font-family: "Pretendard", sans-serif;
   background: #fff;
-  padding: $web-spacing;
+  padding: 120px 170px;
 
   .faq-title {
     font-size: $main-title;
@@ -108,7 +110,7 @@ export default {
     margin-right: 15px;
     font-size: $small-txt;
     color: $sub-font-color;
-    // transition: transform 0.3s ease;
+    
   }
 
   .faq-answer {
