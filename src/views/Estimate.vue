@@ -7,7 +7,7 @@
       <div class="esti_wrap">
         <!-- 영역 이름 -->
         <div class="esti_title">
-          <router-link to="/"><i class="fa-solid fa-arrow-left"></i></router-link>
+          <p></p>
           <p>견적 확인</p>
           <p></p>
         </div>
