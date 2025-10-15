@@ -15,7 +15,9 @@
     <Best_pro />
     <FAQ />
     <QR_banner />
+    <Footer_w/>
     <Quick_btn />
+    
   </div>
 </template>
 <script setup>
@@ -33,6 +35,7 @@ import Self_care from "@/components/Self_care.vue";
 import Service from "@/components/Service.vue";
 import Side_menu from "@/components/Side_menu.vue";
 import Visual from "@/components/Visual.vue";
+import Footer_w from "@/components/Footer_w.vue";
 </script>
 <style lang="scss" scoped>
 .top_wrap {

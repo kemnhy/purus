@@ -47,29 +47,32 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 50px;
+    align-items: center; 
+    justify-content: center; 
+    gap: 60px; 
   }
 
   &__image {
     flex: 1;
     display: flex;
-    justify-content: center;
-
+    justify-content: flex-end;
     img {
-      width: 90%;
-      max-width: 600px;
+      width: 80%;
+      max-width: 480px;
     }
   }
 
   &__content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    text-align: left;
 
     .sub-title {
       font-size: $medium-txt-2;
       color: $point-color;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
 
     .main-title {
@@ -78,43 +81,40 @@
       color: $font-color;
       margin-bottom: 15px;
       img {
-        width: 35%;
+        width: 140px;
       }
     }
 
     .desc {
       font-size: $medium-txt-2;
-      // color: $sub-font-color;
       line-height: 1.5;
       margin-bottom: 30px;
     }
 
     .qr-section {
       display: flex;
-
-      gap: 70px;
+      gap: 40px;
 
       .qr-1 {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        align-items: center;
+        gap: 15px;
 
         .qr {
-          display: block;
           width: 120px;
           border-radius: 8px;
           border: 1px solid $point-color;
-          padding: 12px;
+          padding: 10px;
         }
-        .button {
-          display: block;
-          width: 120px;
-          border-radius: 8px;
 
+        .button {
+          width: 120px;
         }
       }
     }
   }
+
   .notice {
     margin-top: 40px;
     font-size: $small-txt;

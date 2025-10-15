@@ -21,13 +21,16 @@
             <p class="pro-name">{{ pro.name }}</p>
             <div class="pro-detail">
               <div>
-                <p>현장출동</p> <b>{{ pro.activity }}</b>
+                <p>현장출동</p>
+                <b>{{ pro.activity }}</b>
               </div>
               <div>
-                <p>총경력</p><b>{{ pro.career }}</b>
+                <p>총경력</p>
+                <b>{{ pro.career }}</b>
               </div>
               <div>
-                <p>리뷰</p> ⭐
+                <p>리뷰</p>
+                ⭐
                 <b>{{ pro.review }}</b>
               </div>
             </div>
@@ -116,14 +119,13 @@ const pros = [
       align-items: center;
       justify-content: space-between;
       background: #fff;
-      // width: 660px;
+
       width: 70%;
       max-width: 800px;
       border-radius: 25px;
       padding: 25px 35px;
       border: 1.5px solid #e5e8ef;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-      
 
       &.reverse {
         flex-direction: row-reverse;
@@ -133,9 +135,9 @@ const pros = [
 
       .pro-img-box {
         width: 30%;
-        // flex-shrink: 0;
+        
         img {
-          // width: 165px;
+          
           width: 100%;
           height: auto;
         }
@@ -166,7 +168,7 @@ const pros = [
           align-items: center;
           gap: 22px;
           font-size: $medium-txt-2;
-          color: $sub-font-color;
+          // color: $sub-font-color;
           font-weight: bold;
           margin-top: 40px;
           text-align: center;
