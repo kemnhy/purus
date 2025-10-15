@@ -46,8 +46,8 @@ const process = [
   { id: "06", title: "테스트 작동" },
 ];
 const processImg = [
-  { img: "/images/process1.png", alt: "process1" },
-  { img: "/images/process2.png", alt: "process2" },
+  { img: "/images/process2.png", alt: "process1" },
+  { img: "/images/process1.png", alt: "process2" },
   { img: "/images/process3.png", alt: "process3" },
   { img: "/images/process4.png", alt: "process4" },
   { img: "/images/process5.png", alt: "process5" },
@@ -91,14 +91,16 @@ onBeforeUnmount(() => {
           height: calc(100% / 6);
           display: flex;
           align-items: center;
-          font-size: $medium-txt-1;
+          font-size: $medium-txt-2;
+          font-weight: 500;
           color: $font-color;
           background-color: $main-color;
-          padding-left: 35px;
+          padding-left: 46px;
           transition: all 0.2s ease;
           &.click {
             background-color: #daecf8;
             font-weight: bold;
+            font-size: 28px;
           }
         }
       }
