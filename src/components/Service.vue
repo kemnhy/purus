@@ -111,6 +111,10 @@
         p {
           font-size: $small-txt;
           padding-top: 20px;
+          strong{
+            color: $point-color;
+            font-weight: 500;
+          }
         }
       }
       .contents {
@@ -130,15 +134,14 @@
               width: 100%;
               display: block;
               border-radius: 12px;
-              filter: brightness(70%);
             }
             p {
               position: absolute;
-              top: 50%;
+              bottom: -28px;
               left: 50%;
-              transform: translate(-50%, -50%);
+              transform: translateX(-50%);
               font-weight: bold;
-              color: #fff;
+              // margin-bottom: 30px;
             }
           }
         }
@@ -173,23 +176,23 @@
               font-size: $main-title;
               color: $point-color;
             }
-            p{
+            p {
               font-size: 15px;
             }
             .star {
               color: $point-color;
               font-weight: bold;
             }
-            &:nth-child(2){
+            &:nth-child(2) {
               display: flex;
               flex-direction: column;
               gap: 5px;
             }
           }
         }
-        &:last-child{
+        &:last-child {
           height: 50%;
-          img{
+          img {
             height: 100%;
             display: block;
             margin-left: auto;

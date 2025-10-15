@@ -1,7 +1,7 @@
 <template>
   <div class="inner header">
-    <a href="#"><img src="/public/images/logo.png" alt="logo" /></a>
-    <div class="hamburger">
+    <img src="/public/images/logo.png" alt="logo" @click="goHome" />
+    <div class="hamburger" @click="toggleSide">
       <div
         class="line"
         v-for="n in 3"
@@ -10,15 +10,30 @@
       ></div>
     </div>
   </div>
+  <Side_menu :isOpen="isSideOpen" @close="isSideOpen = false" />
 </template>
 
 <script setup>
+import { ref } from "vue";
+import Side_menu from "./Side_menu.vue";
+import { useRouter } from "vue-router";
+
 const props = defineProps({
   lineColor: {
     type: String,
     default: "#fff", // 기본색: 흰색
   },
 });
+//showSide
+const isSideOpen = ref(false);
+const toggleSide = () => {
+  isSideOpen.value = !isSideOpen.value;
+};
+// goHome
+const router = useRouter();
+const goHome = () => {
+  router.push("/");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -28,12 +43,10 @@ const props = defineProps({
   align-items: center;
   justify-content: space-between;
   padding: 16px 0;
-  z-index: 99999;
-  a {
+  z-index: 9;
+  img {
     width: 10%;
-    img {
-      width: 100%;
-    }
+    cursor: pointer;
   }
   .hamburger {
     cursor: pointer;
