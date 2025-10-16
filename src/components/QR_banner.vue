@@ -81,7 +81,7 @@
       color: $font-color;
       margin-bottom: 15px;
       img {
-        width: 140px;
+        width: 198px;
       }
     }
 

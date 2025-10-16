@@ -12,26 +12,25 @@
       </div>
 
       <div class="pro-list">
-        <div class="pro-card" v-for="(pro, i) in pros" :key="i" :class="{ reverse: i % 2 !== 0 }">
+        <div class="pro-card" v-for="(item, index) in items" :key="index" :class="{ reverse: index === 1 }">
           <div class="pro-img-box">
-            <img :src="pro.image" alt="기사님 이미지" class="pro-img" />
+            <img :src="item.image" alt="기사님 이미지" class="pro-img" />
           </div>
           <div class="pro-info">
-            <h3 class="pro-title">{{ pro.title }}</h3>
-            <p class="pro-name">{{ pro.name }}</p>
+            <h3 class="pro-title">{{ item.title }}</h3>
+            <p class="pro-name">{{ item.name }}</p>
             <div class="pro-detail">
               <div>
                 <p>현장출동</p>
-                <b>{{ pro.activity }}</b>
+                <b>{{ item.activity }}</b>
               </div>
               <div>
                 <p>총경력</p>
-                <b>{{ pro.career }}</b>
+                <b>{{ item.career }}</b>
               </div>
               <div>
                 <p>리뷰</p>
-                ⭐
-                <b>{{ pro.review }}</b>
+                <b>{{ item.review }}</b>
               </div>
             </div>
           </div>
@@ -42,7 +41,7 @@
 </template>
 
 <script setup>
-const pros = [
+const items = [
   {
     image: "/images/img1.png",
     title: "제 얼굴을 걸고 청소합니다!",
@@ -131,13 +130,20 @@ const pros = [
         flex-direction: row-reverse;
         margin-left: auto;
         display: flex;
+        .pro-info{
+          text-align: right;
+          .pro-detail{
+            justify-content: flex-end
+
+          }
+        }
+
       }
 
       .pro-img-box {
         width: 30%;
-        
+
         img {
-          
           width: 100%;
           height: auto;
         }
@@ -171,7 +177,7 @@ const pros = [
           // color: $sub-font-color;
           font-weight: bold;
           margin-top: 40px;
-          text-align: center;
+
           b {
             color: $point-color;
             font-weight: 600;
@@ -183,6 +189,13 @@ const pros = [
           }
         }
       }
+      // .pro-info:nth-child(2) {
+      //   text-align: right !important;
+      //   .pro-detail {
+      //     text-align: right;
+      //     justify-content: flex-end;
+      //   }
+      // }
     }
   }
 }

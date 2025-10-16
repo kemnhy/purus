@@ -60,14 +60,13 @@ const reviews = [
 .inner {
   width: 100%;
   max-width: 1320px;
-  padding: 0 24px;
 }
 .title-box {
   text-align: center;
   margin-bottom: 60px;
 }
 .stars {
-  font-size: $medium-txt-2;
+  font-size: $main-title;
   color: $point-color;
   margin-bottom: 10px;
 }
@@ -84,30 +83,32 @@ const reviews = [
 .review-item {
   display: flex;
   align-items: center;
-  gap: 50px;
+  // gap: 50px;
   background-color: #fff;
   border-radius: 14px;
   overflow: hidden;
-  padding: 30px 40px;
+  border-radius: 30px;
+  // padding: 30px 40px;
   &.reverse {
     flex-direction: row-reverse;
   }
 }
 .img-box {
-  flex: 1 1 45%;
+  flex: 1 1 40%;
   img {
     width: 100%;
     height: auto;
-    // display: block;
+    display: block;
     object-fit: cover;
-    border-radius: 8px;
+    
   }
 }
 .text-box {
-  flex: 1 1 55%;
+  flex: 1 1 60%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 0 50px;
 }
 .rating {
   font-size: $small-txt;
@@ -124,7 +125,7 @@ const reviews = [
   font-weight: 500;
   color: $font-color;
   margin-bottom: 16px;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 .writer {
   font-size: $small-txt;
