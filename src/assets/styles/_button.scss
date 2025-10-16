@@ -7,4 +7,7 @@
   color: #fff;
   font-size: 25px;
   cursor: pointer;
+  &:hover {
+    background-color: darken($point-color, 5%);
+  }
 }
