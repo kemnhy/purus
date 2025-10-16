@@ -8,13 +8,14 @@
           {{ line }}
         </li>
       </ul>
-      <button class="btn">나의 견적 알아보기</button>
+      <button class="btn" @click="goEstimate">나의 견적 알아보기</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 const texts = [
   "청결은 선택이 아닌 필수,",
   "보이지 않는 곳까지 지켜 안심을 제공하는 것,",
@@ -22,6 +23,7 @@ const texts = [
 ];
 const displayedLines = ref(["", "", ""]);
 const currentLine = ref(0);
+const router = useRouter();
 
 onMounted(() => {
   const typeLine = (lineIndex = 0) => {
@@ -35,10 +37,14 @@ onMounted(() => {
         currentLine.value++;
         setTimeout(() => typeLine(lineIndex + 1), 300);
       }
-    }, 50);
+    }, 30);
   };
   typeLine();
 });
+// go estimate
+const goEstimate = () => {
+  router.push("/estimate");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -69,7 +75,7 @@ video {
     }
     .main-txt {
       margin: 34px 0;
-      min-height: 200px;
+      min-height: 220px;
       li {
         font-size: $main-title;
         font-weight: bold;
@@ -78,6 +84,7 @@ video {
     }
     .btn {
       cursor: pointer;
+      font-weight: bold;
     }
   }
 }

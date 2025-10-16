@@ -37,12 +37,101 @@
 
         <!-- 베스트 리뷰 카드 -->
         <div class="card-section">
-          <div class="best-card">리뷰카드</div>
-          <div class="best-card">리뷰카드</div>
-          <div class="best-card">리뷰카드</div>
+          <div class="best-card" v-for="(card, index) in bestReviews" :key="index">
+            <img :src="card.bgImage" alt="배경" class="card-bg" />
+            <div class="card-content">
+              <div class="card-user">
+                <img :src="card.userImage" alt="프로필" class="card-profile" />
+                <div class="card-user-info">
+                  <div class="card-stars">
+                    <div class="card-star">⭐</div>
+                    <div class="card-star">⭐</div>
+                    <div class="card-star">⭐</div>
+                    <div class="card-star">⭐</div>
+                    <div class="card-star">⭐</div>
+                  </div>
+                  <div class="card-username">
+                    <span class="name">{{ card.username }}</span>
+                    <span class="suffix">고객님</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-date">
+                <p>{{ card.date }} ∙ {{ card.service }}</p>
+              </div>
+              <div class="card-text">
+                <!-- <img src="/images/downlode.svg" alt="인용" class="quote-icon" /> -->
+                <div class="text-content">{{ card.content }}</div>
+              </div>
+              <img :src="card.reviewImage" alt="리뷰 이미지" class="card-review-img" />
+            </div>
+          </div>
         </div>
 
-        <button class="postrev-btn">리뷰 남기기</button>
+        <div class="postrev">
+          <!-- <p>리뷰 {{reviews}}</p> -->
+          <button class="postrev-btn">리뷰 남기기</button>
+        </div>
+
+        <!-- 평점 및 통계 -->
+        <div class="rating-section">
+          <div class="rating-summary">
+            <div class="rating-score">
+              <i class="score-text">4.9</i>
+              <div class="stars">
+                <div class="star filled">★</div>
+                <div class="star filled">★</div>
+                <div class="star half">★</div>
+                <div class="star filled">★</div>
+                <div class="star empty">★</div>
+              </div>
+            </div>
+            <div class="divider-line"></div>
+          </div>
+
+          <div class="rating-stats">
+            <i class="stats-title">총 만족도</i>
+            <div class="stat-item">
+              <div class="stat-label"><span class="point">5</span><span class="unit">점</span></div>
+              <div class="stat-count">283</div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-bg"></div>
+                <div class="stat-bar-fill" style="width: 82.6%"></div>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">4점</div>
+              <div class="stat-count">37</div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-bg"></div>
+                <div class="stat-bar-fill" style="width: 12.9%"></div>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">3점</div>
+              <div class="stat-count">9</div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-bg"></div>
+                <div class="stat-bar-fill" style="width: 7.8%"></div>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">2점</div>
+              <div class="stat-count">5</div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-bg"></div>
+                <div class="stat-bar-fill" style="width: 6.4%"></div>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">1점</div>
+              <div class="stat-count">0</div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-bg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- 리뷰 목록 -->
         <div class="review-list">
@@ -80,7 +169,7 @@
 
             <!-- 좋아요 버튼 -->
             <button class="like-btn">
-              <i class="heart-icon"></i>
+              <i class="like-icon"></i>
               <span>{{ review.likes }}</span>
             </button>
 
@@ -92,40 +181,35 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Header_w from "@/components/Header_w.vue";
-export default {
-  data() {
-    return {
-      reviews: [
-        {
-          id: 1,
-          userImage: "",
-          username: "성다영",
-          date: "2025.09.16",
-          service: "카이저제빙기 디테일 클리어서비스 이용",
-          images: ["", ""],
-          content:
-            "예약 후 빠른 연락과 제빙기별 맞춤으로 상담해주셨습니다!! 그리고 기사분의 전문성과 청소 용품 퀄리티도 좋습니다 생각보다 디테일한 부분까지 분해하시는데 오히려 좋은 것 같아요! 깨끗해진 제빙기를 보니 기분도 좋고 매장이 화사해지고 개운해서 더 좋아용",
-          likes: 5,
-        },
-        {
-          id: 2,
-          userImage: "",
-          username: "성다영2",
-          date: "2025.09.16",
-          service: "카이저제빙기 디테일 클리어서비스 이용",
-          images: ["", "", "", ""],
-          content:
-            "예약 후 빠른 연락과 제빙기별 맞춤으로 상담해주셨습니다!! 그리고 기사분의 전문성과 청소 용품 퀄리티도 좋습니다 생각보다 디테일한 부분까지 분해하시는데 오히려 좋은 것 같아요! 깨끗해진 제빙기를 보니 기분도 좋고 매장이 화사해지고 개운해서 더 좋아용",
-          likes: 10,
-        },
-      ],
-    };
-  },
-};
-</script>
+import { ref } from "vue";
 
+const reviews = ref([
+  {
+    id: 1,
+    userImage: "",
+    username: "성다영",
+    date: "2025.09.16",
+    service: "카이저제빙기 디테일 클리어서비스 이용",
+    images: ["", ""],
+    content:
+      "예약 후 빠른 연락과 제빙기별 맞춤으로 상담해주셨습니다!! 그리고 기사분의 전문성과 청소 용품 퀄리티도 좋습니다 생각보다 디테일한 부분까지 분해하시는데 오히려 좋은 것 같아요! 깨끗해진 제빙기를 보니 기분도 좋고 매장이 화사해지고 개운해서 더 좋아용",
+    likes: 5,
+  },
+  {
+    id: 2,
+    userImage: "",
+    username: "성다영2",
+    date: "2025.09.16",
+    service: "카이저제빙기 디테일 클리어서비스 이용",
+    images: ["", "", "", ""],
+    content:
+      "예약 후 빠른 연락과 제빙기별 맞춤으로 상담해주셨습니다!! 그리고 기사분의 전문성과 청소 용품 퀄리티도 좋습니다 생각보다 디테일한 부분까지 분해하시는데 오히려 좋은 것 같아요! 깨끗해진 제빙기를 보니 기분도 좋고 매장이 화사해지고 개운해서 더 좋아용",
+    likes: 10,
+  },
+]);
+</script>
 <style lang="scss" scoped>
 @use "../assets/styles/_variables" as *;
 // ===================================================
@@ -296,7 +380,7 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
 
 .star {
   font-weight: bold;
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 7 Free";
   font-size: $small-txt;
   font-style: normal;
 }
@@ -335,13 +419,13 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
 // 좋아요 버튼
 
 .like-btn {
+  margin: 20px 0;
   width: 110px;
   height: 60px;
   border: 1px solid $border-color;
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
   background: $main-color;
-  gap: 15px;
   font-size: $medium-txt-2;
   border-radius: 50px;
   box-sizing: border-box;
@@ -349,22 +433,19 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
   &:hover {
     border-color: $point-color;
 
-    .heart-icon {
+    color: $point-color;
+    .like-icon {
       color: $point-color;
     }
   }
 }
 
-.heart-icon {
+.like-icon {
   width: 24px;
   height: 27px;
-  position: relative;
-  font-size: 25px;
+  padding: 0 15px;
   font-family: "Font Awesome 7 Free";
   color: $border-color;
-  // text-align: left;
-  display: flex;
-  // justify-items: ;
 }
 
 // 타이틀 박스
@@ -385,22 +466,278 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
     padding-top: 20px;
   }
 }
+// 평점 섹션
+.rating-section {
+  display: flex;
+  align-items: center;
+  gap: 226px;
+  padding: 50px 99px 50px 90px;
+  border-radius: 16px;
+  background-color: #f2f4f6;
+  margin: 40px 0;
+}
+
+.rating-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 67px;
+}
 
 // 카드 섹션
 .card-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin: 40px 0;
+  gap: 25px;
+  margin: 60px 0 40px;
+  background-color: #4da5e4;
 }
 
 .best-card {
-  height: 300px;
-  background: #f5f5f5;
-  border-radius: 12px;
+  width: 100%;
+  height: 670px;
+  position: relative;
+  border-radius: 16px;
+  box-shadow: 0px 10px 15px rgba(41, 106, 243, 0.25);
+  background: white;
+  overflow: hidden;
+}
+
+.card-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 179px;
+  object-fit: cover;
+}
+
+.card-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 30px 30px;
+  gap: 36px;
+  justify-content: center;
+}
+
+.card-user {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 21px;
+}
+
+.card-profile {
+  width: 94px;
+  height: 97px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.card-user-info {
+  display: flex;
+  flex-direction: column;
+  width: 226px;
+}
+
+.card-stars {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.card-star {
+  font-size: 18px;
+  color: $point-color;
+  font-style: normal;
+}
+
+.card-username {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  text-align: center;
+
+  .name {
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+  }
+
+  .suffix {
+    font-size: 18px;
+    color: white;
+  }
+}
+
+.card-date {
+  font-size: 18px;
+  color: #f0f0f0;
+  line-height: 1.4;
+
+  p {
+    margin: 0;
+  }
+}
+
+.card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .quote-icon {
+    width: 21px;
+    height: 15px;
+  }
+
+  .text-content {
+    font-size: 24px;
+    font-weight: 300;
+    color: #6b7684;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.card-review-img {
+  width: 100%;
+  border-radius: 16px;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+// 평점 섹션
+.rating-section {
+  display: flex;
+  align-items: center;
+  gap: 226px;
+  padding: 50px 99px 50px 90px;
+  border-radius: 16px;
+  background-color: #f2f4f6;
+  margin: 40px 0;
+}
+
+.rating-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 67px;
+}
+
+.rating-score {
+  width: 150px;
+  text-align: center;
+
+  .score-text {
+    font-size: 30px;
+    font-weight: 700;
+    font-style: normal;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .stars {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    justify-content: center;
+  }
+
+  .star {
+    font-size: 18px;
+    font-style: normal;
+
+    &.filled {
+      color: $point-color;
+    }
+
+    &.half {
+      color: $point-color;
+    }
+
+    &.empty {
+      color: #dce7fb;
+    }
+  }
+}
+
+.divider-line {
+  width: 1px;
+  height: 104px;
+  background-color: #d9d9d9;
+}
+
+.rating-stats {
+  width: 721px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .stats-title {
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    margin-bottom: 5px;
+  }
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+
+  .stat-label {
+    width: 31px;
+    font-size: 15px;
+    color: #6b7684;
+
+    .point {
+      font-size: 15px;
+    }
+
+    .unit {
+      font-size: 14px;
+    }
+  }
+
+  .stat-count {
+    position: absolute;
+    right: 0;
+    font-size: 14px;
+    color: #6b7684;
+    width: 30px;
+    text-align: right;
+  }
+
+  .stat-bar-container {
+    flex: 1;
+    height: 10px;
+    position: relative;
+    margin: 0 45px 0 7px;
+  }
+
+  .stat-bar-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    border-radius: 16px;
+    background-color: #dce7fb;
+  }
+
+  .stat-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10px;
+    border-radius: 16px;
+    background-color: $point-color;
+  }
 }
 
 .postrev-btn {
