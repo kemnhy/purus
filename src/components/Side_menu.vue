@@ -23,7 +23,7 @@
       <li @click="goReser">예약 내역 조회</li>
       <li>
         <button class="btn" @click="goEstimate">
-          <span>견적 확인</span><span>→</span>
+          <span>견적 확인</span><span><i class="fa-solid fa-arrow-right"></i></span>
         </button>
       </li>
     </ul>
@@ -121,6 +121,9 @@ onUnmounted(() => {
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
+        span{
+          font-weight: bold;
+        }
       }
     }
   }
