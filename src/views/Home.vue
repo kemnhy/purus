@@ -17,7 +17,6 @@
     <QR_banner />
     <Footer_w/>
     <Quick_btn />
-    
   </div>
 </template>
 <script setup>

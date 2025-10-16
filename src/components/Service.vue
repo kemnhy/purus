@@ -141,7 +141,7 @@
               left: 50%;
               transform: translateX(-50%);
               font-weight: bold;
-              // margin-bottom: 30px;
+              color: $point-color;
             }
           }
         }

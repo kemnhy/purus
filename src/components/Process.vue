@@ -1,5 +1,5 @@
 <template>
-  <div class="process-wrap">
+  <div class="process-wrap" ref="processRef">
     <div class="inner">
       <h2 class="title">청소 과정 한눈에</h2>
       <div class="slide-wrap">
@@ -8,7 +8,7 @@
             :class="[{ click: current === index }]"
             v-for="(pro, index) in process"
             :key="pro.id"
-            @click="current = index"
+            @click="handleClick(index)"
           >
             {{ pro.id }} {{ pro.title }}
           </li>
@@ -55,14 +55,57 @@ const processImg = [
 ];
 // slide
 let interval = null;
-onMounted(() => {
+let inProcess = false;
+let clickTimeout = null;
+
+const processRef = ref(null);
+const startSlide = () => {
+  clearInterval(interval);
+  current.value = 0;
   interval = setInterval(() => {
     current.value = (current.value + 1) % process.length;
   }, 2000);
+};
+const stopSlide = () => {
+  clearInterval(interval);
+  current.value = 0;
+  inProcess = false;
+};
+// handleClick
+const handleClick = (index) => {
+  clearInterval(interval);
+  clearTimeout(clickTimeout);
+
+  current.value = index;
+
+  clickTimeout = setTimeout(() => {
+    startSlide();
+    current.value = index;
+  }, 500);
+};
+const handleScroll = () => {
+  if (!processRef.value) return;
+  const rect = processRef.value.getBoundingClientRect();
+  const windowHeight = window.innerHeight;
+
+  const isVisible = rect.top < windowHeight * 0.8 && rect.bottom > 0;
+
+  if (isVisible && !inProcess) {
+    inProcess = true;
+    startSlide();
+  }
+  if (!isVisible && inProcess) {
+    stopSlide();
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+  handleScroll();
 });
-//
 onBeforeUnmount(() => {
   clearInterval(interval);
+  window.removeEventListener("scroll", handleScroll);
 });
 </script>
 
