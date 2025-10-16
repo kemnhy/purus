@@ -1,18 +1,23 @@
 <template>
   <div class="point-banner">
     <div class="inner">
-      <p class="text">
-        "<span class="highlight">제빙기 청소</span>, 생각보다 저렴할지도?"
-      </p>
-      <button class="btn-check btn">
-        견적확인
-        <span class="arrow">→</span>
+      <p class="text">"<span class="highlight">제빙기 청소</span>, 생각보다 저렴할지도?"</p>
+      <button @click="goEstimate" class="btn-check btn">
+        <span>견적 확인</span>
+        <span><i class="fa-solid fa-arrow-right"></i></span>
       </button>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+const goEstimate = ()=>{
+  router.push("/estimate")
+}
+</script>
 
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
@@ -24,7 +29,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 32px 0;
+  padding: 46px 0;
 }
 
 .inner {
@@ -38,15 +43,15 @@
 
 .text {
   font-size: $main-title;
-  font-weight: 400; 
+  font-weight: 400;
   margin: 0;
   line-height: 1.2;
 
   // 강조 부분 (제빙기 청소)
   .highlight {
     font-weight: 700;
-    color: $sub-color; 
-    font-family: 'Pretendard-Bold', sans-serif; 
+    color: $sub-color;
+    font-family: "Pretendard-Bold", sans-serif;
   }
 }
 // 견적확인 박스
@@ -55,20 +60,19 @@
   color: #fff;
   border: transparent;
   border-radius: 10px;
-  padding: 8px 28px;
-  // display: flex;
-  align-items: center;
-  // gap: 6px;
+  padding: 10px 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 70px;
   cursor: pointer;
-  font-size: 25px bold;
-  // font-weight: bold;
+  font-size: 25px;
+  font-weight: bold;
+  // justify-content: space-between;
   // transition: background-color 0.2s ease;
 
-  .arrow {
-    font-weight: bold;
-    font-size: $small-txt;
+  span{
+    padding-bottom: 2.5px;
   }
-
   &:hover {
     background-color: darken($point-color, 5%);
   }
