@@ -33,9 +33,10 @@
           </div>
         </div>
 
-        <div class="notice">
-          <span class="arrow">▲</span> 카드에 마우스를 올려보세요 !
-        </div>
+
+      <div class="notice">
+        <span class="arrow">▲</span> 카드에 마우스를 올려보세요 !</div>
+
       </div>
     </div>
   </div>
