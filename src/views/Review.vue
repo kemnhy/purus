@@ -31,11 +31,7 @@ import Header_w from "@/components/Header_w.vue";
     </div>
   </div>
 
-  <div class="re-wrap">
-    <div class="evt-banner">
-      <Review_content />
-    </div>
-  </div>
+  <Review_content />
 </template>
 
 <style lang="scss" scoped>
