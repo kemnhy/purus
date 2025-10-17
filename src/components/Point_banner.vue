@@ -33,7 +33,7 @@ const goEstimate = ()=>{
 }
 
 .inner {
-  width: 100%;
+  // width: 100%;
   // max-width: 1200px;
   display: flex;
   justify-content: space-between;

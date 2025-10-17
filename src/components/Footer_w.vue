@@ -56,7 +56,7 @@
     line-height: 1.8;
 
     a {
-      color: $font-color;
+      color: #000000;
       text-decoration: none;
     }
 

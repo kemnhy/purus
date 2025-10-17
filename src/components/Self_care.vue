@@ -116,7 +116,8 @@ const cards = ref([
     background-color: #fff;
     border-radius: 60px;
     .inner-2 {
-      width: 800px; // 카드+설명 여유 공간 확보
+      width: 60%; // 카드+설명 여유 공간 확보
+      max-width: 800px;
       text-align: center;
       position: relative;
       margin: auto;
