@@ -94,10 +94,10 @@
         </div>
         <!-- 오전/오후 버튼 -->
         <div class="calendar-period" v-if="selectedDate">
-          <button @click="selectPeriod('AM')" :class="{ active: selectedPeriod === 'AM' }">
+          <button @click="selectPeriod('오전')" :class="{ active: selectedPeriod === '오전' }">
             오전
           </button>
-          <button @click="selectPeriod('PM')" :class="{ active: selectedPeriod === 'PM' }">
+          <button @click="selectPeriod('오후')" :class="{ active: selectedPeriod === '오후' }">
             오후
           </button>
         </div>
@@ -112,24 +112,24 @@
   <div class="modal" v-if="showCheckModal">
     <div class="modal_bg"></div>
     <div class="check_modal">
-      <p class="modal_title">예약 정보 확인</p>
+      <p class="modal_title">예약 정보를 확인해 주세요.</p>
       <div class="info_w">
-        <p>
-          성함
-          <span>{{}}</span>
-        </p>
-        <p>
-          전화번호
-          <span>{{}}</span>
-        </p>
-        <p>
-          주소
-          <span>{{}}</span>
-        </p>
-        <p>
-          서비스 날짜
-          <span>{{}}</span>
-        </p>
+        <div>
+          <p>성함</p>
+          <p>{{ name }}</p>
+        </div>
+        <div>
+          <p>전화번호</p>
+          <p>{{ phone }}</p>
+        </div>
+        <div>
+          <p>주소</p>
+          <p>{{ address }} {{ detailAddress || "" }}</p>
+        </div>
+        <div>
+          <p>서비스 날짜</p>
+          <p>{{ formattedSelectedDate }}</p>
+        </div>
       </div>
       <div class="reserbtns">
         <button class="btn" @click="reserCompleteModal">
@@ -141,16 +141,72 @@
       </div>
     </div>
   </div>
+  <!-- 로딩 모달 -->
+  <div class="modal" v-if="showLoadingModal">
+    <div class="modal_bg"></div>
+    <div class="loading_modal">
+      <div class="spinner"></div>
+      <p class="loading_text">예약을 확인 중입니다...</p>
+    </div>
+  </div>
+
+  <!-- 체크 완료 애니메이션 모달 -->
+  <div class="modal" v-if="showCheckAnimation">
+    <div class="modal_bg"></div>
+    <div class="check_animation_modal">
+      <div class="check_icon_container">
+        <i class="fa-solid fa-check check_icon"></i>
+      </div>
+      <p class="check_text">예약이 확인되었습니다!</p>
+    </div>
+  </div>
   <!-- 예약 완료 모달 -->
-  <div class="modal"></div>
+  <div class="modal" v-if="showComplete">
+    <div class="modal_bg"></div>
+    <div class="check_modal">
+      <i @click="goToHome" class="fa-solid fa-xmark x-mark"></i>
+      <p class="modal_title">예약 신청이 완료되었습니다.</p>
+      <div class="modal_w">
+        <img src="/images/reser_process.png" alt="진행과정아이콘" />
+        <div class="reser_process">
+          <p>예약 신청</p>
+          <p>확인 중</p>
+          <p>예약 확정</p>
+        </div>
+        <hr />
+        <div class="reser_notice">
+          <p>
+            담당자가 배정되면
+            <strong>입력하신 연락처로</strong>
+          </p>
+          <p>
+            <strong>확인 전화</strong>
+            를 드릴 예정입니다.
+          </p>
+        </div>
+      </div>
+      <div class="reser_check_notice">
+        <p>
+          신청 내역은
+          <strong>홈페이지 오른쪽 상단 메뉴</strong>
+          <i class="fa-solid fa-chevron-right"></i>
+        </p>
+        <p>
+          <strong>예약 내역 조회</strong>
+          에서 확인 가능합니다.
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import Header_w from "@/components/Header_w.vue";
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 //카카오 주소 검색기능
 const address = ref("");
 const detailAddress = ref("");
@@ -260,6 +316,14 @@ const selectPeriod = (period) => {
 const isSunday = (date) => new Date(currentYear.value, currentMonth.value, date).getDay() === 0;
 const isSaturday = (date) => new Date(currentYear.value, currentMonth.value, date).getDay() === 6;
 
+// 요일 계산용
+const selectedDayName = computed(() => {
+  if (!selectedDate.value) return "";
+  const d = new Date(currentYear.value, currentMonth.value, selectedDate.value);
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  return days[d.getDay()];
+});
+
 // 오늘 강조
 const isToday = (date) => {
   return (
@@ -269,13 +333,56 @@ const isToday = (date) => {
   );
 };
 
+// ✅ 완성된 문장 계산 (년월일 + 요일 + 오전/오후)
+const formattedSelectedDate = computed(() => {
+  if (!selectedDate.value) return "";
+  const d = new Date(currentYear.value, currentMonth.value, selectedDate.value);
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekday = ["일", "월", "화", "수", "목", "금", "토"][d.getDay()];
+  const period = selectedPeriod.value ? ` ${selectedPeriod.value}` : "";
+  return `${year}년 ${month}월 ${day}일 (${weekday}요일)${period}`;
+});
+
 // 다음버튼 나오기
 const selectDay = ref(false);
 
 // 예약정보 확인 모달
 const showCheckModal = ref(false);
+const showLoadingModal = ref(false);
+const showCheckAnimation = ref(false);
 const openCheckModal = () => {
   showCheckModal.value = true;
+};
+const reserCompleteModal = async () => {
+  // 1단계: 확인 모달 숨기고 로딩 모달 표시
+  showCheckModal.value = false;
+  showLoadingModal.value = true;
+
+  // 2단계: 2초 로딩 (API 호출 시간 시뮬레이션)
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  // 3단계: 로딩 모달 숨기고 체크 애니메이션 표시
+  showLoadingModal.value = false;
+  showCheckAnimation.value = true;
+
+  // 4단계: 1.5초 후 완료 모달 표시
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  showCheckAnimation.value = false;
+  showComplete.value = true;
+};
+
+// 이전 페이지 정보 가져오기
+const name = route.query.name;
+const phone = route.query.phone;
+
+// 예약 완료 모달
+const showComplete = ref(false);
+
+// 완료 창 닫기 누르면 홈으로 이동
+const goToHome = () => {
+  router.push("/");
 };
 </script>
 
@@ -419,6 +526,7 @@ const openCheckModal = () => {
   justify-content: space-around;
   margin-top: 16px;
   gap: 20px;
+
   button {
     flex: 1;
     padding: 10px 24px;
@@ -426,6 +534,7 @@ const openCheckModal = () => {
     border: transparent;
     border-radius: 10px;
     background-color: $grey-color;
+    cursor: pointer;
 
     &.active {
       background: $point-color;
@@ -450,9 +559,12 @@ const openCheckModal = () => {
   z-index: 999999;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.check_modal {
+.check_modal,
+.loading_modal,
+.check_animation_modal {
   background-color: #fff;
   width: 560px;
+  height: 480px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -460,7 +572,7 @@ const openCheckModal = () => {
   z-index: 9999999;
   border-radius: 30px;
   padding: 40px 50px 50px;
-  i {
+  .x-mark {
     position: absolute;
     right: 30px;
     top: 30px;
@@ -473,12 +585,73 @@ const openCheckModal = () => {
     text-align: center;
     margin-bottom: 30px;
   }
+  .modal_w {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    img {
+      width: 60%;
+    }
+    .reser_process {
+      margin-top: 5px;
+      display: flex;
+      gap: 72px;
+      p {
+        font-size: 16px;
+        font-weight: 600;
+        color: $point-color;
+        &:last-child {
+          font-weight: 400;
+          color: #c2c2c2;
+        }
+      }
+    }
+    hr {
+      width: 100%;
+      border: 1px solid #c2c2c2;
+      margin: 30px 0;
+    }
+    .reser_notice {
+      text-align: center;
+      margin-bottom: 55px;
+      p {
+        font-size: 22px;
+        strong {
+          color: $point-color;
+        }
+      }
+    }
+  }
+  .reser_check_notice {
+    position: relative;
+    padding-left: 25px;
+    &::before {
+      content: "";
+      display: block;
+      width: 5px;
+      height: 44px;
+      border-radius: 3px;
+      background-color: $border-color;
+      position: absolute;
+      top: 5px;
+      left: 0;
+    }
+    p {
+      color: $border-color;
+      font-size: 18px;
+    }
+  }
   .info_w {
     display: flex;
     flex-direction: column;
     gap: 20px;
     font-size: 20px;
     margin-bottom: 40px;
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
   }
   .reserbtns {
     display: flex;
@@ -494,5 +667,94 @@ const openCheckModal = () => {
       }
     }
   }
+}
+/* 로딩 애니메이션 스타일 */
+.loading_modal {
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid $point-color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading_text {
+  font-size: 16px;
+  color: $sub-font-color;
+  margin: 0;
+}
+
+/* 체크 완료 애니메이션 스타일 */
+.check_animation_modal {
+  text-align: center;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.check_icon_container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #d5ebff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  animation: scaleUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.check_icon {
+  font-size: 40px;
+  color: $point-color;
+  animation: checkmark 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.check_text {
+  font-size: 18px;
+  font-weight: 600;
+  color: $point-color;
+  margin: 0;
 }
 </style>
