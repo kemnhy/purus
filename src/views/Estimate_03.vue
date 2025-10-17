@@ -2,6 +2,9 @@
   <div>
     <!-- 헤더영역 -->
     <Header_w lineColor="#092857" />
+    <Side_menu />
+    <!-- 헤더 구분선 -->
+    <hr class="header_line" />
     <!-- 견적확인 -->
     <div class="esti_check esti_inner">
       <div class="esti_wrap">
@@ -202,6 +205,7 @@
 
 <script setup>
 import Header_w from "@/components/Header_w.vue";
+import Side_menu from "@/components/Side_menu.vue";
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
