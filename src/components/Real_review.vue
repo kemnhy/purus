@@ -27,7 +27,7 @@
 <script setup>
 const reviews = [
   {
-    image: "/public/images/Real_review1.png",
+    image: "/public/images/Real-riv.png",
     text: "예전엔 얼음에서 약간 비린내가 났는데,청소 받고 나니 완전히 없어졌습니다.고객들도 음료 맛이 깔끔해졌다고 해요.",
     writer: "네이버 yg***님",
   },
@@ -37,12 +37,12 @@ const reviews = [
     writer: "네이버 dm***님",
   },
   {
-    image: "/public/images/Real_review3.png",
+    image: "/public/images/Real-riv3.png",
     text: "다른 업체도 알아봤는데,여기처럼 꼼꼼하게 청소해주는 곳은 처음입니다. 정기적으로 이용하고 싶어요.",
     writer: "네이버 nh***님",
   },
   {
-    image: "/public/images/Real_review4.png",
+    image: "/public/images/Real-riv4.png",
     text: "얼음에서 냄새가 사라지고,손님 반응이 확 달라졌습니다!",
     writer: "네이버 dy***님",
   },
@@ -88,6 +88,7 @@ const reviews = [
   border-radius: 14px;
   overflow: hidden;
   border-radius: 30px;
+
   // padding: 30px 40px;
   &.reverse {
     flex-direction: row-reverse;
@@ -97,10 +98,10 @@ const reviews = [
   flex: 1 1 40%;
   img {
     width: 100%;
-    height: auto;
+    height: 330px;
+    // border-radius: 14px;
     display: block;
     object-fit: cover;
-    
   }
 }
 .text-box {
@@ -114,7 +115,7 @@ const reviews = [
   font-size: $small-txt;
   color: $point-color;
   margin-bottom: 10px;
-  span{
+  span {
     color: $sub-font-color;
     font-size: 16px;
     margin-left: 4px;

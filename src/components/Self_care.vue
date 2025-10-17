@@ -32,11 +32,7 @@
             </div>
           </div>
         </div>
-
-
-      <div class="notice">
-        <span class="arrow">▲</span> 카드에 마우스를 올려보세요 !</div>
-
+        <div class="notice"><span class="arrow">▲</span> 카드에 마우스를 올려보세요 !</div>
       </div>
     </div>
   </div>
@@ -236,13 +232,13 @@ const cards = ref([
       .hover-desc {
         position: absolute;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
+        background-color: rgba(0, 0, 0, 0.9);
         color: #fff;
         padding: 30px;
         display: flex;
         align-items: center;
         font-size: $small-txt;
-        line-height: 1.8;
+        line-height: 1.9;
         border-radius: 20px;
       }
     }
