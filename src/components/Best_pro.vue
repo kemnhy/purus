@@ -130,14 +130,12 @@ const items = [
         flex-direction: row-reverse;
         margin-left: auto;
         display: flex;
-        .pro-info{
+        .pro-info {
           text-align: right;
-          .pro-detail{
-            justify-content: flex-end
-
+          .pro-detail {
+            justify-content: flex-end;
           }
         }
-
       }
 
       .pro-img-box {
@@ -150,8 +148,7 @@ const items = [
       }
 
       .pro-info {
-        // flex: 1;
-        width: 60%;
+        width: 55%;
         text-align: left;
         padding-left: 20px;
 
@@ -174,13 +171,14 @@ const items = [
           align-items: center;
           gap: 22px;
           font-size: $medium-txt-2;
+          justify-content: center;
           // color: $sub-font-color;
           font-weight: bold;
           margin-top: 40px;
 
           b {
             color: $point-color;
-            font-weight: 600;
+            font-weight: bold;
             margin-left: 4px;
           }
 

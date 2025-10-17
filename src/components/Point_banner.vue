@@ -1,7 +1,7 @@
 <template>
   <div class="point-banner">
     <div class="inner">
-      <p class="text">"<span class="highlight">제빙기 청소</span>, 생각보다 저렴할지도?"</p>
+      <p class="text">"<span class="highlight">청결 이상의 가치</span>, 합리적인 비용으로 경험하세요"</p>
       <button @click="goEstimate" class="btn-check btn">
         <span>견적 확인</span>
         <span><i class="fa-solid fa-arrow-right"></i></span>
@@ -34,7 +34,7 @@ const goEstimate = ()=>{
 
 .inner {
   width: 100%;
-  max-width: 1200px;
+  // max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,7 +42,7 @@ const goEstimate = ()=>{
 }
 
 .text {
-  font-size: $main-title;
+  font-size: 40px;
   font-weight: 400;
   margin: 0;
   line-height: 1.2;
