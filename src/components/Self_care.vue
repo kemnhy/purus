@@ -45,7 +45,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 
-const activeIndex = ref(null)
+const activeIndex = ref(null);
 const isActive = ref(false);
 const selfRef = ref(null);
 const progress = ref(0);
