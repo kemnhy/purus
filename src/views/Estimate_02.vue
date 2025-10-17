@@ -22,37 +22,17 @@
               고객님의 성함을 입력해주세요.
               <span>(필수)</span>
             </p>
-            <input type="text" />
+            <input type="text" v-model="userName" placeholder="이름을 입력해주세요." />
           </div>
           <div class="user_number">
             <p>
               고객님의 연락처를 입력해주세요.
               <span>(필수)</span>
             </p>
-            <div class="number_input">
-              <div class="custom-select" ref="selectRef">
-                <!-- 선택된 값 -->
-                <div class="selected" @click="toggleDropdown">
-                  {{ selectedOption }}
-                  <span class="arrow" :class="{ open: isOpen }">▼</span>
-                </div>
-
-                <!-- 옵션 목록 -->
-                <ul v-show="isOpen" class="options">
-                  <li
-                    v-for="(option, i) in options"
-                    :key="i"
-                    @click="selectOption(option)"
-                    :class="{ active: selectedOption === option }">
-                    {{ option }}
-                  </li>
-                </ul>
-              </div>
-              <span class="bar"></span>
-              <input type="number" />
-              <span class="bar"></span>
-              <input type="number" />
-            </div>
+            <input
+              type="text"
+              v-model="userPhone"
+              placeholder="전화번호를 입력해주세요. (예: 01012345678)" />
           </div>
         </div>
         <!-- 유의사항 안내 -->
@@ -95,7 +75,7 @@
           </ul>
           <div class="agree">
             <label>
-              <input type="checkbox" />
+              <input type="checkbox" v-model="selectAgree1" />
               위 내용을 모두 확인하였으며, 안내에 동의합니다.
             </label>
           </div>
@@ -113,7 +93,7 @@
           </ul>
           <div class="agree">
             <label>
-              <input type="checkbox" v-model="selectAgree" />
+              <input type="checkbox" v-model="selectAgree2" />
               위 내용을 모두 확인하였으며, 안내에 동의합니다.
             </label>
           </div>
@@ -124,9 +104,9 @@
         </p>
       </div>
       <!-- 다음 버튼 -->
-      <div v-if="selectAgree !== false" class="buttons">
+      <div v-if="selectAgree1 !== false && selectAgree2 !== false" class="buttons">
         <button class="btn" @click="pushMessage">견적만 받기</button>
-        <router-link to="/estimate03" class="btn">동의하고 가능한 일정 선택하기</router-link>
+        <button @click="goNextPage" class="btn">동의하고 가능한 일정 선택하기</button>
       </div>
     </div>
   </div>
@@ -135,67 +115,37 @@
 <script setup>
 import Header_w from "@/components/Header_w.vue";
 import { useRouter } from "vue-router";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref } from "vue";
 
 const router = useRouter();
 
-// 연락처
-
-const options = [
-  "010",
-  "02",
-  "031",
-  "032",
-  "033",
-  "041",
-  "042",
-  "043",
-  "044",
-  "051",
-  "052",
-  "053",
-  "054",
-  "055",
-  "061",
-  "062",
-  "063",
-  "064",
-];
-
-const selectedOption = ref("010");
-const isOpen = ref(false);
-const selectRef = ref(null);
-
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
-};
-
-const selectOption = (option) => {
-  selectedOption.value = option;
-  isOpen.value = false;
-};
-
-// 바깥 클릭 시 닫기
-const handleClickOutside = (e) => {
-  if (selectRef.value && !selectRef.value.contains(e.target)) {
-    isOpen.value = false;
-  }
-};
-
-onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener("click", handleClickOutside);
-});
-
 // 다음버튼 나오기
-const selectAgree = ref(false);
+const selectAgree1 = ref(false);
+const selectAgree2 = ref(false);
 // 견적만 받기
 const pushMessage = () => {
   alert("입력하신 연락처로 견적서를 보내드립니다.");
   router.push("/"); // 홈('/')으로 이동
+};
+
+// 입력한 정보 받기
+const userName = ref("");
+const userPhone = ref("");
+// 다음 페이지로 넘어가면서 정보 보내기
+const goNextPage = () => {
+  if (userName.value === "" || userPhone.value === "") {
+    return alert("이름과 전화번호를 모두 입력해주세요.");
+  } else if (!isNaN(userName.value) || userPhone.value.length <= 8) {
+    return alert("이름과 전화번호를 올바르게 입력해주세요.");
+  } else {
+    router.push({
+      path: "/estimate03",
+      query: {
+        name: userName.value,
+        phone: userPhone.value,
+      },
+    });
+  }
 };
 </script>
 

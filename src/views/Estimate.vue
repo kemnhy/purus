@@ -2,6 +2,7 @@
   <div>
     <!-- 헤더영역 -->
     <Header_w lineColor="#092857" />
+    <Side_menu/>
     <!-- 견적확인 -->
     <div class="esti_check esti_inner">
       <div class="esti_wrap">
@@ -58,7 +59,7 @@
               <span>(필수)</span>
             </p>
             <span>ex) IMK-3051</span>
-            <input type="text" />
+            <input type="text" v-model="modelName" />
           </div>
         </div>
       </div>
@@ -75,7 +76,7 @@
             {{ typeof totalPrice === "number" ? totalPrice.toLocaleString() + "원" : totalPrice }}
           </div>
         </div>
-        <router-link to="/estimate02" class="btn">가능한 일정 확인하기</router-link>
+        <button @click="goNextPage" class="btn">가능한 일정 확인하기</button>
       </div>
     </div>
   </div>
@@ -83,6 +84,7 @@
 
 <script setup>
 import Header_w from "@/components/Header_w.vue";
+import Side_menu from "@/components/Side_menu.vue";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -122,6 +124,18 @@ const totalPrice = computed(() => {
 
   return brandPrice + sizePrice;
 });
+
+const modelName = ref("");
+// 다음 페이지 넘어가기
+const goNextPage = () => {
+  if (selectedI.value === null && selectedIndex.value === null) {
+    alert("모든 옵션을 선택해주세요.");
+  } else if (modelName.value === "") {
+    alert("모델명을 입력해주세요.");
+  } else {
+    router.push("/estimate02");
+  }
+};
 </script>
 
 <style lang="scss" scoped>
