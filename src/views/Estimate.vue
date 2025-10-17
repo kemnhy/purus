@@ -2,7 +2,9 @@
   <div>
     <!-- 헤더영역 -->
     <Header_w lineColor="#092857" />
-    <Side_menu/>
+    <Side_menu />
+    <!-- 헤더 구분선 -->
+    <hr class="header_line" />
     <!-- 견적확인 -->
     <div class="esti_check esti_inner">
       <div class="esti_wrap">

@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import Estimate from "@/views/Estimate.vue";
 
 import Reser_check from "@/views/Reser_check.vue";
-import Estimate_01 from "@/views/Estimate_01.vue";
 import Estimate_02 from "@/views/Estimate_02.vue";
 import Estimate_03 from "@/views/Estimate_03.vue";
 import Review from "@/views/Review.vue";
@@ -13,7 +12,6 @@ const routes = [
   { path: "/", component: Home },
   { path: "/side_menu", component: Side_menu, name: Side_menu },
   { path: "/estimate", component: Estimate },
-  { path: "/estimate01", component: Estimate_01 },
   { path: "/estimate02", component: Estimate_02 },
   { path: "/estimate03", component: Estimate_03 },
   { path: "/reser_check", component: Reser_check },
