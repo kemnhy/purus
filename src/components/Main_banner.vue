@@ -56,7 +56,7 @@ onMounted(() => {
 @use "../assets/styles/variables" as *;
 .banner-wrap {
   width: 100%;
-  padding: 100px 0;
+  padding: $web-spacing 0;
   background-color: $sub-color;
   .inner {
     display: flex;

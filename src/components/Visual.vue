@@ -15,6 +15,9 @@
       </ul>
       <button class="btn" @click="goEstimate">나의 견적 알아보기</button>
     </div>
+    <p class="scroll" :class="{animate : allVisible === false}">
+      스크롤하세요<span><i class="fa-solid fa-angle-down"></i></span>
+    </p>
   </div>
 </template>
 
@@ -56,7 +59,7 @@ const handleScroll = async (e) => {
     if (e.deltaY > 0 && currentIndex.value < texts.length) {
       wheelCount.value++;
     }
-    if (wheelCount.value >= 5) {
+    if (wheelCount.value >= 4) {
       const index = currentIndex.value;
       visibleLine.value.push(texts[index]);
       activeLines.value.push(false);
@@ -75,7 +78,7 @@ const handleScroll = async (e) => {
       allVisible.value = true;
       setTimeout(() => {
         document.body.style.overflow = "";
-      }, 1000);
+      }, 800);
     }
   }
 };
@@ -120,9 +123,9 @@ video {
   position: relative;
   max-width: 1320px;
   margin: auto;
-  height: 100%;
+  height: calc(100% - 65px);
   z-index: 9;
-  margin-top: 200px;
+  padding-top: 200px;
   .text-box {
     text-align: left;
     p {
@@ -150,6 +153,32 @@ video {
       cursor: pointer;
       font-weight: bold;
     }
+  }
+  .scroll {
+    transition: all 0.3s ease;
+    font-size: $small-txt;
+    text-align: center;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    color: #fff;
+    opacity: 0;
+    transform: translateX(-50%);
+    span {
+      display: block;
+    }
+    &.animate {
+      animation: floatY 1s ease-in-out infinite;
+      opacity: 0.7;
+    }
+  }
+}
+@keyframes floatY {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 30%, 0);
   }
 }
 </style>

@@ -112,7 +112,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 .process-wrap {
-  margin-bottom: 120px;
+  padding-bottom: $web-spacing;
   .inner {
     .title {
       text-align: center;

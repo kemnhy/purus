@@ -81,7 +81,7 @@
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 .service-wrap {
-  padding: 120px 0;
+  padding: $web-spacing 0;
   .title {
     text-align: center;
     font-size: $main-title;
