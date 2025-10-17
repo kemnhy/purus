@@ -33,10 +33,9 @@
           </div>
         </div>
 
-
-      <div class="notice">
-        <span class="arrow">▲</span> 카드에 마우스를 올려보세요 !
-
+        <div class="notice">
+          <span class="arrow">▲</span> 카드에 마우스를 올려보세요 !
+        </div>
       </div>
     </div>
   </div>
@@ -45,7 +44,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 
-const activeIndex = ref(null)
+const activeIndex = ref(null);
 const isActive = ref(false);
 const selfRef = ref(null);
 const progress = ref(0);
