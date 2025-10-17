@@ -171,7 +171,7 @@ const items = [
           align-items: center;
           gap: 22px;
           font-size: $medium-txt-2;
-          justify-content: center;
+          justify-content: left;
           // color: $sub-font-color;
           font-weight: bold;
           margin-top: 40px;
@@ -187,13 +187,6 @@ const items = [
           }
         }
       }
-      // .pro-info:nth-child(2) {
-      //   text-align: right !important;
-      //   .pro-detail {
-      //     text-align: right;
-      //     justify-content: flex-end;
-      //   }
-      // }
     }
   }
 }

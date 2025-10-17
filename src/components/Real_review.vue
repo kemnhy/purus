@@ -57,10 +57,7 @@ const reviews = [
   padding: 100px 0;
   background-color: #f0faff;
 }
-.inner {
-  width: 100%;
-  max-width: 1320px;
-}
+
 .title-box {
   text-align: center;
   margin-bottom: 60px;
