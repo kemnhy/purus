@@ -45,18 +45,21 @@ const goHome = () => {
   padding: 16px 0;
   z-index: 9;
   img {
+    min-width: 100px;
     width: 10%;
     cursor: pointer;
   }
   .hamburger {
     cursor: pointer;
-    width: 30px;
+    width: 3%;
+    max-width: 30px;
+    min-width: 28px;
     height: 33px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     .line {
-      width: 30px;
+      width: 100%;
       height: 2px;
       background-color: #fff;
       border-radius: 1px;

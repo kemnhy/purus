@@ -41,7 +41,7 @@ const cares = [
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 .care-wrap {
-  padding: 120px 0;
+  padding: $web-spacing 0;
   .care-title {
     text-align: center;
     h2 {

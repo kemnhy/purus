@@ -6,6 +6,7 @@
   text-decoration: none;
 }
 .inner {
+  width: 80%;
   max-width: 1320px;
   margin: auto;
 }

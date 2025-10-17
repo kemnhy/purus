@@ -63,7 +63,7 @@ const goTop = () => {
       display: block;
       text-align: center;
       font-weight: 500;
-      font-size: 18px;
+      font-size: 110%;
       background-color: $point-color;
       aspect-ratio: 1 / 1;
       border-radius: 50%;
