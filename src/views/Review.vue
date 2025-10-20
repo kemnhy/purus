@@ -65,6 +65,7 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
     // 별, 눈송이 등 배경 장식
     &::after {
       margin: 90px;
+      // height: ;
       padding: 100px;
       content: "";
       position: absolute;
