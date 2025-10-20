@@ -15,7 +15,7 @@
       </ul>
       <button class="btn" @click="goEstimate">나의 견적 알아보기</button>
     </div>
-    <p class="scroll" :class="{animate : allVisible === false}">
+    <p class="scroll" :class="{ animate: allVisible === false }">
       스크롤하세요<span><i class="fa-solid fa-angle-down"></i></span>
     </p>
   </div>
@@ -35,7 +35,10 @@ const wheelCount = ref(0);
 const router = useRouter();
 const visibleLine = ref([]);
 const allVisible = ref(false);
-const activeLines = ref([]);
+const activeLines = ref(Array(texts.length).fill(false));
+// interval id(mobile)
+let intervalId = null;
+
 // const displayedLines = ref(["", "", ""]);
 
 // typing
@@ -54,50 +57,87 @@ const activeLines = ref([]);
 // };
 
 const handleScroll = async (e) => {
-  // e.preventDefault();
-  if (window.scrollY === 0) {
-    if (e.deltaY > 0 && currentIndex.value < texts.length) {
-      wheelCount.value++;
-    }
-    if (wheelCount.value >= 4) {
-      const index = currentIndex.value;
-      visibleLine.value.push(texts[index]);
-      activeLines.value.push(false);
-      // typeLine(currentIndex.value);
+  if (window.scrollY !== 0) return;
 
-      await nextTick();
+  if (e && e.deltaY > 0 && currentIndex.value < texts.length) {
+    e.preventDefault();
+    wheelCount.value++;
+  }
 
-      setTimeout(() => {
-        activeLines.value[index] = true;
-      }, 10);
+  if (wheelCount.value >= 4) {
+    const index = currentIndex.value;
+    visibleLine.value.push(texts[index]);
 
-      currentIndex.value++;
-      wheelCount.value = 0;
-    }
-    if (currentIndex.value === texts.length && !allVisible.value) {
-      allVisible.value = true;
-      setTimeout(() => {
-        document.body.style.overflow = "";
-      }, 800);
-    }
+    await nextTick();
+
+    setTimeout(() => {
+      activeLines.value[index] = true;
+    }, 10);
+
+    currentIndex.value++;
+    wheelCount.value = 0;
+  }
+  if (currentIndex.value === texts.length && !allVisible.value) {
+    allVisible.value = true;
+    setTimeout(() => {
+      document.body.style.overflow = "";
+    }, 800);
   }
 };
 
 onMounted(() => {
-  if (window.scrollY === 0) {
-    document.body.style.overflow = "hidden";
+  // mobile(wheel X)
+  const mobile = window.innerWidth <= 768;
+  if (mobile) {
+    visibleLine.value = [];
+    activeLines.value = Array(texts.length).fill(false);
+    currentIndex.value = 0;
+    allVisible.value = false;
+    document.body.style.overflow = "";
+
+    // setInterval
+    let index = 0;
+    intervalId = setInterval(() => {
+      if (currentIndex.value < texts.length) {
+        const indexUpdate = currentIndex.value;
+        visibleLine.value.push(texts[indexUpdate]);
+
+        nextTick(() => {
+          setTimeout(() => (activeLines.value[indexUpdate] = true), 20);
+        });
+
+        currentIndex.value++;
+      } else {
+        allVisible.value = true;
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }, 500);
   } else {
-    visibleLine.value = [...texts];
-    activeLines.value = Array(texts.length).fill(true);
-    currentIndex.value = texts.length;
-    allVisible.value = true;
+    // web(wheel O)
+    if (window.scrollY === 0) {
+      document.body.style.overflow = "hidden";
+      visibleLine.value = [];
+      activeLines.value = Array(texts.length).fill(false);
+      currentIndex.value = 0;
+      allVisible.value = false;
+    } else {
+      visibleLine.value = [...texts];
+      activeLines.value = Array(texts.length).fill(true);
+      currentIndex.value = texts.length;
+      allVisible.value = true;
+    }
+    window.addEventListener("wheel", handleScroll, { passive: false });
   }
 });
 
-window.addEventListener("wheel", handleScroll, { passive: false });
-
 onUnmounted(() => {
-  window.addEventListener("wheel", handleScroll);
+  window.removeEventListener("wheel", handleScroll);
+
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
   document.body.style.overflow = "";
 });
 
@@ -125,24 +165,27 @@ video {
   margin: auto;
   height: calc(100% - 65px);
   z-index: 9;
-  padding-top: 200px;
+  display: flex;
+  align-items: center;
   .text-box {
+    width: 100%;
     text-align: left;
+    padding-bottom: 8%;
     p {
       color: $main-color;
-      font-size: $medium-txt-2;
+      font-size: clamp($small-txt, 2vw, $medium-txt-2);
       font-weight: bold;
     }
     .main-txt {
       margin: 34px 0;
-      min-height: 220px;
+      min-height: calc(#{$main-title} * 4.5);
       li {
         font-size: $main-title;
         font-weight: bold;
         color: #fff;
         opacity: 0;
-        transition: all 0.5s ease;
-        transform: translateY(-50px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        transform: translateY(-30px);
         &.fadeIn {
           opacity: 1;
           transform: translateY(0);
@@ -179,6 +222,65 @@ video {
   }
   100% {
     transform: translate3d(-50%, 30%, 0);
+  }
+}
+@media screen and (max-width: 1024px) {
+  .inner {
+    .text-box {
+      padding-bottom: 15%;
+      .main-txt {
+        margin: 30px 0;
+        min-height: calc(#{$medium-txt-1} * 4.5);
+        li {
+          font-size: $medium-txt-1;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .inner {
+    .text-box {
+      padding-bottom: 15%;
+      .main-txt {
+        min-height: calc(30px * 4.5);
+        li {
+          font-size: 30px;
+        }
+      }
+      .btn {
+        font-size: $small-txt;
+      }
+    }
+    .scroll {
+      display: none;
+    }
+  }
+}
+@media screen and (max-width: 450px) {
+  .inner {
+    .text-box {
+      padding-bottom: 15%;
+      text-align: center;
+      .main-txt {
+        margin: 24px 0;
+        min-height: calc($small-txt * 6);
+        li {
+          width: 100%;
+          font-size: $small-txt;
+          &:nth-child(2) {
+            width: 60%;
+            margin: auto;
+          }
+        }
+      }
+      .btn {
+        font-size: 14px;
+      }
+    }
+    .scroll {
+      display: none;
+    }
   }
 }
 </style>

@@ -23,7 +23,8 @@
       <li @click="goReser">예약 내역 조회</li>
       <li>
         <button class="btn" @click="goEstimate">
-          <span>견적 확인</span><span><i class="fa-solid fa-arrow-right"></i></span>
+          <span>견적 확인</span
+          ><span><i class="fa-solid fa-arrow-right"></i></span>
         </button>
       </li>
     </ul>
@@ -106,7 +107,7 @@ onUnmounted(() => {
       font-size: $medium-txt-2;
       cursor: pointer;
       transition: all 0.3s ease;
-      &:hover{
+      &:hover {
         font-weight: 500;
         color: $point-color;
       }
@@ -121,7 +122,7 @@ onUnmounted(() => {
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
-        span{
+        span {
           font-weight: bold;
         }
       }
@@ -135,6 +136,34 @@ onUnmounted(() => {
     top: 12px;
     right: 16px;
     cursor: pointer;
+  }
+}
+@media screen and (max-width: 768px) {
+  .side-menu {
+    width: 40%;
+    ul {
+      li {
+        .btn {
+          margin-top: 30px;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 450px) {
+  .side-menu {
+    width: 55%;
+    padding: 24px 20px;
+    ul {
+      gap: 30px;
+      li {
+        font-size: $small-txt;
+        .btn {
+          font-size: $small-txt;
+          margin-top: 20px;
+        }
+      }
+    }
   }
 }
 </style>

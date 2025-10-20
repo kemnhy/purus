@@ -86,120 +86,159 @@
     text-align: center;
     font-size: $main-title;
   }
-  .card-list {
-    margin-top: 60px;
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    .card {
-      background-color: $main-color;
-      flex: 1;
-      width: 310px;
-      height: 350px;
+  .inner {
+    overflow: hidden;
+    .card-list {
+      width: 100%;
+      margin-top: 60px;
       display: flex;
-      flex-direction: column;
       justify-content: space-between;
-      &:first-child,
-      &:nth-child(3) {
-        padding-bottom: 0;
-      }
-      .txt {
-        width: 100%;
-        h2 {
-          font-size: $medium-txt-2;
+      gap: 16px;
+      .card {
+        background-color: $main-color;
+        flex: 1;
+        max-width: 310px;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        &:first-child,
+        &:nth-child(3) {
+          padding-bottom: 0;
         }
-        p {
-          font-size: $small-txt;
-          padding-top: 20px;
-          strong{
-            color: $point-color;
-            font-weight: 500;
+        .txt {
+          width: 100%;
+          h2 {
+            font-size: $medium-txt-2;
           }
-        }
-      }
-      .contents {
-        width: 100%;
-        .before-after {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          li {
-            position: relative;
-            i {
-              font-size: 24px;
-              color: $point-color;
-              text-align: center;
-            }
-            img {
-              width: 100%;
-              display: block;
-              border-radius: 12px;
-            }
-            p {
-              position: absolute;
-              bottom: -28px;
-              left: 50%;
-              transform: translateX(-50%);
-              font-weight: bold;
-              color: $point-color;
-            }
-          }
-        }
-        .box {
-          width: 70%;
-          padding: 20px 20px 40px 20px;
-          background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(255, 255, 255, 1) 80%,
-            rgba(255, 255, 255, 0) 100%
-          );
-          margin-left: auto;
-          border-top-left-radius: 12px;
-          border-top-right-radius: 12px;
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          li {
-            font-size: 15px;
+          p {
+            font-size: $small-txt;
+            padding-top: 20px;
             strong {
               color: $point-color;
+              font-weight: 500;
             }
           }
         }
-        .box2 {
-          flex-direction: row;
-          align-items: center;
-          padding: 20px 20px 75px 20px;
-          li {
-            .fa-user {
-              font-size: $main-title;
-              color: $point-color;
-            }
-            p {
-              font-size: 15px;
-            }
-            .star {
-              color: $point-color;
-              font-weight: bold;
-            }
-            &:nth-child(2) {
-              display: flex;
-              flex-direction: column;
-              gap: 5px;
+        .contents {
+          width: 100%;
+          .before-after {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            li {
+              position: relative;
+              i {
+                font-size: 24px;
+                color: $point-color;
+                text-align: center;
+              }
+              img {
+                width: 100%;
+                display: block;
+                border-radius: 12px;
+              }
+              p {
+                position: absolute;
+                bottom: -28px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-weight: bold;
+                color: $point-color;
+              }
             }
           }
-        }
-        &:last-child {
-          height: 50%;
-          img {
-            height: 100%;
-            display: block;
+          .box {
+            width: 70%;
+            padding: 20px 20px 40px 20px;
+            background: linear-gradient(
+              to bottom,
+              rgba(255, 255, 255, 1) 0%,
+              rgba(255, 255, 255, 1) 80%,
+              rgba(255, 255, 255, 0) 100%
+            );
             margin-left: auto;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            li {
+              font-size: 15px;
+              strong {
+                color: $point-color;
+              }
+            }
+          }
+          .box2 {
+            flex-direction: row;
+            align-items: center;
+            padding: 20px 20px 75px 20px;
+            li {
+              .fa-user {
+                font-size: $main-title;
+                color: $point-color;
+              }
+              p {
+                font-size: 15px;
+              }
+              .star {
+                color: $point-color;
+                font-weight: bold;
+              }
+              &:nth-child(2) {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+              }
+            }
+          }
+          &:last-child {
+            height: 50%;
+            img {
+              height: 100%;
+              display: block;
+              margin-left: auto;
+            }
           }
         }
       }
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .service-wrap {
+    padding: $tab-spacing 0;
+    .title{
+    font-size: $medium-txt-2;
+  }
+  .inner{
+    .card-list{
+      margin-top: 34px;
+      flex-wrap: wrap;
+      gap: 20px;
+      .card{
+        max-width: 290px;
+        height: 330px;
+        width: calc((100% - 20px) / 2);
+        flex: auto;
+        .txt{
+          h2{
+            font-size: 20px;
+          }
+          p{
+            font-size: $small-txt;
+            padding-top: 10px;
+          }
+        }
+        .contents{
+          .box{
+            width: 80%;
+          }
+        }
+      }
+    }
+  }
   }
 }
 </style>

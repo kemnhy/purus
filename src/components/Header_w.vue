@@ -1,6 +1,12 @@
 <template>
   <div class="inner header">
-    <img src="/public/images/logo.png" alt="logo" @click="goHome" />
+    <img src="/images/logo.png" alt="logo" @click="goHome" class="web-logo" />
+    <img
+      src="/public/images/mobile-logo.png"
+      alt="logo"
+      @click="goHome"
+      class="mobile-logo"
+    />
     <div class="hamburger" @click="toggleSide">
       <div
         class="line"
@@ -49,11 +55,17 @@ const goHome = () => {
     width: 10%;
     cursor: pointer;
   }
+  .web-logo {
+    display: block;
+  }
+  .mobile-logo {
+    display: none;
+  }
   .hamburger {
     cursor: pointer;
     width: 3%;
     max-width: 30px;
-    min-width: 28px;
+    min-width: 25px;
     height: 33px;
     display: flex;
     flex-direction: column;
@@ -63,6 +75,35 @@ const goHome = () => {
       height: 2px;
       background-color: #fff;
       border-radius: 1px;
+    }
+  }
+}
+// responsive
+// @media screen and (max-width: 768px) {
+//   .header {
+//     .web-logo {
+//       display: none;
+//     }
+//     .mobile-logo {
+//       display: block;
+//       max-width: 38px;
+//     }
+//   }
+// }
+@media screen and (max-width: 480px) {
+  .header {
+    padding: 0;
+    img {
+    min-width: 0;
+    width: 10%;
+    cursor: pointer;
+  }
+    .web-logo {
+      display: none;
+    }
+    .mobile-logo {
+      display: block;
+      max-width: 38px;
     }
   }
 }
