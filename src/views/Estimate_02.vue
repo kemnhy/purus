@@ -92,7 +92,7 @@
           <ul class="agree_list">
             <li>1. 개인정보 수집목적 및 이용목적 : 전문청소 견적 및 서비스 제공</li>
             <li>2. 수집하는 개인정보 항목 : 성명, 전화번호, 주소</li>
-            <li>3. 개인정보의 보유기간 및 이용기간 : 회원탈퇴 시</li>
+            <li>3. 개인정보의 보유기간 및 이용기간 : 1년간 서비스 이용이 없으면 개인정보 파기</li>
           </ul>
           <div class="agree">
             <label>
@@ -209,18 +209,10 @@ const goNextPage = () => {
   .user_number {
     flex: 1;
     p {
-      font-size: $medium-txt-2;
+      font-size: $esti-medium-txt;
       span {
         font-size: 16px;
         color: $point-color;
-      }
-    }
-    .number_input {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      input {
-        width: 100px;
       }
     }
     input {
@@ -230,85 +222,8 @@ const goNextPage = () => {
       margin-top: 10px;
       width: 100%;
     }
-    .bar {
-      width: 10px;
-      height: 2px;
-      background-color: $border-color;
-      margin-top: 10px;
-    }
-  }
-  // 연락처 선택
-  .custom-select {
-    position: relative;
-    font-family: sans-serif;
-    user-select: none;
-    width: 80px;
-    .selected {
-      margin-top: 10px;
-      border: 1px solid $border-color;
-      border-radius: 8px;
-      padding: 6px 8px;
-      background: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.2s ease;
-
-      .arrow {
-        font-size: 10px;
-        margin-left: 6px;
-        color: $border-color;
-        transition: transform 0.2s ease;
-        &.open {
-          transform: rotate(180deg);
-        }
-      }
-    }
-
-    .options {
-      position: absolute;
-      top: 105%;
-      left: 0;
-      width: 100%;
-      max-height: 110px; // 👈 스크롤 높이
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      background: #fff;
-      border-radius: 6px;
-      z-index: 10;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-
-      li {
-        padding: 6px 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background-color: $grey-color;
-        }
-
-        &.active {
-          background-color: $main-color;
-          color: $point-color;
-        }
-      }
-
-      /* 스크롤바 커스텀 */
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: #bbb;
-        border-radius: 10px;
-      }
-      &::-webkit-scrollbar-thumb:hover {
-        background: #888;
-      }
-    }
   }
 }
-
 // 유의사항 안내
 .notice_wrap,
 .agree_wrap {
@@ -316,7 +231,7 @@ const goNextPage = () => {
   .notice,
   .agree_title {
     margin-bottom: 15px;
-    font-size: $medium-txt-2;
+    font-size: $esti-medium-txt;
     span {
       font-size: 16px;
       color: $point-color;
@@ -370,6 +285,108 @@ const goNextPage = () => {
     flex: 1;
     font-weight: 600;
     text-align: center;
+  }
+}
+
+// 반응형
+@media screen and (max-width: 768px) {
+  .esti_inner {
+    max-width: 600px;
+  }
+  .personal_data {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .notice_wrap,
+  .agree_wrap {
+    margin-top: 30px;
+  }
+  .buttons {
+    margin-top: 50px;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+@media screen and (max-width: 390px) {
+  .esti_inner {
+    max-width: 280px;
+  }
+  // 영역 이름
+  .esti_title {
+    height: 50px;
+    margin-bottom: 10px;
+    p,
+    i {
+      font-size: $esti-medium-txt;
+    }
+  }
+  .esti_gauge {
+    height: 7px;
+  }
+  // 개인정보 입력
+  .personal_data {
+    gap: 25px;
+    .user_name,
+    .user_number {
+      p {
+        font-size: 16px;
+        span {
+          font-size: 12px;
+        }
+      }
+      input {
+        font-size: 12px;
+      }
+    }
+  }
+  // 유의사항 안내
+  .notice_wrap,
+  .agree_wrap {
+    margin-top: 25px;
+    .notice,
+    .agree_title {
+      margin-bottom: 10px;
+      font-size: 16px;
+      span {
+        font-size: 12px;
+      }
+    }
+    ul {
+      gap: 10px;
+      margin-bottom: 20px;
+
+      li {
+        font-size: 13px;
+        p {
+          font-size: 12px;
+          &:first-child {
+            margin-top: 3px;
+          }
+        }
+      }
+    }
+    .agree_list {
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+  }
+  .agree {
+    font-size: 14px;
+    letter-spacing: -1px;
+    input {
+      margin-right: 5px;
+    }
+  }
+  .small_txt {
+    font-size: 12px;
+    margin-top: 25px;
+  }
+  .buttons {
+    margin-top: 20px;
+    gap: 10px;
+    .btn {
+      font-size: $small-txt;
+    }
   }
 }
 </style>

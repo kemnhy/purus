@@ -130,7 +130,7 @@
           <p>{{ address }} {{ detailAddress || "" }}</p>
         </div>
         <div>
-          <p>서비스 날짜</p>
+          <p>날짜</p>
           <p>{{ formattedSelectedDate }}</p>
         </div>
       </div>
@@ -140,7 +140,11 @@
           <br />
           서비스 이용하기
         </button>
-        <router-link class="btn btn_danger" to="/estimate02">입력사항 수정</router-link>
+        <router-link class="btn btn_danger" to="/estimate02">
+          입력사항
+          <br />
+          수정
+        </router-link>
       </div>
     </div>
   </div>
@@ -168,7 +172,7 @@
     <div class="modal_bg"></div>
     <div class="check_modal">
       <i @click="goToHome" class="fa-solid fa-xmark x-mark"></i>
-      <p class="modal_title">예약 신청이 완료되었습니다.</p>
+      <p class="modal_title">{{ reserComplete }}</p>
       <div class="modal_w">
         <img src="/images/reser_process.png" alt="진행과정아이콘" />
         <div class="reser_process">
@@ -206,7 +210,7 @@
 <script setup>
 import Header_w from "@/components/Header_w.vue";
 import Side_menu from "@/components/Side_menu.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
@@ -383,6 +387,20 @@ const phone = route.query.phone;
 
 // 예약 완료 모달
 const showComplete = ref(false);
+const reserComplete = ref("예약 신청이 완료되었습니다.");
+
+const updateComplete = () => {
+  reserComplete.value = window.innerWidth <= 390 ? "예약 신청 완료!" : reserComplete.value;
+};
+
+onMounted(() => {
+  updateComplete();
+  window.addEventListener("resize", updateComplete);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateComplete);
+});
 
 // 완료 창 닫기 누르면 홈으로 이동
 const goToHome = () => {
@@ -428,7 +446,7 @@ const goToHome = () => {
 .addr,
 .service_date {
   p {
-    font-size: $medium-txt-2;
+    font-size: $esti-medium-txt;
     span {
       font-size: 16px;
       color: $point-color;
@@ -451,7 +469,7 @@ const goToHome = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+  margin: 10px 0;
   gap: 20px;
   font-size: $small-txt;
   i {
@@ -568,7 +586,7 @@ const goToHome = () => {
 .check_animation_modal {
   background-color: #fff;
   width: 560px;
-  height: 480px;
+  // height: 480px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -584,7 +602,7 @@ const goToHome = () => {
     cursor: pointer;
   }
   .modal_title {
-    font-size: $medium-txt-1;
+    font-size: $esti-large-txt;
     font-weight: 600;
     text-align: center;
     margin-bottom: 30px;
@@ -620,7 +638,7 @@ const goToHome = () => {
       text-align: center;
       margin-bottom: 55px;
       p {
-        font-size: 22px;
+        font-size: $small-txt;
         strong {
           color: $point-color;
         }
@@ -634,7 +652,7 @@ const goToHome = () => {
       content: "";
       display: block;
       width: 5px;
-      height: 44px;
+      height: 40px;
       border-radius: 3px;
       background-color: $border-color;
       position: absolute;
@@ -643,14 +661,14 @@ const goToHome = () => {
     }
     p {
       color: $border-color;
-      font-size: 18px;
+      font-size: 16px;
     }
   }
   .info_w {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    font-size: 20px;
+    font-size: $small-txt;
     margin-bottom: 40px;
     div {
       display: flex;
@@ -661,6 +679,7 @@ const goToHome = () => {
     display: flex;
     gap: 20px;
     .btn {
+      font-size: $esti-medium-txt;
       width: 70%;
       font-weight: 600;
       padding: 10px;
@@ -760,5 +779,152 @@ const goToHome = () => {
   font-weight: 600;
   color: $point-color;
   margin: 0;
+}
+
+// 반응형
+@media screen and (max-width: 768px) {
+  .esti_inner {
+    max-width: 600px;
+  }
+  .service_date {
+    margin-top: 30px;
+  }
+  .calendar .calendar-days .calendar-day {
+    padding: 10px 15px 15px;
+  }
+  .infoCheck {
+    margin-top: 50px;
+  }
+}
+@media screen and (max-width: 390px) {
+  .esti_inner {
+    max-width: 280px;
+  }
+  // 영역 이름
+  .esti_title {
+    height: 50px;
+    margin-bottom: 10px;
+    p,
+    i {
+      font-size: $esti-medium-txt;
+    }
+  }
+  .esti_gauge {
+    height: 7px;
+  }
+  .addr,
+  .service_date {
+    p {
+      font-size: 16px;
+      span {
+        font-size: 12px;
+      }
+    }
+    input {
+      font-size: 12px;
+    }
+  }
+  // 달력
+  .calendar-header {
+    font-size: 16px;
+  }
+  .calendar {
+    padding: 10px 0;
+  }
+  .calendar-weekdays {
+    margin-bottom: 15px !important;
+    span {
+      font-size: 16px;
+    }
+  }
+  .calendar-days {
+    .calendar-day {
+      padding: 0 5px !important;
+      p {
+        font-size: 16px !important;
+      }
+    }
+  }
+  .calendar-period {
+    gap: 10px;
+    button {
+      font-size: 16px;
+      padding: 5px 0;
+    }
+  }
+  .infoCheck {
+    margin-top: 30px;
+    .btn {
+      font-size: $small-txt;
+    }
+  }
+  .check_modal,
+  .loading_modal,
+  .check_animation_modal {
+    width: 280px;
+    padding: 30px 20px;
+    border-radius: 20px;
+    .modal_title {
+      font-size: $esti-medium-txt;
+      margin-bottom: 15px;
+    }
+    .info_w {
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      div {
+        p:nth-child(2) {
+          width: 70%;
+          text-align: right;
+        }
+      }
+    }
+    .x-mark {
+      top: 25px;
+      right: 25px;
+      font-size: 18px;
+    }
+    .modal_w {
+      img {
+        width: 80%;
+      }
+      .reser_process {
+        gap: 32px;
+      }
+      hr {
+        margin: 20px 0;
+      }
+      .reser_notice {
+        margin-bottom: 20px;
+        p {
+          font-size: 15px;
+        }
+      }
+    }
+    .reser_check_notice {
+      padding-left: 10px;
+      &::before {
+        width: 2px;
+        height: 28px;
+        top: 3px;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+    .reserbtns {
+      gap: 10px;
+      .btn {
+        font-size: 16px;
+        width: 60%;
+        &.btn_danger {
+          width: 40%;
+        }
+      }
+    }
+    .loading_text {
+      font-size: 14px;
+    }
+  }
 }
 </style>

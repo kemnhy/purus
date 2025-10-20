@@ -61,7 +61,7 @@
               <span>(필수)</span>
             </p>
             <span>ex) IMK-3051</span>
-            <input type="text" v-model="modelName" />
+            <input type="text" v-model="modelName" :placeholder="placeholderTxt" />
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@
 <script setup>
 import Header_w from "@/components/Header_w.vue";
 import Side_menu from "@/components/Side_menu.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 // 브랜드 목록
@@ -138,6 +138,21 @@ const goNextPage = () => {
     router.push("/estimate02");
   }
 };
+
+// 390px일때 모델명 placeholder 생기기
+const placeholderTxt = ref("");
+const updatePlaceholder = () => {
+  placeholderTxt.value = window.innerWidth <= 390 ? "ex) IMK-3051" : "";
+};
+
+onMounted(() => {
+  updatePlaceholder();
+  window.addEventListener("resize", updatePlaceholder);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updatePlaceholder);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -199,7 +214,7 @@ const goNextPage = () => {
   gap: 30px;
   margin-bottom: 50px;
   p {
-    font-size: $medium-txt-2;
+    font-size: $esti-medium-txt;
     span {
       font-size: 16px;
       color: $point-color;
@@ -230,7 +245,7 @@ const goNextPage = () => {
 // 모델명 입력
 .esti_model {
   p {
-    font-size: $medium-txt-2;
+    font-size: $esti-medium-txt;
     span {
       font-size: 16px;
       color: $point-color;
@@ -239,14 +254,15 @@ const goNextPage = () => {
   }
   span {
     color: $border-color;
-    font-size: $small-txt;
+    font-size: 16px;
     margin-top: 15px;
     display: block;
   }
   input {
     border: 1px solid $border-color;
     border-radius: 8px;
-    padding: 20px;
+    padding: 15px;
+    font-size: 16px;
     margin-top: 10px;
     width: 100%;
   }
@@ -267,7 +283,7 @@ const goNextPage = () => {
     margin-bottom: 20px;
     .price_title {
       p {
-        font-size: $btn-large;
+        font-size: $esti-large-txt;
         font-weight: 600;
       }
       span {
@@ -275,7 +291,7 @@ const goNextPage = () => {
       }
     }
     .price_num {
-      font-size: $btn-large;
+      font-size: $esti-large-txt;
       color: $point-color;
       font-weight: 600;
     }
@@ -286,6 +302,92 @@ const goNextPage = () => {
     margin: auto;
     width: 100%;
     font-weight: 600;
+  }
+}
+
+// 반응형
+@media screen and (max-width: 768px) {
+  .esti_inner {
+    max-width: 600px;
+  }
+}
+@media screen and (max-width: 390px) {
+  .esti_inner {
+    max-width: 280px;
+  }
+  // 영역 이름
+  .esti_title {
+    height: 50px;
+    margin-bottom: 10px;
+    p,
+    i {
+      font-size: $esti-medium-txt;
+    }
+  }
+  .esti_gauge {
+    height: 7px;
+  }
+  // 브랜드 선택, 용량 선택
+  .esti_brand,
+  .esti_size {
+    gap: 10px;
+    margin-bottom: 25px;
+    p {
+      font-size: 16px;
+      span {
+        font-size: 12px;
+      }
+    }
+    div {
+      gap: 10px;
+    }
+    .brand_list,
+    .size_list {
+      font-size: 16px;
+      padding: 10px;
+      input {
+        margin-right: 10px;
+      }
+    }
+  }
+  .esti_model {
+    p {
+      font-size: 16px;
+      span {
+        font-size: 12px;
+      }
+    }
+    span {
+      display: none;
+    }
+    input {
+      padding: 10px 8px;
+      font-size: 14px;
+    }
+  }
+  .esti_price {
+    height: 170px;
+    .price_txt {
+      margin-bottom: 15px;
+      .price_title {
+        p {
+          font-size: $esti-medium-txt;
+        }
+        span {
+          font-size: 12px;
+        }
+      }
+      .price_num {
+        font-size: $esti-medium-txt;
+      }
+    }
+    .btn {
+      font-size: $small-txt;
+    }
+  }
+  .esti_select {
+    max-height: calc(100vh - 360px);
+    padding-bottom: 0px;
   }
 }
 </style>
