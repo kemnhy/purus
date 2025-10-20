@@ -46,6 +46,7 @@ const goTop = () => {
 .quickMenu {
   position: fixed;
   width: 3.7%;
+  min-width: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -102,6 +103,32 @@ const goTop = () => {
   }
   100% {
     transform: translate3d(0, 0, 0);
+  }
+}
+// responsive
+@media screen and (max-width:1300px) {
+  .quickMenu {
+    width: 5%;
+  }
+}
+@media screen and (max-width:1024px) {
+  .quickMenu {
+    width: 6%;
+    li{
+      button{
+        font-size: 100%;
+      }
+    }
+  }
+}
+@media screen and (max-width:768px) {
+  .quickMenu {
+    width: 7.5%;
+  }
+}
+@media screen and (max-width:450px) {
+  .quickMenu {
+    width: 13%;
   }
 }
 </style>

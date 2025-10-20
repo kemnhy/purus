@@ -12,7 +12,7 @@
             :key="i"
             class="box"
             :class="{ visible: isVisible }"
-            :style="{ transitionDelay: `${i * 0.8}s` }"
+            :style="{ transitionDelay: `${i * 0.6}s` }"
           >
             <p v-html="text"></p>
           </div>
@@ -49,7 +49,6 @@ onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   handleScroll();
 });
-
 </script>
 
 <style lang="scss" scoped>
@@ -81,7 +80,7 @@ onMounted(() => {
         flex-direction: column;
         gap: 28px;
         .box {
-          width: 550px;
+          max-width: 550px;
           height: 110px;
           background-color: $font-color;
           border-radius: 100px;
@@ -107,7 +106,7 @@ onMounted(() => {
             justify-content: center;
             line-height: 1.2;
           }
-          &.visible{
+          &.visible {
             opacity: 1;
             transform: translateY(0);
           }
@@ -126,4 +125,150 @@ onMounted(() => {
     }
   }
 }
+@media screen and (max-width: 1200px) {
+  .banner-wrap {
+    .inner {
+      .txt {
+        .banner-title {
+          p {
+            font-size: 20px;
+          }
+          h2 {
+            font-size: 40px;
+          }
+        }
+        .animation-txt {
+          .box {
+            max-width: 400px;
+            height: 80px;
+            p {
+              font-size: $small-txt;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 850px) {
+  .banner-wrap {
+    padding: $tab-spacing 0;
+    .inner {
+      .txt {
+        .banner-title {
+          margin-left: 0px;
+          p {
+            font-size: 20px;
+          }
+          h2 {
+            font-size: 36px;
+            padding: 15px 0 30px 0;
+          }
+        }
+        .animation-txt {
+          gap: 16px;
+          .box {
+            max-width: 330px;
+            height: 70px;
+            &:first-child {
+              margin-left: 80px;
+            }
+            &:nth-child(3) {
+              margin-left: 50px;
+            }
+            p {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 450px) {
+  .banner-wrap {
+    padding: 0 0 $mo-spacing 0;
+    .inner {
+      flex-direction: column-reverse;
+      .txt {
+        width: 100%;
+        .banner-title {
+          margin-left: 0px;
+          p {
+            font-size: 16px;
+            text-align: center;
+          }
+          h2 {
+            font-size: $medium-txt-2;
+            padding: 15px 0 30px 0;
+            text-align: center;
+          }
+        }
+        .animation-txt {
+          gap: 16px;
+          .box {
+            max-width: 280px;
+            height: 60px;
+            &:first-child {
+              margin-left: 80px;
+            }
+            &:nth-child(3) {
+              margin-left: 50px;
+            }
+            p {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+      .img{
+        width: 100%;
+        display: block;
+        img{
+          width: 90%;
+          margin: auto;
+          object-fit: contain;
+          aspect-ratio: 1 / 1;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 390px){
+.banner-wrap {
+    .inner {
+      .txt {
+        width: 100%;
+        .banner-title {
+          p {
+            font-size: 16px;
+            text-align: center;
+          }
+          h2 {
+            font-size: $medium-txt-2;
+            padding: 15px 20px 24px 20px;
+            text-align: center;
+          }
+        }
+        .animation-txt {
+          gap: 12px;
+          .box {
+            max-width: 250px;
+            height: 60px;
+            &:first-child {
+              margin-left:50px;
+            }
+            &:nth-child(3) {
+              margin-left: 30px;
+            }
+            p {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 </style>
