@@ -26,7 +26,7 @@
 .footer {
   width: 100%;
   background-color: $grey-color;
-  border-top: 1px solid #e3eef5;
+
   padding: 30px 0;
 
   &__inner {
@@ -52,7 +52,7 @@
   &__info {
     flex: 1;
     font-size: $small-txt;
-    
+
     line-height: 1.8;
 
     a {
@@ -63,7 +63,7 @@
     .footer__copy {
       margin-top: 15px;
       color: #999;
-      font-size: 11px;
+      font-size: $small-txt;
     }
   }
 }

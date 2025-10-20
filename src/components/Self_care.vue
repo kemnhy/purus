@@ -262,4 +262,129 @@ const cards = ref([
     }
   }
 }
+// 768px 반응형 테블릿
+@media screen and (max-width: 768px) {
+  // 셀프케어 영역
+  .care-wrap {
+    padding: 80px 0;
+
+    .inner {
+      border-radius: 40px;
+
+      .inner-2 {
+        width: 90%;
+        padding: 60px 0;
+      }
+
+      .header .title {
+        font-size: 24px;
+      }
+
+      .progress {
+        height: 36px;
+        margin-bottom: 40px;
+      }
+
+      .grid {
+        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+
+        .card {
+          padding: 30px 15px;
+          height: 300px;
+
+          .title {
+            font-size: 20px;
+          }
+
+          .img img {
+            width: 100%;
+          }
+        }
+      }
+
+      .notice {
+        font-size: 15px;
+      }
+    }
+  }
+}
+// 390px 반응형 모바일
+// 셀프케어 영역
+@media screen and (max-width: 390px) {
+  .care-wrap {
+    padding: 60px 0;
+
+    .inner {
+      border-radius: 30px;
+
+      .inner-2 {
+        width: 92%;
+        padding: 40px 0;
+      }
+
+      .header .title {
+        font-size: 20px;
+        text-align: center;
+      }
+
+      .progress {
+        width: 90%;
+        height: 26px;
+        margin-bottom: 40px;
+
+        .bar-active {
+          padding-right: 12px;
+
+          .txt {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .grid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 18px;
+        margin-bottom: 30px;
+
+        .card {
+          width: 90%;
+          background: $sub-color;
+          border-radius: 20px;
+          text-align: center;
+          padding: 25px 15px;
+          transition: 0.3s;
+
+          .title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: $font-color;
+          }
+
+          .img img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+          }
+
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
+          }
+        }
+      }
+
+      .notice {
+        font-size: 12px;
+        // color: #666;
+        text-align: center;
+      }
+    }
+  }
+}
+
 </style>

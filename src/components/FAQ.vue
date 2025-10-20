@@ -3,7 +3,12 @@
     <div class="faq">
       <h1 class="faq-title">F A Q</h1>
 
-      <div class="faq-item" v-for="(item, index) in faqList" :key="index" :class="{ active: activeIndex === index }">
+      <div
+        class="faq-item"
+        v-for="(item, index) in faqList"
+        :key="index"
+        :class="{ active: activeIndex === index }"
+      >
         <div class="faq-question" @click="toggleFAQ(index)">
           <span class="faq-arrow">
             <i class="fa-solid fa-angle-down"></i>
@@ -11,9 +16,11 @@
           {{ item.question }}
         </div>
 
-        <div class="faq-answer" v-if="activeIndex === index">
-          {{ item.answer }}
-        </div>
+        <transition name="faq">
+          <div class="faq-answer" v-if="activeIndex === index">
+            {{ item.answer }}
+          </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -92,6 +99,7 @@ export default {
 
     &.active .faq-arrow {
       transform: rotate(180deg);
+      color: $point-color;
     }
   }
 
@@ -110,7 +118,7 @@ export default {
     margin-right: 15px;
     font-size: $small-txt;
     color: $sub-font-color;
-    
+    transition: transform 0.3s ease;
   }
 
   .faq-answer {
@@ -119,6 +127,86 @@ export default {
     font-size: $small-txt;
     color: $sub-font-color;
     line-height: 1.6;
+  }
+
+  /* 애니메이션 */
+  .faq-enter-active,
+  .faq-leave-active {
+    transition: all 0.3s ease;
+  }
+  .faq-enter-from,
+  .faq-leave-to {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  /* 768px 반응형 */
+  @media (max-width: 768px) {
+    padding: 100px 40px;
+
+    .faq-title {
+      text-align: left;
+      font-size: 25px;
+    }
+
+    .faq-question {
+      font-size: 16px;
+    }
+
+    .faq-answer {
+      font-size: 14px;
+    }
+  }
+
+  /*  390px 반응형 */
+  @media (max-width: 390px) {
+    padding: 60px 20px;
+    background: #fff;
+
+    .faq-title {
+      text-align: left;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: #004b9b;
+      margin-bottom: 25px;
+    }
+
+    .faq-item {
+      background: #fff;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+
+      &.active {
+        background: #fff;
+      }
+
+      .faq-question {
+        padding: 14px;
+        font-size: 15px;
+        color: #003366;
+        display: flex;
+        align-items: center;
+
+        .faq-arrow {
+          font-size: 13px;
+          color: #007bff;
+          margin-right: 12px;
+        }
+      }
+
+      .faq-answer {
+        background: #fff;
+        margin: 0;
+        padding: 12px 16px 16px;
+        border-top: 1px solid #fff;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #4a4a4a;
+      }
+    }
   }
 }
 </style>
