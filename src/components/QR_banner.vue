@@ -123,4 +123,12 @@
     font-weight: bold;
   }
 }
+// 768px 반응형 
+@media screen and (max-width: 768px) {
+
+}
+// 390px 반응형 
+@media screen and (max-width: 390px) {
+
+}
 </style>

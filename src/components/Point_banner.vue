@@ -33,8 +33,7 @@ const goEstimate = ()=>{
 }
 
 .inner {
-  // width: 100%;
-  // max-width: 1200px;
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -67,8 +66,7 @@ const goEstimate = ()=>{
   cursor: pointer;
   font-size: 25px;
   font-weight: bold;
-  // justify-content: space-between;
-  // transition: background-color 0.2s ease;
+  
 
   span{
     padding-bottom: 2.5px;
@@ -77,4 +75,50 @@ const goEstimate = ()=>{
     background-color: darken($point-color, 5%);
   }
 }
+// 768px 반응형 테블릿
+@media (max-width: 768px) {
+  .point-banner {
+    padding: 30px 0;
+  }
+
+  .inner {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: row; /* 한 줄 유지 */
+    align-items: center;
+    justify-content: center; 
+    gap: 18px; 
+    padding: 0 16px;
+  }
+
+  .text {
+    font-size: $medium-txt-2;
+    line-height: 1.4;
+    margin: 0;
+    text-align: center;
+
+    .highlight {
+      font-weight: bold;
+    }
+  }
+
+  .btn-check {
+    font-size: $small-txt;
+    padding: 8px 20px;
+    gap: 18px;
+    border-radius: 8px;
+    flex-shrink: 0; /* 버튼이 줄어들지 않게 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+// 390px 반응형 모바일 
+@media (max-width: 390px) {
+  .point-banner {
+    visibility: hidden;
+  }
+}
+
 </style>
