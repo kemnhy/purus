@@ -323,16 +323,20 @@ const cards = ref([
         width: 92%;
         padding: 40px 0;
       }
-
-      .header .title {
-        font-size: 20px;
-        text-align: center;
+      .header {
+       .logo{
+          width: 130px;
+        }
+        .sub {
+          font-size: $medium-txt-2;
+        }
       }
 
       .progress {
         width: 90%;
         height: 26px;
-        margin-bottom: 40px;
+
+        margin: auto;
 
         .bar-active {
           padding-right: 12px;
@@ -349,7 +353,7 @@ const cards = ref([
         align-items: center;
         width: 100%;
         gap: 18px;
-        margin-bottom: 30px;
+        margin: 30px 0;
 
         .card {
           width: 90%;
@@ -379,12 +383,14 @@ const cards = ref([
       }
 
       .notice {
-        font-size: 12px;
+        font-size: 14px;
         // color: #666;
         text-align: center;
+        .arrow{
+          font-size: 14px;
+        }
       }
     }
   }
 }
-
 </style>
