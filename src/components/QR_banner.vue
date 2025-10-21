@@ -1,6 +1,6 @@
 <template>
   <section class="qr-banner">
-    <div class="qr-banner__inner">
+    <div class="inner">
       <!-- 왼쪽 이미지 -->
       <div class="qr-banner__image">
         <img src="/images/QR.png" alt="앱 미리보기" />
@@ -12,7 +12,9 @@
           <p class="sub-title">제빙기 케어 앱</p>
           <div class="main-title"><img src="/images/footer_logo.png" alt="logo" /></div>
           <p class="desc">
-            <strong>앱에서</strong> 쉽고 편리하게!<br />
+            <strong>앱에서</strong>
+            쉽고 편리하게!
+            <br />
             더 많은 기능을 이용해보세요.
           </p>
         </div>
@@ -43,13 +45,11 @@
   background: linear-gradient(to top, #f0faff 0%, #ffffff 100%);
   padding: $web-spacing 0;
 
-  &__inner {
-    max-width: 1200px;
-    margin: 0 auto;
+  .inner {
     display: flex;
-    align-items: center; 
-    justify-content: center; 
-    gap: 60px; 
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
   }
 
   &__image {
@@ -66,7 +66,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
     text-align: left;
 
     .sub-title {
@@ -76,9 +76,6 @@
     }
 
     .main-title {
-      font-size: $main-title;
-      font-weight: bold;
-      color: $font-color;
       margin-bottom: 15px;
       img {
         width: 198px;
@@ -123,12 +120,79 @@
     font-weight: bold;
   }
 }
-// 768px 반응형 
+// 768px 반응형
 @media screen and (max-width: 768px) {
-
+  .qr-banner {
+    padding: 50px 0;
+    .qr-banner__content {
+      .sub-title {
+        font-size: 20px;
+      }
+      .main-title {
+        img {
+          width: 150px;
+        }
+      }
+      .desc {
+        font-size: 20px;
+      }
+      .qr-section {
+        .qr-1 {
+          .qr {
+            width: 80px;
+          }
+          .button {
+            width: 80px;
+          }
+        }
+      }
+    }
+  }
 }
-// 390px 반응형 
+// 390px 반응형
 @media screen and (max-width: 390px) {
-
+  .qr-banner {
+    padding: 30px 0;
+    .inner {
+      flex-direction: column;
+      gap: 30px;
+    }
+    .qr-banner__image {
+      justify-content: center;
+    }
+    .qr-banner__content {
+      .sub-title {
+        font-size: 14px;
+        text-align: center;
+      }
+      .main-title {
+        text-align: center;
+        padding-left: 10px;
+        img {
+          width: 120px;
+        }
+      }
+      .desc {
+        font-size: 16px;
+        text-align: center;
+      }
+      .qr-section {
+        gap: 10px;
+        .qr-1 {
+          .qr {
+            display: none;
+          }
+          .button {
+            width: 100%;
+            border-radius: 6px;
+          }
+        }
+      }
+    }
+    .notice {
+      font-size: 12px;
+      margin-top: 20px;
+    }
+  }
 }
 </style>

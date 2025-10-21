@@ -51,7 +51,7 @@ const gotoList = () => {
 .reser_title {
   text-align: center;
   margin-bottom: clamp(10px, 5vw, 60px);
-  padding-top: clamp(40px, 8vw, 100px);
+  padding-top: clamp(20px, 5vw, 100px);
   h1 {
     font-size: $medium-txt-1;
     margin-bottom: 35px;
@@ -115,6 +115,25 @@ const gotoList = () => {
   }
   .reser_check_w {
     min-width: 280px;
+    gap: 5px;
+    height: auto;
+    margin-bottom: 40px;
+    .reser_input {
+      margin-bottom: 25px;
+      .input_w {
+        label {
+          font-size: 14px;
+        }
+        input {
+          font-size: 12px;
+          width: 76%;
+          padding: 8px;
+        }
+      }
+    }
+    .check_btn {
+      font-size: 16px;
+    }
   }
 }
 </style>
