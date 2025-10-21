@@ -23,6 +23,8 @@
             <p>{{ item.dscr }}</p>
           </div>
         </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
       </div>
     </div>
   </div>
@@ -31,9 +33,10 @@
 <script setup>
 import { onMounted } from "vue";
 import Swiper from "swiper";
-import { EffectCoverflow } from "swiper/modules";
+import { EffectCoverflow, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
 
 const cares = [
   {
@@ -60,7 +63,7 @@ const cares = [
 onMounted(() => {
   if (window.innerWidth <= 450) {
     new Swiper(".care-swiper", {
-      modules: [EffectCoverflow],
+      modules: [EffectCoverflow, Navigation],
       effect: "coverflow",
       grabCursor: true,
       centeredSlides: true,
@@ -75,20 +78,24 @@ onMounted(() => {
         modifier: 1,
         slideShadows: false,
       },
+      navigation: {
+        nextEl: ".swiper-button-prev",
+        prevEl: ".swiper-button-next",
+      },
       initialSlide: 0,
       breakpoints: {
         0: {
           spaceBetween: -130,
-          coverflowEffect:{
+          coverflowEffect: {
             scale: 0.3,
-          }
+          },
         },
-        450:{
+        450: {
           spaceBetween: -80,
-          coverflowEffect:{
+          coverflowEffect: {
             scale: 0.6,
-          }
-        }
+          },
+        },
       },
     });
   }
@@ -197,12 +204,13 @@ onMounted(() => {
     }
     .card-wrap {
       display: block;
+      position: relative;
       .web-tab {
         display: none;
       }
       .care-swiper {
+        overflow: visible !important;
         display: block;
-        // overflow: visible;
         .swiper-wrapper {
           .swiper-slide {
             width: 200px;
@@ -233,6 +241,26 @@ onMounted(() => {
             opacity: 0;
             pointer-events: none;
           }
+        }
+        .swiper-button-prev {
+          line-height: 1;
+          position: absolute;
+          top: 50%;
+          right: -12%;
+          z-index: 10;
+          opacity: 0.4;
+        }
+        .swiper-button-next {
+          line-height: 1;
+          position: absolute;
+          top: 50%;
+          left: -12%;
+          transform: rotate(180deg);
+          z-index: 10;
+          // border: 1px solid #aaa;
+          // padding: 4px 8px 4px 10px;
+          // border-radius: 30px;
+          opacity: 0.4;
         }
       }
     }
