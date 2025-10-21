@@ -1,58 +1,52 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
+// import { PostModal } from "@/components/Post_Modal.vue";
+// const PostModal = useModal();
 
-const activeFilter = ref("추천순");
+const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+const revInfo = ref([]);
 const rating = ref(0);
-const userImgUrl = ref("/images/profile.png");
-const revImgUrl = ref(["/images/review/review1.png", "/images/Real-riv.png", "/images/Real-riv3.png"]);
+// const sliceImg =
+const activeFilter = ref("추천순");
 
-const reviews = ref([
-  {
-    id: 1,
-    userImage: userImgUrl.value,
-    username: "ㅇㅇ2",
-    date: "2025.09.16",
-    service: "카이저제빙기 디테일 클리어서비스 이용",
-    images: [revImgUrl.value[0], revImgUrl.value[1]],
-    comment: "아주 굳b",
-    likes: 5,
-    rating: 3.5,
-  },
-  {
-    id: 2,
-    userImage: userImgUrl.value,
-    username: "ㅇㅇ",
-    date: "2025.09.13",
-    service: " 제빙기   이용",
-    images: [revImgUrl.value[2]], // ✅ 배열로 (1개여도)
-    comment: "test comment",
-    likes: 10,
-    rating: 1,
-  },
-  {
-    id: 3,
-    userImage: userImgUrl.value,
-    username: "ㅇㅇ",
-    date: "2025.09.13",
-    service: " 제빙기   이용",
-    images: [], // ✅ 배열로 (1개여도)
-    comment: "test comment",
-    likes: 10,
-    rating: 2,
-  },
-]);
+// const isOpModal = ref(false);
+
+const getReviewsInfo = async () => {
+  try {
+    const response = await fetch(SHEETDB_API);
+    const data = await response.json();
+    revInfo.value = data.map((item) => ({
+      id: item.id,
+      username: item.USER_NM,
+      rating: Number(item.REV_RATING) || 0,
+      comment: item.REV_COMMENT || "",
+      date: item.REV_DT || "",
+      service: item.SERVICE || "",
+      likes: Number(item.REV_LIKES) || 0,
+      images: item.REV_IMG ? item.REV_IMG.split(",").map((img) => img.trim()) : [],
+      userImage: item.USER_IMG ? item.USER_IMG : [],
+    }));
+    console.log("리뷰 불러오기 성공:", revInfo.value);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+onMounted(() => {
+  getReviewsInfo();
+  console.log(averageScore.value);
+});
+//  이미지 여러개일떄 짤라서
 
 // 총 리뷰 개수
-const totalReviews = computed(() => reviews.value.length);
+const totalReviews = computed(() => revInfo.value?.length || 0);
 
 // 별점별 개수 계산
 const getRatingCounts = computed(() => {
   const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-  reviews.value.forEach((review) => {
+  revInfo.value.forEach((review) => {
     counts[Math.ceil(review.rating)]++;
   });
-
-  console.log(counts);
 
   return counts;
 });
@@ -60,7 +54,9 @@ const getRatingCounts = computed(() => {
 // 평균 점수 계산 (소수점 1자리)
 const averageScore = computed(() => {
   if (totalReviews.value === 0) return 0;
-  const sum = reviews.value.reduce((acc, review) => acc + review.rating, 0);
+  const sum = revInfo.value.reduce((acc, review) => acc + review.rating, 0);
+  console.log(sum);
+
   return (sum / totalReviews.value).toFixed(1);
 });
 
@@ -74,17 +70,9 @@ const averageScore = computed(() => {
 // 좋아요 상태 관리
 const likedReviews = ref(new Set());
 
-// 초기 로드 시 localStorage에서 불러오기
-onMounted(() => {
-  const saved = localStorage.getItem("likedReviews");
-  if (saved) {
-    likedReviews.value = new Set(JSON.parse(saved));
-  }
-});
-
 // 좋아요 토글
 const toggleLike = (reviewId) => {
-  const review = reviews.value.find((r) => r.id === reviewId);
+  const review = revInfo.value.find((r) => r.id === reviewId);
   if (!review) return;
 
   if (likedReviews.value.has(reviewId)) {
@@ -117,8 +105,19 @@ const isLiked = (reviewId) => {
 
     <div class="postrev">
       <div class="postrev-cnt">리뷰 수 {{ totalReviews }}</div>
-      <!-- <div :class="isCntReview">{{}}</div> -->
-      <button class="postrev-btn">리뷰 남기기</button>
+
+      <button @click="openModal" class="postrev-btn">리뷰 남기기</button>
+
+      <!-- <div class="modal_bg">
+        <Modal class="modal_section" v-model="isModalOpen" title="폼">
+          <input v-model="txtId" placeholder="아이디 입력" />
+          
+          <input v-model="selRating" type="number" min="1" max="5" placeholder="별점(1~5)" />
+          <textarea v-model="tbReview" placeholder="리뷰를 입력하세요."></textarea>
+          <button @click="saveReview">리뷰 저장하기</button>
+        </Modal>
+      </div>
+      -->
     </div>
 
     <!-- 총 만족도 ==========================-->
@@ -162,11 +161,10 @@ const isLiked = (reviewId) => {
       <div class="divider"></div>
       <div class="grp-btn">
         <!-- 필터 버튼 -->
-        <div class="filter-buttons">
-          <!-- 필터 아이콘  -->
+        <div class="filter-tabs">
           <!-- <div class="filler-icon"></div> -->
-          <button class="filter-btn" @click="seqBest">추천순</button>
           <button class="filter-btn" @click="seqLast">최신순</button>
+          <button class="filter-btn" @click="seqBest">추천순</button>
           <button class="filter-btn photo" @click="selPhoto">
             <div class="img-icon"></div>
             사진 리뷰
@@ -183,7 +181,7 @@ const isLiked = (reviewId) => {
       <div class="divider"></div>
 
       <!-- 리뷰 아이템 -->
-      <div class="review-item" v-for="(review, i) in reviews" :key="i">
+      <div class="review-item" v-for="(review, i) in revInfo" :key="i">
         <!-- 사용자 정보 -->
         <div class="user-info">
           <img v-if="review.userImage" :src="review.userImage" alt="프로필" class="profile-img" />
@@ -216,7 +214,7 @@ const isLiked = (reviewId) => {
         <!-- 좋아요 버튼 -->
         <div class="like-div">
           <button class="like-btn" @click="toggleLike(review.id)" :class="{ active: isLiked(review.id) }">
-            <i class="like-icon" :class="{ filled: isLiked(reviews.id) }"></i>
+            <i class="like-icon" :class="{ filled: isLiked(revInfo.id) }"></i>
             <span>{{ review.likes }}</span>
           </button>
         </div>
@@ -264,7 +262,8 @@ const isLiked = (reviewId) => {
   padding: 30px 90px;
   border-radius: 16px;
   background-color: #f2f4f6;
-  margin: 40px 0;
+  margin-top: 15px;
+  margin-bottom: 30px;
 }
 
 .rating-summary {
@@ -283,31 +282,6 @@ const isLiked = (reviewId) => {
     font-style: normal;
     display: block;
     margin-bottom: 10px;
-  }
-
-  .stars {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .star {
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 900;
-    font-family: "Font Awesome 5 Free";
-    &.filled {
-      color: $point-color;
-    }
-
-    &.half {
-      color: $point-color;
-    }
-
-    &.empty {
-      color: #dce7fb;
-    }
   }
 }
 
@@ -394,7 +368,7 @@ const isLiked = (reviewId) => {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 40px;
+  // margin-bottom: 10px;
   .postrev-cnt {
     font-size: $small-txt;
     font-weight: bold;
@@ -418,23 +392,33 @@ const isLiked = (reviewId) => {
 }
 // ========================================
 
-//========================================
-.review-li {
-  // background: $bg-light;
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-
-  h2 {
-    // color: $text-color;
-    margin-bottom: 10px;
-  }
-
-  p {
-    margin: 5px 0;
-    // color: $text-color;
+//
+.modal_bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 999999;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal_section {
+  background-color: #fff;
+  width: 560px;
+  // height: 480px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999999;
+  border-radius: 30px;
+  padding: 40px 50px 50px;
+  .x-mark {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    font-size: $medium-txt-2;
+    cursor: pointer;
   }
 }
 
@@ -450,9 +434,16 @@ const isLiked = (reviewId) => {
   justify-content: space-between;
 
   // 필터 버튼
-  .filter-buttons {
+  .filter-tabs {
     display: flex;
     gap: 20px;
+
+    &.active {
+      color: $point-color;
+      .img-icon {
+        color: $point-color;
+      }
+    }
 
     &.hover {
       color: $point-color;
@@ -516,7 +507,8 @@ const isLiked = (reviewId) => {
 // 사용자 정보
 .user-info {
   display: flex;
-  align-items: center;
+  align-content: start;
+  align-items: end;
   gap: 11px;
   font-size: $small-txt;
 }
@@ -529,22 +521,7 @@ const isLiked = (reviewId) => {
 }
 
 .user-details {
-  display: flex;
-  flex-direction: column;
   gap: 5px;
-}
-
-.stars {
-  display: flex;
-  gap: 3px;
-  color: $point-color;
-}
-
-.star {
-  color: $point-color;
-  font-weight: 900;
-  font-family: "Font Awesome 5 Free";
-  font-style: normal;
 }
 
 .username {
@@ -557,7 +534,6 @@ const isLiked = (reviewId) => {
   font-size: $small-txt;
 }
 
-// 이미지 갤러리
 .image-gallery {
   display: flex;
   gap: 10px;
@@ -625,133 +601,6 @@ const isLiked = (reviewId) => {
   }
 }
 
-// 카드 섹션
-.card-section {
-  display: flex;
-  // grid-templates-columns: repeat(3, 1fr);
-  gap: 25px;
-  margin: 60px 0 40px;
-  background-color: #4da5e4;
-}
-
-.best-card {
-  width: 100%;
-  height: 670px;
-  position: relative;
-  border-radius: 16px;
-  box-shadow: 0px 10px 15px rgba(41, 106, 243, 0.25);
-  background: white;
-  overflow: hidden;
-}
-
-.card-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 179px;
-  object-fit: cover;
-}
-
-.card-content {
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0 30px 30px;
-  gap: 36px;
-  justify-content: center;
-}
-
-.card-user {
-  display: flex;
-  align-items: center;
-  gap: 21px;
-}
-
-.card-profile {
-  width: 94px;
-  height: 97px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.card-user-info {
-  display: flex;
-  flex-direction: column;
-  width: 226px;
-}
-
-.card-stars {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 5px;
-}
-
-.card-star {
-  font-size: 18px;
-  color: $point-color;
-  font-style: normal;
-}
-
-.card-username {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  text-align: center;
-
-  .name {
-    font-size: $esti-medium-txt;
-    font-weight: 500;
-    color: white;
-  }
-
-  .suffix {
-    font-size: 18px;
-    color: white;
-  }
-}
-
-.card-date {
-  font-size: 18px;
-  color: #f0f0f0;
-  line-height: 1.4;
-
-  p {
-    margin: 0;
-  }
-}
-
-.card-text {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  .quote-icon {
-    width: 21px;
-    height: 15px;
-  }
-
-  .text-content {
-    font-size: 24px;
-    font-weight: 300;
-    color: #6b7684;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.card-review-img {
-  width: 100%;
-  border-radius: 16px;
-  max-height: 100%;
-  object-fit: cover;
-}
-
 @media (max-width: 768px) {
   .review-list {
     min-width: 600px;
@@ -767,22 +616,35 @@ const isLiked = (reviewId) => {
   .rating-section {
     gap: $tab-spacing;
     min-width: 600px;
-    padding: 30px 79px 30px 70px;
-    margin: 40px 0;
   }
 
   .allscore {
     min-width: 200px;
   }
-  // .rating-summary {
-  //   gap: $tab-spacing;
-  // }
-  // .rating-section {
-  //   gap: $tab-spacing;
-  // }
 }
 
-// ========== 평점 섹션의 평균 별점 (큰 크기) ==========
+@media (max-width: 393px) {
+  .review-list {
+    min-width: 300px;
+  }
+
+  .user-info {
+    display: block;
+    align-items: center;
+    gap: 11px;
+    font-size: $small-txt;
+  }
+
+  .rating-section {
+    gap: $tab-spacing;
+    min-width: 600px;
+  }
+
+  .allscore {
+    min-width: 300px;
+  }
+}
+// ========== 평점 섹션  평균 별점  ==========
 .rating-score {
   width: 150px;
   text-align: center;
@@ -805,33 +667,6 @@ const isLiked = (reviewId) => {
 
     i {
       font-size: 24px; // 평균 별점 크기 (크게)
-    }
-  }
-}
-
-// ========== 개별 리뷰의 별점 (작은 크기) ==========
-.user-details {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
-
-  .username {
-    color: #6b7684;
-    font-weight: 500;
-  }
-
-  // 개별 별점 컨테이너
-  .stars-container {
-    margin: 0;
-    height: 14px; // 작은 별점 높이
-  }
-
-  .stars {
-    gap: 3px; // 간격 좁게
-
-    i {
-      font-size: 14px; // 개별 별점 크기 (작게)
     }
   }
 }
@@ -868,38 +703,30 @@ const isLiked = (reviewId) => {
     color: $point-color;
   }
 }
-</style>
+// ========== 개별 리뷰의 별점 (작은 크기) ==========
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
 
-<!-- 추후 수정 -->
-<!-- 베스트 리뷰 카드 ============-->
-<!-- <div class="card-section">
-          <div class="best-card" v-for="(card, index) in bestReviews" :key="index">
-            <img :src="card.bgImage" alt="배경" class="card-bg" />
-            <div class="card-content">
-              <div class="card-user">
-                <img :src="card.userImage" alt="프로필" class="card-profile" />
-                <div class="card-user-info">
-                  <div class="card-stars">
-                    <div class="card-star">⭐</div>
-                    <div class="card-star">⭐</div>
-                    <div class="card-star">⭐</div>
-                    <div class="card-star">⭐</div>
-                    <div class="card-star">⭐</div>
-                  </div>
-                  <div class="card-username">
-                    <span class="name">{{ card.username }}</span>
-                    <span class="suffix">고객님</span>
-                  </div>
-                </div>
-              </div>
-              <div class="card-date">
-                <p>{{ card.date }} ∙ {{ card.service }}</p>
-              </div>
-              <div class="card-text">
-                <img src="/images/downlode.svg" alt="인용" class="quote-icon" />
-                <div class="text-content">{{ card.content }}</div>
-              </div>
-              <img :src="card.reviewImage" alt="리뷰 이미지" class="card-review-img" />
-            </div>
-          </div>
-        </div> -->
+  .username {
+    color: #6b7684;
+    font-weight: 500;
+  }
+
+  // 개별 별점 컨테이너
+  .stars-container {
+    margin: 0;
+    height: 14px; // 작은 별점 높이
+  }
+
+  .stars {
+    gap: 3px; // 간격 좁게
+
+    i {
+      font-size: 14px; // 개별 별점 크기 (작게)
+    }
+  }
+}
+</style>

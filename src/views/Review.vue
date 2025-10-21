@@ -36,7 +36,7 @@ import Header_w from "@/components/Header_w.vue";
 
 <style lang="scss" scoped>
 @use "../assets/styles/_variables" as *;
-// ===================================================
+// 버튼 그라데이션용 ===================================================
 $bd-alpha: rgba(97, 188, 225, 0.5); // #61BCE1 50%
 $g1: #92d3cd;
 $g2: #76c6d3;
@@ -70,7 +70,7 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
       content: "";
       position: absolute;
       inset: 0;
-      background-image: url("/images/eventModal_star_4x.png"); // Vite 기준 public/images/* 경로
+      background-image: url("/images/eventModal_star_4x.png");
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
@@ -82,8 +82,6 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
 
 .review-div {
   padding: 25px;
-  // 위치확인용
-  // background-color: #000;
 }
 
 // banner ============================================
