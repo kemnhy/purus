@@ -6,7 +6,8 @@
         <h2 class="title">사장님 리얼 리뷰</h2>
       </div>
 
-      <div class="review-list">
+      <!-- 일반 레이아웃 (768px 이상) -->
+      <div class="review-list" v-if="!isMobile">
         <div class="review-item" v-for="(review, index) in reviews" :key="index" :class="{ reverse: index % 2 === 1 }">
           <div class="img-box">
             <img :src="review.image" alt="리뷰 이미지" />
@@ -20,34 +21,78 @@
           </div>
         </div>
       </div>
+
+      <!-- 390px 이하에서 Swiper 작동 -->
+      <div class="review-swiper" v-else>
+        <Swiper
+          :modules="[Autoplay, Pagination]"
+          :autoplay="{ delay: 3000, disableOnInteraction: false }"
+          :pagination="{ clickable: true }"
+          :loop="true"
+          class="reviewSwiper"
+        >
+          <SwiperSlide v-for="(review, index) in reviews" :key="index">
+            <div class="review-item">
+              <div class="img-box">
+                <img :src="review.image" alt="리뷰 이미지" />
+              </div>
+              <div class="text-box">
+                <p class="desc">“{{ review.text }}”</p>
+                <p class="writer">- {{ review.writer }}</p>
+              </div>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </div>
     </div>
   </section>
 </template>
 
 <script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Autoplay, Pagination } from "swiper/modules";
+
 const reviews = [
   {
-    image: "/public/images/Real-riv.png",
+    image: "/images/Real-riv.png",
     text: "예전엔 얼음에서 약간 비린내가 났는데,청소 받고 나니 완전히 없어졌습니다.고객들도 음료 맛이 깔끔해졌다고 해요.",
     writer: "네이버 yg***님",
   },
   {
-    image: "/public/images/Real_review2.png",
-    text: "제빙기 청소를 미루다 보니 얼음에서 냄새가 나고 음료 맛까지 영향을 줬습니다. 청소 서비스를 받은 후에는 잡내가 싹 사라지고,얼음이 투명하게 맑아져서 음료 퀼리티가 달라졌습니다.",
+    image: "/images/Real_review2.png",
+    text: "청소 서비스를 받은 후에는 잡내가 싹 사라지고,얼음이 투명하게 맑아져서 음료 퀼리티가 달라졌습니다.",
     writer: "네이버 dm***님",
   },
   {
-    image: "/public/images/Real-riv3.png",
+    image: "/images/Real-riv3.png",
     text: "다른 업체도 알아봤는데,여기처럼 꼼꼼하게 청소해주는 곳은 처음입니다. 정기적으로 이용하고 싶어요.",
     writer: "네이버 nh***님",
   },
   {
-    image: "/public/images/Real-riv4.png",
+    image: "/images/Real-riv4.png",
     text: "얼음에서 냄새가 사라지고,손님 반응이 확 달라졌습니다!",
     writer: "네이버 dy***님",
   },
 ];
+
+const isMobile = ref(false);
+
+const checkScreen = () => {
+  isMobile.value = window.innerWidth <= 390;
+};
+
+onMounted(() => {
+  checkScreen();
+  window.addEventListener("resize", checkScreen);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", checkScreen);
+});
 </script>
+
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 
@@ -56,6 +101,12 @@ const reviews = [
   justify-content: center;
   padding: 100px 0;
   background-color: #f0faff;
+
+  .inner {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+  }
 }
 
 .title-box {
@@ -80,34 +131,35 @@ const reviews = [
 .review-item {
   display: flex;
   align-items: center;
-  // gap: 50px;
   background-color: #fff;
-  border-radius: 14px;
-  overflow: hidden;
   border-radius: 30px;
+  overflow: hidden;
 
-  // padding: 30px 40px;
   &.reverse {
     flex-direction: row-reverse;
   }
-}
-.img-box {
-  flex: 1 1 40%;
-  img {
-    width: 100%;
+
+  .img-box {
+    flex: 1 1 40%;
     height: 330px;
-    // border-radius: 14px;
-    display: block;
-    object-fit: cover;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* cover: 비율 유지하며 박스 가득 채움(일부 잘릴 수 있음) */
+      object-position: center; /* 중앙 기준으로 잘라짐, 필요하면 변경 */
+    }
+  }
+
+  .text-box {
+    flex: 1 1 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 50px;
   }
 }
-.text-box {
-  flex: 1 1 60%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 50px;
-}
+
 .rating {
   font-size: $small-txt;
   color: $point-color;
@@ -118,6 +170,7 @@ const reviews = [
     margin-left: 4px;
   }
 }
+
 .desc {
   font-size: $medium-txt-2;
   font-weight: 500;
@@ -128,5 +181,84 @@ const reviews = [
 .writer {
   font-size: $small-txt;
   color: $sub-font-color;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .real-review {
+    padding: 50px 0;
+    .review-list {
+      gap: 30px;
+      .review-item {
+        .text-box {
+          padding: 20px;
+          .desc {
+            font-size: 16px;
+          }
+          .writer {
+            font-size: 14px;
+          }
+        }
+
+        .img-box {
+          height: 200px;
+        }
+      }
+    }
+  }
+
+  .stars {
+    font-size: $medium-txt-1;
+  }
+  .title {
+    font-size: $medium-txt-1;
+  }
+}
+
+.review-swiper {
+  width: 100%;
+  .review-item {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+// 390px 일때
+@media (max-width: 390px) {
+  .real-review {
+    padding: 30px 0;
+    .review-swiper {
+      // width: 100% !important;
+      max-width: 280px;
+      margin: auto;
+      gap: 30px;
+      .review-item {
+        height: 400px;
+        .text-box {
+          padding: 20px;
+          .desc {
+            font-size: 14px;
+          }
+          .writer {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .img-box {
+        height: 200px !important;
+        width: 100%;
+        img {
+          width: 100%;
+          height: 200px;
+        }
+      }
+    }
+  }
+  .stars {
+    font-size: $medium-txt-2;
+  }
+  .title {
+    font-size: $medium-txt-2;
+  }
 }
 </style>

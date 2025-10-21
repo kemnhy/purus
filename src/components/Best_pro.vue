@@ -16,7 +16,7 @@
           :key="index"
           :class="{ reverse: index === 1 }"
         >
-          <!-- ✅ 순서 변경: 제목 → 이미지 → 이름 → 상세정보 -->
+          <!-- 순서 변경: 제목 → 이미지 → 이름 → 상세정보 -->
           <h3 class="pro-title">{{ item.title }}</h3>
 
           <div class="pro-img-box">
@@ -24,6 +24,9 @@
           </div>
 
           <p class="pro-name">{{ item.name }}</p>
+          <div class="line">
+
+          </div>
 
           <div class="pro-detail">
             <div>
@@ -65,7 +68,7 @@ const items = [
   },
   {
     image: "/images/img3.png",
-    title: "신뢰 할 수 있는 청소 퀄리티!",
+    title: "신뢰 할수있는 청소 퀄리티!",
     name: "김클린 기사님",
     activity: "887회",
     career: "9년",
@@ -121,7 +124,7 @@ const items = [
       border-radius: 30px;
       border: 1.5px solid #e5e8ef;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      padding: 30px 25px;
+      padding: 42px 42px;
       width: 100%;
       max-width: 360px;
       display: flex;
@@ -129,16 +132,22 @@ const items = [
       align-items: center;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
       min-height: 460px;
+      .line{
+        width: 100%;
+        height: 1px;
+        margin: 30px 0;
+        background-color: #e5e8ef;
+      }
 
       &:hover {
         transform: translateY(-5px);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
       }
 
-      /* ✅ 순서 변경 후 약간의 마진 조정 */
+      
       .pro-title {
         font-size: $medium-txt-2;
-        font-weight: bold;
+        font-weight: 500;
         color: $font-color;
         margin-bottom: 14px;
         line-height: 1.25;
@@ -146,8 +155,8 @@ const items = [
       }
 
       .pro-img-box {
-        width: 160px;
-        height: 160px;
+        width: 200px;
+        // height: 160px;
         border-radius: 12px;
         overflow: hidden;
         display: flex;
@@ -167,7 +176,7 @@ const items = [
         color: $point-color;
         font-size: $medium-txt-2;
         font-weight: bold;
-        margin-top: 10px;
+        
         
       }
 
@@ -175,9 +184,9 @@ const items = [
         width: 100%;
         max-width: 300px;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         align-items: center;
-        margin-top: auto;
+       
         gap: 10px;
         padding-top: 8px;
 
@@ -187,9 +196,9 @@ const items = [
           align-items: center;
 
           p {
-            margin-bottom: 10px;
+            // margin-bottom: 10px;
             font-size: $small-txt;
-            font-weight: bold;
+            font-weight: 500;
           }
 
           b {

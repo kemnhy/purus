@@ -117,7 +117,7 @@ const goEstimate = ()=>{
 // 390px 반응형 모바일 
 @media (max-width: 390px) {
   .point-banner {
-    visibility: hidden;
+    display: none;
   }
 }
 
