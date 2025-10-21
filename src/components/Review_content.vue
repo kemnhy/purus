@@ -9,8 +9,6 @@ const rating = ref(0);
 // const sliceImg =
 const activeFilter = ref("추천순");
 
-// const isOpModal = ref(false);
-
 const getReviewsInfo = async () => {
   try {
     const response = await fetch(SHEETDB_API);

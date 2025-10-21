@@ -32,10 +32,7 @@
               고객님의 연락처를 입력해주세요.
               <span>(필수)</span>
             </p>
-            <input
-              type="text"
-              v-model="userPhone"
-              placeholder="전화번호를 입력해주세요. (예: 01012345678)" />
+            <input type="text" v-model="userPhone" placeholder="전화번호를 입력해주세요. (예: 01012345678)" />
           </div>
         </div>
         <!-- 유의사항 안내 -->
@@ -58,17 +55,12 @@
             <li>
               3. 현장 안내 및 추가 비용
               <p>• 서비스 1~2일 전 담당자가 연락드리며, 출입 방법을 알려주세요.</p>
-              <p>
-                • 접수 내용과 현장 상황이 다를 경우 추가 비용이 발생하거나, 서비스가 제한될 수
-                있습니다.
-              </p>
+              <p>• 접수 내용과 현장 상황이 다를 경우 추가 비용이 발생하거나, 서비스가 제한될 수 있습니다.</p>
               <p>• 고객 사정으로 청소 시작 지연 시 서비스가 불가할 수 있습니다.</p>
             </li>
             <li>
               4. 결제 안내
-              <p>
-                • 서비스 당일 대표번호(1234-5678)로 결제 링크가 발송되며, 청소 전 결제 부탁드립니다.
-              </p>
+              <p>• 서비스 당일 대표번호(1234-5678)로 결제 링크가 발송되며, 청소 전 결제 부탁드립니다.</p>
             </li>
             <li>
               5. 현장 검수 및 AS 안내
@@ -102,8 +94,8 @@
           </div>
         </div>
         <p class="small_txt">
-          * 귀하는 위와 같은 일반 개인정보의 수집 및 이용을 거부할 수 있습니다. 다만, 일반
-          개인정보의 필수적 수집 및 이용에 동의하지 않을 경우 서비스 이용이 불가능합니다.
+          * 귀하는 위와 같은 일반 개인정보의 수집 및 이용을 거부할 수 있습니다. 다만, 일반 개인정보의 필수적 수집 및 이용에
+          동의하지 않을 경우 서비스 이용이 불가능합니다.
         </p>
       </div>
       <!-- 다음 버튼 -->
@@ -135,6 +127,28 @@ const pushMessage = () => {
 // 입력한 정보 받기
 const userName = ref("");
 const userPhone = ref("");
+
+const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+// const revInfo = ref([]);
+
+const putUserInfo = async (userName, userPhone) => {
+  try {
+    const response = await fetch(SHEETDB_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [ userName
+        , userPhone] }),
+    });
+
+    if (response.ok) {
+      alert("저장 완료!");
+      // fetchReviews();
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 // 다음 페이지로 넘어가면서 정보 보내기
 const goNextPage = () => {
   if (userName.value === "" || userPhone.value === "") {
@@ -142,6 +156,9 @@ const goNextPage = () => {
   } else if (!isNaN(userName.value) || userPhone.value.length <= 8) {
     return alert("이름과 전화번호를 올바르게 입력해주세요.");
   } else {
+
+    
+    console.log(putUserInfo);
     router.push({
       path: "/estimate03",
       query: {
