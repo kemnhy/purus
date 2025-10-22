@@ -852,6 +852,8 @@ const goToHome = () => {
       padding: 5px 0;
     }
   }
+
+  // 모달창
   .infoCheck {
     margin-top: 30px;
     .btn {

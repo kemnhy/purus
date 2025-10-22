@@ -107,6 +107,7 @@
 
         .button {
           width: 120px;
+          border-radius: 6px;
         }
       }
     }
@@ -184,7 +185,6 @@
           }
           .button {
             width: 100%;
-            border-radius: 6px;
           }
         }
       }
