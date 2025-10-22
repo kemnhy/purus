@@ -1,6 +1,7 @@
 <script setup>
 import Review_content from "@/components/Review_content.vue";
 import Header_w from "@/components/Header_w.vue";
+import Footer_w from "@/components/Footer_w.vue";
 </script>
 
 <template>
@@ -13,6 +14,7 @@ import Header_w from "@/components/Header_w.vue";
         <!-- 리뷰 textbox -->
         <div class="review-div">
           <img src="/images/eventText.png" alt="리뷰 작성 혜택" />
+          <p>리뷰 작성 혜택!!</p>
         </div>
         <!-- 쿠폰 img-->
         <div class="review-div">
@@ -21,17 +23,19 @@ import Header_w from "@/components/Header_w.vue";
 
         <!-- 이동버튼 -->
         <div class="review-div">
-          <button class="glass-btn">
-            리뷰 작성 하고 쿠폰 받기
+          <div class="glass-btn">
+            <p>리뷰 작성 하고 쿠폰 받기</p>
             <img src="/images/download.svg" alt="리뷰쓰고 쿠폰 다운" />
-          </button>
+          </div>
         </div>
         <!--  -->
       </div>
+      <!-- 푸터 -->
     </div>
   </div>
 
   <Review_content />
+  <Footer_w />
 </template>
 
 <style lang="scss" scoped>
@@ -46,7 +50,6 @@ $g4: #4da5e4;
 $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
 
 .review {
-  font-family: Pretendard;
   width: 100%;
   height: auto;
   position: relative;
@@ -58,8 +61,7 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
   &_top {
     position: relative;
     background-color: #061c34;
-    max-height: 974px;
-    min-height: 974px;
+    height: 974px;
     display: block;
 
     // 별, 눈송이 등 배경 장식
@@ -80,51 +82,129 @@ $border-grad: linear-gradient(135deg, $g1 0%, $g2 25%, $g3 60%, $g4 100%);
   }
 }
 
-.review-div {
-  padding: 25px;
-}
-
 // banner ============================================
 .banner {
-  padding: 30px;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
   text-align: center;
+  margin: 60px auto;
+  .review-div {
+    img {
+      width: 43%;
+    }
+    p {
+      font-size: $main-title;
+      font-weight: 700;
+      color: #fff;
+    }
+    .glass-btn {
+      margin: auto;
+      position: relative;
+      height: 90px;
+      width: 530px;
+      padding: 0 30px;
+      border-radius: 50px;
+      border: 1px solid transparent;
+      background: transparent;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 0 0 0.5px $bd-alpha inset, 0 6px 24px rgba(97, 188, 225, 0.1); /* 외곽선 느낌을 조금 더 선명하게 */
+      cursor: pointer;
+      color: $grey-color;
+      font-size: $esti-large-txt;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+
+      p {
+        font-size: 30px;
+      }
+
+      img {
+        width: 10%;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 1px 1px auto 1px;
+        height: 90%;
+        border-radius: 50px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        pointer-events: none;
+      }
+
+      &:hover {
+        color: #061c34;
+        background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)) padding-box,
+          $border-grad border-box;
+        box-shadow: 0 0 0 0.5px $bd-alpha inset, 0 8px 28px rgba(33, 150, 243, 0.28),
+          /* 블루 글로우 */ 0 6px 24px rgba(0, 0, 0, 0.25);
+        transform: translateY(-1px);
+      }
+    }
+  }
 }
 
-.glass-btn {
-  height: 90px;
-  width: 530px;
-  padding: 0 30px;
-  align-items: center;
-  text-align: center;
-  color: $grey-color;
-  font-size: $esti-large-txt;
-  gap: 15px;
-  border-radius: 50px;
-  border: 1px solid transparent;
-  background: transparent;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 0 0 0.5px $bd-alpha inset, 0 6px 24px rgba(97, 188, 225, 0.1); /* 외곽선 느낌을 조금 더 선명하게 */
-  cursor: pointer;
-
-  /* 상단 유리 하이라이트 */
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 1px 1px auto 1px;
-    height: 90%;
-    // height: 45%;
-    border-radius: 50px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
-    pointer-events: none;
+// 반응형
+@media screen and (max-width: 768px) {
+  .review {
+    &_top {
+      height: 600px;
+    }
+    .banner {
+      gap: 30px;
+      .review-div {
+        padding: 0;
+        img {
+          width: 40%;
+        }
+        p {
+          font-size: 30px;
+          // margin-top: 10px;
+        }
+        .glass-btn {
+          width: 300px;
+          height: 50px;
+          p {
+            font-size: 18px;
+          }
+          img {
+            width: 10%;
+          }
+        }
+      }
+    }
   }
-
-  &:hover {
-    color: #061c34;
-    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)) padding-box, $border-grad border-box;
-    box-shadow: 0 0 0 0.5px $bd-alpha inset, 0 8px 28px rgba(33, 150, 243, 0.28), /* 블루 글로우 */ 0 6px 24px rgba(0, 0, 0, 0.25);
-    transform: translateY(-1px);
+}
+@media screen and (max-width: 390px) {
+  .review {
+    &_top {
+      height: 400px;
+    }
+    .banner {
+      gap: 20px;
+      margin: 20px auto;
+      .review-div {
+        img {
+          width: 60%;
+        }
+        p {
+          font-size: 20px;
+          margin-top: 3px;
+        }
+        .glass-btn {
+          width: 230px;
+          height: 40px;
+          p {
+            font-size: 14px;
+            margin: 0;
+          }
+        }
+      }
+    }
   }
 }
 </style>
