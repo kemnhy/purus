@@ -1,0 +1,25 @@
+/* variables */
+/* color */
+/* font-size */
+/* spacing */
+.btn {
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: transparent;
+  background-color: #296af1;
+  color: #fff;
+  font-size: 25px;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: rgb(17.0657894737, 89.3355263158, 239.4342105263);
+}
+
+.card {
+  padding: 30px;
+  border-radius: 25px;
+}
+
+.header_line {
+  border: 1px solid #f1f1f1;
+}/*# sourceMappingURL=main.css.map */
