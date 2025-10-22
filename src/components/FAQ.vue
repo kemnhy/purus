@@ -3,12 +3,7 @@
     <div class="faq">
       <h1 class="faq-title">F A Q</h1>
 
-      <div
-        class="faq-item"
-        v-for="(item, index) in faqList"
-        :key="index"
-        :class="{ active: activeIndex === index }"
-      >
+      <div class="faq-item" v-for="(item, index) in faqList" :key="index" :class="{ active: activeIndex === index }">
         <div class="faq-question" @click="toggleFAQ(index)">
           <span class="faq-arrow">
             <i class="fa-solid fa-angle-down"></i>
@@ -84,16 +79,18 @@ export default {
   font-family: "Pretendard", sans-serif;
   background: #fff;
   padding: 120px 170px;
+  transition: all 0.3s ease;
 
   .faq-title {
     font-size: $main-title;
     font-weight: bold;
     color: $point-color;
     margin-bottom: 40px;
+    text-align: left;
   }
 
   .faq-item {
-    border-bottom: 0.3px solid $border-color;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     padding: 20px 0;
     transition: all 0.3s ease;
 
@@ -140,69 +137,76 @@ export default {
     transform: translateY(-5px);
   }
 
-  /* 768px 반응형 */
+  /*  768px 이하 (태블릿) */
   @media (max-width: 768px) {
-    padding: 100px 40px;
+    padding: 60px 24px; /* 위아래 여백 줄임 */
 
     .faq-title {
-      text-align: left;
-      font-size: 25px;
+      font-size: 26px;
+      margin-bottom: 28px;
+      color: $point-color;
+    }
+
+    .faq-item {
+      padding: 16px 0;
     }
 
     .faq-question {
-      font-size: 16px;
+      font-size: 17px;
+      line-height: 1.4;
     }
 
     .faq-answer {
       font-size: 14px;
+      line-height: 1.5;
+      margin-left: 28px;
     }
   }
-
-  /*  390px 반응형 */
-  @media (max-width: 390px) {
-    padding: 60px 20px;
+}
+/*  390px 이하 (모바일) */
+@media (max-width: 390px) {
+  .faq {
+    padding: 40px 0; /* 위아래 줄이되 자연스럽게 */
     background: #fff;
-
     .faq-title {
       text-align: left;
       font-size: 22px;
       letter-spacing: 1px;
       color: #004b9b;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .faq-item {
-      background: #fff;
+      // background: #fff;
       border: none;
       border-radius: 8px;
-      margin-bottom: 8px;
+      // margin-bottom: 10px;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       overflow: hidden;
+      padding: 0px;
 
       &.active {
         background: #fff;
       }
 
       .faq-question {
-        padding: 14px;
+        padding: 15px 0;
         font-size: 15px;
         color: #003366;
-        display: flex;
-        align-items: center;
 
         .faq-arrow {
           font-size: 13px;
           color: #007bff;
-          margin-right: 12px;
+          margin-right: 10px;
         }
       }
 
       .faq-answer {
         background: #fff;
         margin: 0;
-        padding: 12px 16px 16px;
-        border-top: 1px solid #fff;
-        font-size: 14px;
+        padding: 10px 12px 14px;
+        border-top: 1px solid #f0f0f0;
+        font-size: 13px;
         line-height: 1.5;
         color: #4a4a4a;
       }

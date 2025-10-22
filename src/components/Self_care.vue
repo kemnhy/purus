@@ -62,7 +62,7 @@ onMounted(() => {
 });
 //
 const animateProgress = () => {
-  const duration = 3000;
+  const duration = 1800;
   let start = null;
 
   function animate(timestamp) {
@@ -321,7 +321,7 @@ const cards = ref([
 
       .inner-2 {
         width: 92%;
-        padding: 40px 0;
+        padding: 30px 0;
       }
       .header {
        .logo{
