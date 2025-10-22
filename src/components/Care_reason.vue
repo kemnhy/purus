@@ -31,9 +31,9 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, onUnmounted, nextTick } from "vue";
 import Swiper from "swiper";
-import { EffectCoverflow, Navigation } from "swiper/modules";
+import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
@@ -60,44 +60,71 @@ const cares = [
   { id: 4, name: "care4", img: "/images/care4.png", dscr: "고객 신뢰 유지" },
 ];
 // swiper
+let swiperInstance = null;
+const handleSwiper = async () => {
+  const screenWidth = window.innerWidth;
+  if (screenWidth <= 450) {
+    if (!swiperInstance) {
+      await nextTick();
+      swiperInstance = new Swiper(".care-swiper", {
+        modules: [EffectCoverflow, Navigation, Autoplay],
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        loop: true,
+        spaceBetween: -80,
+        coverflowEffect: {
+          rotate: 0,
+          stretch: 0,
+          depth: 200,
+          scale: 0.5,
+          modifier: 1,
+          slideShadows: false,
+        },
+        navigation: {
+          nextEl: ".swiper-button-prev",
+          prevEl: ".swiper-button-next",
+        },
+        autoplay: {
+          delay: 1500,
+          disableOnInteraction: false,
+        },
+        initialSlide: 0,
+        breakpoints: {
+          0: {
+            spaceBetween: -130,
+            coverflowEffect: {
+              scale: 0.3,
+            },
+          },
+          450: {
+            spaceBetween: -80,
+            coverflowEffect: {
+              scale: 0.6,
+            },
+          },
+        },
+      });
+    }
+  } else {
+    if (swiperInstance) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
+    }
+  }
+};
+//
 onMounted(() => {
-  if (window.innerWidth <= 450) {
-    new Swiper(".care-swiper", {
-      modules: [EffectCoverflow, Navigation],
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      loop: true,
-      spaceBetween: -80,
-      coverflowEffect: {
-        rotate: 0,
-        stretch: 0,
-        depth: 200,
-        scale: 0.5,
-        modifier: 1,
-        slideShadows: false,
-      },
-      navigation: {
-        nextEl: ".swiper-button-prev",
-        prevEl: ".swiper-button-next",
-      },
-      initialSlide: 0,
-      breakpoints: {
-        0: {
-          spaceBetween: -130,
-          coverflowEffect: {
-            scale: 0.3,
-          },
-        },
-        450: {
-          spaceBetween: -80,
-          coverflowEffect: {
-            scale: 0.6,
-          },
-        },
-      },
-    });
+  handleSwiper();
+  window.addEventListener("resize", handleSwiper);
+});
+onUnmounted(() => {
+  window.removeEventListener("resize", handleSwiper);
+  // 스와이퍼 인스턴스가 남아있으면 파괴
+  if (swiperInstance) {
+    swiperInstance.destroy(true, true);
+    swiperInstance = null;
   }
 });
 </script>
