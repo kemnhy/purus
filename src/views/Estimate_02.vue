@@ -119,9 +119,13 @@ const router = useRouter();
 const route = useRoute();
 
 // 이전 페이지 정보 가져오기
-const name = route.query.name;
-const price = route.query.price;
-console.log("name/price" + name + price);
+const mdNm = route.query.MdNm;
+const mdPrice = route.query.mdPrice;
+const size = route.query.size;
+const sizePrice = route.query.sizePrice;
+const totalPrice = route.query.totalPrice;
+console.log("name/price" + mdNm + mdPrice + totalPrice);
+console.log("name/price" + size + sizePrice);
 
 // 다음버튼 나오기
 const selectAgree1 = ref(false);
@@ -129,43 +133,60 @@ const selectAgree2 = ref(false);
 
 // 견적만 받기
 const pushMessage = () => {
-  // savetest();
+  savetest();
+
   alert("입력하신 연락처로 견적서를 보내드립니다.");
   router.push("/"); // 홈('/')으로 이동
 };
 
 const savetest = async () => {
   try {
-    console.log(userName.value);
-    console.log(userPhone.value);
+    const getResponse = await fetch(SHEETDB_API, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
 
-    debugger;
+    if (!getResponse.ok) {
+      throw new Error(`GET 실패! status: ${getResponse.status}`);
+    }
+
+    const existingData = await getResponse.json();
+    console.log("기존 데이터:", existingData);
+
+    let newId = 1; // 기본값
+    if (existingData && existingData.length > 0) {
+      const maxId = Math.max(...existingData.map((item) => Number(item.ID) || 0));
+      newId = maxId + 1;
+    }
+    console.log(String(userName.value));
+    console.log(Number(userPhone.value));
+
     const newEstim = {
-      // ID: Date.now(),
-      USER_ID: userName.value.toString(),
-      SEL_NUMBER: userPhone.value,
-      CRT_DT: TIMESTAMP, // YYYY-MM-DD,
+      ID: Number(newId),
+      USER_ID: String(userName.value),
+      SEL_NUMBER: Number(userPhone.value),
+      // CREATE_DT: TIMESTAMP,
     };
     console.log("test" + newEstim.value);
-    debugger;
 
     const response = await fetch(SHEETDB_API, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({ data: [newEstim] }),
     });
-    console.log(response.value);
+    console.log(" 응답 상태:", response.status, response.statusText);
 
-    debugger;
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const result = await response.json();
-    console.log("✅ 추가 성공:", result);
-    alert("리뷰가 등록되었습니다!");
-  } catch {
-    console.log("error");
+    console.log("추가 성공:", result);
+  } catch (error) {
+    console.log("error :" + error);
     return;
   }
 };
