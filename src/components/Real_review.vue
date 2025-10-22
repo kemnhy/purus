@@ -26,7 +26,7 @@
       <div class="review-swiper" v-else>
         <Swiper
           :modules="[Autoplay, Pagination]"
-          :autoplay="{ delay: 3000, disableOnInteraction: false }"
+          :autoplay="{ delay: 1500, disableOnInteraction: false }"
           :pagination="{ clickable: true }"
           :loop="true"
           class="reviewSwiper"
@@ -101,12 +101,6 @@ onBeforeUnmount(() => {
   justify-content: center;
   padding: 100px 0;
   background-color: #f0faff;
-
-  .inner {
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 20px;
-  }
 }
 
 .title-box {
@@ -185,6 +179,17 @@ onBeforeUnmount(() => {
 
 /* 반응형 */
 @media (max-width: 768px) {
+  .inner {
+    .title-box {
+      margin-bottom: 50px;
+      .stars {
+        font-size: $medium-txt-1;
+      }
+      .title {
+        font-size: $medium-txt-1;
+      }
+    }
+  }
   .real-review {
     padding: 50px 0;
     .review-list {
@@ -206,13 +211,6 @@ onBeforeUnmount(() => {
       }
     }
   }
-
-  .stars {
-    font-size: $medium-txt-1;
-  }
-  .title {
-    font-size: $medium-txt-1;
-  }
 }
 
 .review-swiper {
@@ -224,6 +222,18 @@ onBeforeUnmount(() => {
 }
 // 390px 일때
 @media (max-width: 390px) {
+  .inner {
+    .title-box {
+      margin-bottom: 30px;
+      .stars {
+        font-size: $medium-txt-2;
+      }
+      .title {
+        font-size: $medium-txt-2;
+      }
+    }
+  }
+
   .real-review {
     padding: 30px 0;
     .review-swiper {
@@ -231,8 +241,12 @@ onBeforeUnmount(() => {
       max-width: 280px;
       margin: auto;
       gap: 30px;
+      .reviewSwiper {
+        padding-bottom: 40px;
+      }
       .review-item {
         height: 400px;
+
         .text-box {
           padding: 20px;
           .desc {
@@ -253,12 +267,6 @@ onBeforeUnmount(() => {
         }
       }
     }
-  }
-  .stars {
-    font-size: $medium-txt-2;
-  }
-  .title {
-    font-size: $medium-txt-2;
   }
 }
 </style>
