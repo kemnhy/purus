@@ -32,16 +32,12 @@
                 v-model="address"
                 placeholder="지번, 도로명, 건물명으로 검색"
                 required
-                @click="handleAddressSearch" />
+                @click="handleAddressSearch"
+              />
             </div>
           </div>
           <div class="form-group">
-            <input
-              type="text"
-              id="detailAddress"
-              v-model="detailAddress"
-              placeholder="상세주소를 입력하세요"
-              required />
+            <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소를 입력하세요" required />
           </div>
         </div>
         <div class="service_date">
@@ -61,10 +57,7 @@
           <div class="calendar_wrap">
             <!-- 요일 -->
             <div class="calendar-weekdays">
-              <span
-                v-for="day in weekDays"
-                :key="day"
-                :class="{ sun: day === '일', sat: day === '토' }">
+              <span v-for="day in weekDays" :key="day" :class="{ sun: day === '일', sat: day === '토' }">
                 {{ day }}
               </span>
             </div>
@@ -84,7 +77,8 @@
                   selected: selectedDate === date,
                   closed: isPastDate(date),
                 }"
-                @click="selectDate(date)">
+                @click="selectDate(date)"
+              >
                 <p class="date">{{ date }}</p>
                 <div class="day-status">
                   <span class="status">
@@ -97,12 +91,8 @@
         </div>
         <!-- 오전/오후 버튼 -->
         <div class="calendar-period" v-if="selectedDate">
-          <button @click="selectPeriod('오전')" :class="{ active: selectedPeriod === '오전' }">
-            오전
-          </button>
-          <button @click="selectPeriod('오후')" :class="{ active: selectedPeriod === '오후' }">
-            오후
-          </button>
+          <button @click="selectPeriod('오전')" :class="{ active: selectedPeriod === '오전' }">오전</button>
+          <button @click="selectPeriod('오후')" :class="{ active: selectedPeriod === '오후' }">오후</button>
         </div>
         <!-- 다음 버튼 -->
         <div v-if="selectDay !== false" class="infoCheck">
@@ -266,10 +256,7 @@ const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 
 // 이번 달 날짜
 const daysInMonth = computed(() => {
-  return Array.from(
-    { length: new Date(currentYear.value, currentMonth.value + 1, 0).getDate() },
-    (_, i) => i + 1
-  );
+  return Array.from({ length: new Date(currentYear.value, currentMonth.value + 1, 0).getDate() }, (_, i) => i + 1);
 });
 
 // 1일 시작 공백
@@ -334,11 +321,7 @@ const selectedDayName = computed(() => {
 
 // 오늘 강조
 const isToday = (date) => {
-  return (
-    date === today.getDate() &&
-    currentMonth.value === today.getMonth() &&
-    currentYear.value === today.getFullYear()
-  );
+  return date === today.getDate() && currentMonth.value === today.getMonth() && currentYear.value === today.getFullYear();
 };
 
 // ✅ 완성된 문장 계산 (년월일 + 요일 + 오전/오후)
@@ -530,6 +513,7 @@ const goToHome = () => {
 
       .status {
         font-size: 12px;
+        // translate: 30%;
       }
       .day-status {
         min-height: 20px;
@@ -852,6 +836,8 @@ const goToHome = () => {
       padding: 5px 0;
     }
   }
+
+  // 모달창
   .infoCheck {
     margin-top: 30px;
     .btn {

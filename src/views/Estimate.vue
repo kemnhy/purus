@@ -28,10 +28,11 @@
             </p>
             <div>
               <label
-                v-for="(brand, index) in brandList"
+                v-for="(brand, index) in brandInfo"
                 :key="index"
                 :class="{ active: selectedIndex === index }"
-                class="brand_list">
+                class="brand_list"
+              >
                 <input type="radio" name="brand" :value="index" v-model="selectedIndex" />
                 {{ brand.name }}
               </label>
@@ -44,11 +45,7 @@
               <span>(필수)</span>
             </p>
             <div>
-              <label
-                v-for="(size, index) in sizeList"
-                :key="index"
-                :class="{ active: selectedI === index }"
-                class="size_list">
+              <label v-for="(size, index) in sizeList" :key="index" :class="{ active: selectedI === index }" class="size_list">
                 <input type="radio" name="size" :value="index" v-model="selectedI" />
                 {{ size.size }}
               </label>
@@ -89,15 +86,30 @@ import Header_w from "@/components/Header_w.vue";
 import Side_menu from "@/components/Side_menu.vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
+
+const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
 const router = useRouter();
+const brandInfo = ref([]);
 // 브랜드 목록
-const brandList = [
-  { name: "카이저(KAISER)", price: 90000 },
-  { name: "호시자키(HOSHIZAKI)", price: 100000 },
-  { name: "아이스트로(ICETRO)", price: 80000 },
-  { name: "라셀르(Lassele)", price: 90000 },
-  { name: "그 외", price: "유선 상담" },
-];
+
+const getBrandList = async () => {
+  try {
+    const response = await fetch(`${SHEETDB_API}?sheet=TB_BRAND`);
+    const data = await response.json();
+
+    brandInfo.value = data.map((item) => ({
+      id: item.ID,
+      name: item.BRAND_NM || "",
+      price: Number(item.PRICE) || 0,
+    }));
+  } catch (error) {
+    // console.error("Error:", error);
+  }
+};
+
+// const brandList = [
+//   { name: "그 외", price: "유선 상담" },
+// ];
 const selectedIndex = ref(null);
 const sizeList = [
   { size: "~ 20kg", price: 0 },
@@ -118,7 +130,7 @@ const gaugeWidth = computed(() => {
 const totalPrice = computed(() => {
   if (selectedIndex.value === null) return 0;
 
-  const brandPrice = brandList[selectedIndex.value]?.price;
+  const brandPrice = brandInfo.value[selectedIndex.value]?.price;
   const sizePrice = selectedI.value !== null ? sizeList[selectedI.value]?.price || 0 : 0;
 
   // 브랜드가 '그 외'면 문자열 반환
@@ -127,16 +139,41 @@ const totalPrice = computed(() => {
   return brandPrice + sizePrice;
 });
 
+const selBrand = brandInfo.value[selectedIndex.value];
+const selSize = sizeList[selectedI.value];
+
 const modelName = ref("");
 // 다음 페이지 넘어가기
 const goNextPage = () => {
+  if (selectedIndex.value === null) return 0;
   if (selectedI.value === null && selectedIndex.value === null) {
     alert("모든 옵션을 선택해주세요.");
-  } else if (modelName.value === "") {
-    alert("모델명을 입력해주세요.");
-  } else {
-    router.push("/estimate02");
+    return;
   }
+
+  if (modelName.value === "" || !modelName.value.trim()) {
+    alert("모델명을 입력해주세요.");
+    return;
+  }
+
+  // router.push("/estimate02");
+  router.push({
+    path: "/estimate02",
+    query: {
+      name: brandInfo.value[selectedIndex.value].name,
+      // name: modelName.value,
+      price: totalPrice.value,
+    },
+  });
+  // router.push({
+  //   path: "/estimate02",
+  //   state: { brand: selBrand, size: selSize, modelName: modelName, totalPrice: totalPrice },
+  // });
+  // console.log("goNextPage vars", {
+  //   page, // ref인지
+  //   totalPages, // computed인지
+  //   thisContext: this, // Options/Composition 혼용 여부
+  // });
 };
 
 // 390px일때 모델명 placeholder 생기기
@@ -146,6 +183,7 @@ const updatePlaceholder = () => {
 };
 
 onMounted(() => {
+  getBrandList();
   updatePlaceholder();
   window.addEventListener("resize", updatePlaceholder);
 });

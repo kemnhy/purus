@@ -1,12 +1,6 @@
 <template>
   <div class="inner header">
     <img src="/images/logo.png" alt="logo" @click="goHome" class="web-logo" />
-    <img
-      src="/public/images/mobile-logo.png"
-      alt="logo"
-      @click="goHome"
-      class="mobile-logo"
-    />
     <div class="hamburger" @click="toggleSide">
       <div
         class="line"
@@ -58,9 +52,6 @@ const goHome = () => {
   .web-logo {
     display: block;
   }
-  .mobile-logo {
-    display: none;
-  }
   .hamburger {
     cursor: pointer;
     width: 3%;
@@ -92,18 +83,18 @@ const goHome = () => {
 // }
 @media screen and (max-width: 480px) {
   .header {
-    padding: 0;
+    padding: 10px 0;
     img {
     min-width: 0;
     width: 10%;
     cursor: pointer;
   }
     .web-logo {
-      display: none;
+      opacity: 0;
     }
-    .mobile-logo {
-      display: block;
-      max-width: 38px;
+    .hamburger {
+      min-width: 20px;
+      height: 25px;
     }
   }
 }

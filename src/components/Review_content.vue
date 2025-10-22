@@ -9,8 +9,6 @@ const rating = ref(0);
 // const sliceImg =
 const activeFilter = ref("추천순");
 
-// const isOpModal = ref(false);
-
 const getReviewsInfo = async () => {
   try {
     const response = await fetch(SHEETDB_API);
@@ -143,15 +141,17 @@ const isLiked = (reviewId) => {
         <i class="stats-title">총 만족도</i>
         <div class="stat-item" v-for="ratingCnt in [5, 4, 3, 2, 1]" :key="ratingCnt">
           <div class="stat-label">
-            <span class="point">{{ ratingCnt }}</span
-            ><span class="unit">점</span>
+            <span class="point">{{ ratingCnt }}</span>
+            <span class="unit">점</span>
           </div>
           <!-- <div class="stat-count" v-if="ratingCounts.counts.le === ">{{ }}</div> -->
           <div class="stat-count">{{ getRatingCounts[ratingCnt] }}</div>
           <!-- 개수 바 -->
           <div class="stat-bar-container">
             <div class="stat-bar-bg"></div>
-            <div class="stat-bar-fill" :style="{ width: `${(getRatingCounts[rating] / totalReviews) * 100}%` }"></div>
+            <div
+              class="stat-bar-fill"
+              :style="{ width: `${(getRatingCounts[rating] / totalReviews) * 100}%` }"></div>
           </div>
         </div>
       </div>
@@ -197,12 +197,17 @@ const isLiked = (reviewId) => {
               </div>
             </div>
           </div>
-          <div class="review-meta">{{ review.date }} ∙ {{ review.service }}</div>
         </div>
+        <div class="review-meta">{{ review.date }} ∙ {{ review.service }}</div>
 
         <!-- 이미지 갤러리 -->
         <div class="image-gallery" v-if="review.images && review.images.length > 0">
-          <img v-for="(img, idx) in review.images" :key="idx" :src="img" alt="리뷰 이미지" class="review-img" />
+          <img
+            v-for="(img, idx) in review.images"
+            :key="idx"
+            :src="img"
+            alt="리뷰 이미지"
+            class="review-img" />
           {{ (img, idx) }}
         </div>
 
@@ -213,13 +218,16 @@ const isLiked = (reviewId) => {
 
         <!-- 좋아요 버튼 -->
         <div class="like-div">
-          <button class="like-btn" @click="toggleLike(review.id)" :class="{ active: isLiked(review.id) }">
+          <button
+            class="like-btn"
+            @click="toggleLike(review.id)"
+            :class="{ active: isLiked(review.id) }">
             <i class="like-icon" :class="{ filled: isLiked(revInfo.id) }"></i>
             <span>{{ review.likes }}</span>
           </button>
         </div>
 
-        <div class="divider"></div>
+        <!-- <div class="divider"></div> -->
       </div>
     </div>
   </div>
@@ -244,13 +252,12 @@ const isLiked = (reviewId) => {
 
   h2 {
     font-size: $main-title;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
   }
 
   p {
     font-size: $esti-medium-txt;
     color: #666;
-    padding-top: 20px;
   }
 }
 
@@ -258,7 +265,7 @@ const isLiked = (reviewId) => {
 .rating-section {
   display: flex;
   align-items: center;
-  gap: 226px;
+  gap: 100px;
   padding: 30px 90px;
   border-radius: 16px;
   background-color: #f2f4f6;
@@ -268,8 +275,8 @@ const isLiked = (reviewId) => {
 
 .rating-summary {
   display: flex;
-  align-items: flex-start;
-  gap: $tab-spacing;
+  align-items: center;
+  gap: 60px;
 }
 
 .rating-score {
@@ -427,16 +434,18 @@ const isLiked = (reviewId) => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  // margin: 40px;
+  margin-bottom: 40px;
 }
 .grp-btn {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   // 필터 버튼
   .filter-tabs {
     display: flex;
     gap: 20px;
+    align-items: center;
 
     &.active {
       color: $point-color;
@@ -457,9 +466,10 @@ const isLiked = (reviewId) => {
     gap: 10px;
     display: flex;
     justify-content: left;
+    align-items: center;
     color: $border-color;
-    font-family: "Font Awesome 5 Free";
     .fa-filter {
+      font-family: "Font Awesome 5 Free";
       padding-top: 6px;
     }
   }
@@ -481,8 +491,9 @@ const isLiked = (reviewId) => {
 
     &.photo {
       gap: 10px;
-      font-family: "Font Awesome 5 Free";
+      align-items: center;
       .img-icon {
+        font-family: "Font Awesome 5 Free";
         padding-top: 5px;
       }
     }
@@ -501,7 +512,11 @@ const isLiked = (reviewId) => {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding: 20px 0;
+  border-bottom: 1px solid #d9d9d9;
+  padding-bottom: 30px;
+  &:last-child {
+    border: none;
+  }
 }
 
 // 사용자 정보
@@ -552,24 +567,22 @@ const isLiked = (reviewId) => {
 .review-text {
   color: $sub-font-color;
   line-height: 1.6;
-  font-size: $small-txt;
 }
 
 // 좋아요 버튼
 .like-div {
   .like-btn {
     color: $border-color;
-    width: 80px;
-    height: 40px;
+    padding: 10px 20px;
     border: 1px solid $border-color;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
     align-items: center;
     background: transparent;
     font-size: $esti-medium-txt;
-    font-size: $esti-medium-txt;
-    font-weight: solid;
     border-radius: 50px;
     box-sizing: border-box;
-
     cursor: pointer;
 
     &:hover {
@@ -591,9 +604,6 @@ const isLiked = (reviewId) => {
     }
 
     .like-icon {
-      width: 24px;
-      height: 27px;
-      gap: 15px;
       font-style: normal;
       font-family: "Font Awesome 5 Free";
       color: $border-color;
@@ -602,20 +612,55 @@ const isLiked = (reviewId) => {
 }
 
 @media (max-width: 768px) {
-  .review-list {
-    min-width: 600px;
-  }
+  .rev-con {
+    .title-section {
+      padding: 50px 0;
+      h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
 
-  .user-info {
-    display: block;
-    align-items: center;
-    gap: 11px;
-    font-size: $small-txt;
-  }
-
-  .rating-section {
-    gap: $tab-spacing;
-    min-width: 600px;
+    .rating-section {
+      gap: 20px;
+      padding: 30px;
+      .rating-summary {
+        gap: 35px;
+        align-items: center;
+        padding-bottom: 10px;
+        .rating-score {
+          width: 100%;
+        }
+      }
+    }
+    .review-list {
+      .review-item {
+        gap: 15px;
+        .review-text {
+          p {
+            font-size: 16px;
+          }
+        }
+        .like-div {
+          .like-btn {
+            padding: 5px 10px;
+            i,
+            span {
+              font-size: 16px;
+            }
+          }
+        }
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 14px;
+        }
+      }
+    }
   }
 
   .allscore {
@@ -623,50 +668,178 @@ const isLiked = (reviewId) => {
   }
 }
 
-@media (max-width: 393px) {
-  .review-list {
-    min-width: 300px;
-  }
+@media (max-width: 390px) {
+  .rev-con {
+    .title-section {
+      padding: 30px 0;
+      h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+      }
+      p {
+        font-size: 14px;
+      }
+    }
+    .postrev {
+      .postrev-cnt {
+        font-size: 14px;
+      }
+      .postrev-btn {
+        font-size: 14px;
+      }
+    }
 
-  .user-info {
-    display: block;
-    align-items: center;
-    gap: 11px;
-    font-size: $small-txt;
-  }
+    .rating-section {
+      flex-direction: column;
+      gap: 5px;
+      padding: 20px;
+      .divider-line {
+        display: none;
+      }
+      .rating-summary {
+        gap: 35px;
+        align-items: center;
+        padding-bottom: 10px;
+        .rating-score {
+          width: 100%;
+          .score-text {
+            font-size: 20px;
+          }
+          .stars-container {
+            .stars {
+              gap: 3px;
+              i {
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+      .allscore {
+        .stats-title {
+          font-size: 14px;
+        }
+        .stat-label {
+          .point,
+          .unit {
+            font-size: 14px;
+          }
+        }
 
-  .rating-section {
-    gap: $tab-spacing;
-    min-width: 600px;
-  }
+        .stat-item {
+          gap: 0;
+          .stat-count {
+            width: 15px;
+          }
+          .stat-bar-container {
+            margin: 0 20px 0 7px;
+          }
+        }
+      }
+    }
+    .review-list {
+      margin-bottom: 20px;
+      .grp-btn {
+        .filter-tabs {
+          gap: 10px;
+          .filter-btn {
+            font-size: 14px;
+            &.photo {
+              gap: 5px;
+              .img-icon {
+                font-size: 12px;
+                padding-top: 0;
+              }
+            }
+          }
+        }
+        .filter-detail {
+          gap: 5px;
+          .fa-filter {
+            font-size: 12px;
+            padding-top: 0;
+          }
+          .filter-btn {
+            font-size: 14px;
+          }
+        }
+      }
+      .review-item {
+        gap: 10px;
+        padding-bottom: 15px;
+        .review-text {
+          p {
+            font-size: 16px;
+          }
+        }
+        .like-div {
+          .like-btn {
+            padding: 5px 10px;
+            i,
+            span {
+              font-size: 16px;
+            }
+          }
+        }
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 14px;
+          .profile-img {
+            width: 35px;
+            height: 35px;
+          }
+          .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            .username {
+              font-size: 12px;
+            }
+            // 개별 별점 컨테이너
+            .stars-container {
+              margin: 0;
 
-  .allscore {
-    min-width: 300px;
-  }
-}
-// ========== 평점 섹션  평균 별점  ==========
-.rating-score {
-  width: 150px;
-  text-align: center;
+              .stars {
+                gap: 3px; // 간격 좁게
 
-  .score-text {
-    font-size: $medium-txt-1;
-    font-weight: 700;
-    font-style: normal;
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  // 평균 별점 컨테이너
-  .stars-container {
-    height: 24px; // 큰 별점 높이
-  }
-
-  .stars {
-    gap: 8px; // 간격도 조금 더 넓게
-
-    i {
-      font-size: 24px; // 평균 별점 크기 (크게)
+                i {
+                  font-size: 12px; // 개별 별점 크기 (작게)
+                }
+              }
+            }
+          }
+        }
+        .review-meta {
+          font-size: 12px;
+        }
+        .image-gallery {
+          flex-wrap: nowrap;
+          .review-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+          }
+        }
+        .review-text {
+          p {
+            font-size: 14px;
+          }
+        }
+        .like-div {
+          .like-btn {
+            padding: 3px 6px;
+            gap: 3px;
+            .like-icon {
+              font-size: 14px;
+            }
+            span {
+              font-size: 14px;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -701,32 +874,6 @@ const isLiked = (reviewId) => {
 
   i {
     color: $point-color;
-  }
-}
-// ========== 개별 리뷰의 별점 (작은 크기) ==========
-.user-details {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
-
-  .username {
-    color: #6b7684;
-    font-weight: 500;
-  }
-
-  // 개별 별점 컨테이너
-  .stars-container {
-    margin: 0;
-    height: 14px; // 작은 별점 높이
-  }
-
-  .stars {
-    gap: 3px; // 간격 좁게
-
-    i {
-      font-size: 14px; // 개별 별점 크기 (작게)
-    }
   }
 }
 </style>
