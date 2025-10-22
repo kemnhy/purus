@@ -110,44 +110,120 @@
 <script setup>
 import Header_w from "@/components/Header_w.vue";
 import Side_menu from "@/components/Side_menu.vue";
-import { useRouter } from "vue-router";
 import { ref } from "vue";
+const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
+
+// 이전 페이지 정보 가져오기
+const name = route.query.name;
+const price = route.query.price;
+console.log("name/price" + name + price);
 
 // 다음버튼 나오기
 const selectAgree1 = ref(false);
 const selectAgree2 = ref(false);
+
 // 견적만 받기
 const pushMessage = () => {
+  // savetest();
   alert("입력하신 연락처로 견적서를 보내드립니다.");
   router.push("/"); // 홈('/')으로 이동
 };
 
+const savetest = async () => {
+  try {
+    console.log(userName.value);
+    console.log(userPhone.value);
+
+    debugger;
+    const newEstim = {
+      // ID: Date.now(),
+      USER_ID: userName.value.toString(),
+      SEL_NUMBER: userPhone.value,
+      CRT_DT: TIMESTAMP, // YYYY-MM-DD,
+    };
+    console.log("test" + newEstim.value);
+    debugger;
+
+    const response = await fetch(SHEETDB_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ data: [newEstim] }),
+    });
+    console.log(response.value);
+
+    debugger;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("✅ 추가 성공:", result);
+    alert("리뷰가 등록되었습니다!");
+  } catch {
+    console.log("error");
+    return;
+  }
+};
 // 입력한 정보 받기
 const userName = ref("");
 const userPhone = ref("");
 
-const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+// const saveEstimInfo = async () => {
+//   try {
+//     const newEstim = {
+//       ID: Date.now().toString(),
+//       USER_ID: userName.value,
+//       SEL_NUMBER: userPhone.value,
+//       SERVICE: selBrand.name + selSize.size + modelName.value,
+//       // SIZE: ,
+//       TOTAL_PRICE: totalPrice.value,
+//       // MODEL_NO: ,
+//       CRT_DT: new Date().toISOString().split("T")[0], // YYYY-MM-DD,
+//     };
+//     console.log(newEstim);
+
+//     const response = await fetch(SHEETDB_API, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json", Accept: "application/json" },
+//       body: JSON.stringify({ data: [newReview] }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+
+//     const result = await response.json();
+//     console.log("✅ 추가 성공:", result);
+//     alert("리뷰가 등록되었습니다!");
+//   } catch (error) {
+//     console.error("❌ 추가 실패:", error);
+//     alert(`등록 실패: ${error.message}`);
+//   }
+// };
+
 // const revInfo = ref([]);
 
-const putUserInfo = async (userName, userPhone) => {
-  try {
-    const response = await fetch(SHEETDB_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: [ userName
-        , userPhone] }),
-    });
+// const putUserInfo = async (userName, userPhone) => {
+//   try {
+//     const response = await fetch(SHEETDB_API, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ data: [userName, userPhone] }),
+//     });
 
-    if (response.ok) {
-      alert("저장 완료!");
-      // fetchReviews();
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
+//     if (response.ok) {
+//       alert("저장 완료!");
+//       // fetchReviews();
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// };
 
 // 다음 페이지로 넘어가면서 정보 보내기
 const goNextPage = () => {
@@ -156,9 +232,7 @@ const goNextPage = () => {
   } else if (!isNaN(userName.value) || userPhone.value.length <= 8) {
     return alert("이름과 전화번호를 올바르게 입력해주세요.");
   } else {
-
-    
-    console.log(putUserInfo);
+    // console.log(putUserInfo);
     router.push({
       path: "/estimate03",
       query: {
