@@ -5,30 +5,35 @@
       <div class="slide-wrap">
         <ul class="process">
           <li
-            :class="[{ click: current === index }]"
+            class="txt"
             v-for="(pro, index) in process"
             :key="pro.id"
+            :class="[
+              {
+                click: isMobile ? openedIndex === index : current === index,
+                open: openedIndex === index,
+              },
+            ]"
             @click="handleClick(index)"
           >
-            {{ pro.id }} {{ pro.title }}
+            <p>{{ pro.id }} {{ pro.title }}</p>
+
+            <transition name="accordion">
+              <div
+                class="img"
+                v-if="isMobile ? openedIndex === index : current === index"
+                :class="{ upward: index === process.length - 1 }"
+              >
+                <img
+                  :src="processImg[index].img"
+                  :alt="processImg[index].alt"
+                />
+              </div>
+            </transition>
           </li>
         </ul>
-        <div class="slide">
-          <ul class="slide-list">
-            <li
-              v-for="(image, index) in processImg"
-              :key="image.img"
-              :style="{
-                opacity: current === index ? 1 : 0,
-                visibility: current === index ? 'visible' : 'hidden',
-                transition: 'opacity 0.5s ease',
-              }"
-            >
-              <img :src="image.img" :alt="image.alt" />
-            </li>
-          </ul>
-        </div>
       </div>
+      <p class="clickTxt" v-if="isMobile">▲ 과정을 클릭해보세요 !</p>
     </div>
   </div>
 </template>
@@ -37,6 +42,9 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
 
 const current = ref(0);
+const openedIndex = ref(null);
+const isMobile = ref(false);
+
 const process = [
   { id: "01", title: "제품 완전 분해" },
   { id: "02", title: "전용 세정제로 세척" },
@@ -53,64 +61,74 @@ const processImg = [
   { img: "/images/process5.png", alt: "process5" },
   { img: "/images/process6.png", alt: "process6" },
 ];
-// slide
+
 let interval = null;
 let inProcess = false;
 let clickTimeout = null;
-
 const processRef = ref(null);
+
 const startSlide = () => {
+  if (isMobile.value) return;
   clearInterval(interval);
   current.value = 0;
   interval = setInterval(() => {
     current.value = (current.value + 1) % process.length;
-  }, 2000);
+  }, 1500);
 };
 const stopSlide = () => {
   clearInterval(interval);
   current.value = 0;
   inProcess = false;
 };
-// handleClick
+
 const handleClick = (index) => {
+  if (isMobile.value) {
+    openedIndex.value = openedIndex.value === index ? null : index;
+    current.value = index;
+    return;
+  }
+
   clearInterval(interval);
   clearTimeout(clickTimeout);
 
+  startSlide();
   current.value = index;
-
-  clickTimeout = setTimeout(() => {
-    startSlide();
-    current.value = index;
-  }, 500);
 };
+
 const handleScroll = () => {
-  if (!processRef.value) return;
+  if (!processRef.value || isMobile.value) return;
   const rect = processRef.value.getBoundingClientRect();
   const windowHeight = window.innerHeight;
-
   const isVisible = rect.top < windowHeight * 0.8 && rect.bottom > 0;
 
   if (isVisible && !inProcess) {
     inProcess = true;
     startSlide();
-  }
-  if (!isVisible && inProcess) {
+  } else if (!isVisible && inProcess) {
     stopSlide();
   }
 };
 
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 390;
+};
+
 onMounted(() => {
+  handleResize();
+  window.addEventListener("resize", handleResize);
   window.addEventListener("scroll", handleScroll);
   handleScroll();
 });
 onBeforeUnmount(() => {
   clearInterval(interval);
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", handleResize);
 });
 </script>
 
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
+
 .process-wrap {
   padding-bottom: $web-spacing;
   .inner {
@@ -121,55 +139,146 @@ onBeforeUnmount(() => {
     }
     .slide-wrap {
       width: 100%;
-      height: 500px;
-      display: flex;
       border-radius: 30px;
       overflow: hidden;
       .process {
-        width: 40%;
-        height: 100%;
-        li {
-          cursor: pointer;
-          width: 100%;
+        width: 100%;
+        height: 500px;
+        position: relative;
+
+        .txt {
+          width: 40%;
           height: calc(100% / 6);
           display: flex;
           align-items: center;
-          font-size: $medium-txt-2;
-          font-weight: 500;
-          color: $font-color;
           background-color: $main-color;
           padding-left: 46px;
+          cursor: pointer;
           transition: all 0.2s ease;
+          p {
+            font-size: $medium-txt-2;
+            font-weight: 500;
+            color: $font-color;
+          }
           &.click {
+            background-color: #daecf8;
+          }
+          &.click p {
             background-color: #daecf8;
             font-weight: bold;
             font-size: 28px;
           }
-        }
-      }
-      .slide {
-        width: 60%;
-        height: 100%;
-        .slide-list {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          li {
-            width: 100%;
-            height: 100%;
+
+          .img {
             position: absolute;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease;
+            right: 0;
+            top: 0;
+            width: 60%;
+            height: 100%;
             img {
               width: 100%;
               height: 100%;
-              display: block;
+              object-fit: cover;
             }
           }
         }
       }
     }
+    .clickTxt{
+      font-size: 14px;
+      color: $font-color;
+      text-align: center;
+      margin-top: 16px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .process-wrap {
+    padding-bottom: $tab-spacing;
+    .inner {
+      .title {
+        font-size: $medium-txt-2;
+        margin-bottom: 30px;
+      }
+      .slide-wrap {
+        border-radius: 20px;
+        height: 280px;
+        .process {
+          width: 100%;
+          height: 100%;
+          .txt {
+            padding-left: 20px;
+            p {
+              font-size: 16px;
+            }
+            &.click p {
+              font-size: $small-txt;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 390px) {
+  .process-wrap {
+    padding-bottom: $mo-spacing;
+    .inner {
+      .title {
+        font-size: 20px;
+        margin-bottom: 24px;
+      }
+      .slide-wrap {
+        border-radius: 16px;
+        height: auto;
+        .process {
+          height: auto;
+          .txt {
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            background: #f2f6f8;
+            border-bottom: 1px solid rgba(9, 40, 87, 0.1);
+            position: relative;
+            overflow: hidden;
+            padding-left: 0;
+            p {
+              font-size: 14px;
+              padding: 14px 20px;
+            }
+            &:last-child {
+              border-bottom: none;
+            }
+            &.click p {
+              font-size: 16px;
+            }
+            .img {
+              position: static;
+              width: 100%;
+              height: auto;
+              overflow: hidden;
+              img {
+                width: 100%;
+                height: auto;
+                display: block;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .accordion-enter-active,
+  .accordion-leave-active {
+    transition: all 0.3s ease;
+  }
+  .accordion-enter-from,
+  .accordion-leave-to {
+    opacity: 0;
+    max-height: 0;
   }
 }
 </style>

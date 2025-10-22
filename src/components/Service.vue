@@ -7,8 +7,9 @@
           <div class="txt">
             <h2>간단한 절차</h2>
             <p>
-              <strong>원하는 시간, 일정</strong>만 입력하면<br />Purus가 알아서
-              청소해 드립니다.
+              <strong>원하는 시간, 일정</strong>만 입력하면<br
+                v-if="!isMobile"
+              />Purus가 알아서 청소해 드립니다.
             </p>
           </div>
           <div class="contents">
@@ -23,8 +24,9 @@
           <div class="txt">
             <h2>확실한 보고</h2>
             <p>
-              작업 후 <strong>청소 전·후 사진</strong>을<br />고객님께 전송해
-              드립니다.
+              작업 후 <strong>청소 전·후 사진</strong>을<br
+                v-if="!isMobile"
+              />고객님께 전송해 드립니다.
             </p>
           </div>
           <div class="contents">
@@ -45,7 +47,7 @@
           <div class="txt">
             <h2>1:1 맞춤 서비스</h2>
             <p>
-              <strong>1:1담당자 맞춤 서비스</strong>로<br />
+              <strong>1:1담당자 맞춤 서비스</strong>로<br v-if="!isMobile" />
               끝까지 확실하게 책임집니다.
             </p>
           </div>
@@ -61,10 +63,10 @@
         </li>
         <li class="card">
           <div class="txt">
-            <h2>365일 고객센터 운영</h2>
+            <h2>{{ serviceTitle }}</h2>
             <p>
-              <strong>오전 8시 ~ 오후 10시까지,</strong><br />휴일에도 신속하게
-              해결해드립니다.
+              <strong>오전 8시 ~ 오후 10시까지, </strong
+              ><br v-if="!isMobile" />휴일에도 신속하게 해결해드립니다.
             </p>
           </div>
           <div class="contents">
@@ -76,7 +78,33 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted, onUnmounted, ref } from "vue";
+
+const serviceTitle = ref("365일 고객센터 운영");
+const isMobile = ref(false);
+const handleResize = () => {
+  const screenWidth = window.innerWidth;
+  // 450미만
+  isMobile.value = screenWidth < 450;
+  // 365일 문구변경
+  if (screenWidth < 450) {
+    serviceTitle.value = "365일 고객센터";
+  } else {
+    serviceTitle.value = "365일 고객센터 운영";
+  }
+};
+
+onMounted(() => {
+  handleResize();
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  handleResize();
+  window.removeEventListener("resize", handleResize);
+});
+</script>
 
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
@@ -208,84 +236,117 @@
 }
 @media screen and (max-width: 1200px) {
   .service-wrap {
-  .inner{
-    .card-list{
-      flex-wrap: wrap;
-      .card{
-        flex: auto;
+    .inner {
+      .card-list {
+        flex-wrap: wrap;
+        .card {
+          flex: auto;
+        }
       }
     }
-  }
   }
 }
 @media screen and (max-width: 768px) {
   .service-wrap {
     padding: $tab-spacing 0;
-    .title{
+    .title {
       font-size: $medium-txt-2;
-  }
-  .inner{
-    .card-list{
-      margin-top: 34px;
-      flex-wrap: wrap;
-      gap: 20px;
-      .card{
-        max-width: 290px;
-        height: 330px;
-        width: calc((100% - 20px) / 2);
-        flex: auto;
-        .txt{
-          h2{
-            font-size: 20px;
+    }
+    .inner {
+      .card-list {
+        margin-top: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+        .card {
+          max-width: 290px;
+          height: 330px;
+          width: calc((100% - 20px) / 2);
+          flex: auto;
+          .txt {
+            h2 {
+              font-size: 20px;
+            }
+            p {
+              font-size: $small-txt;
+              padding-top: 10px;
+            }
           }
-          p{
-            font-size: $small-txt;
-            padding-top: 10px;
-          }
-        }
-        .contents{
-          .box{
-            width: 80%;
+          .contents {
+            .box {
+              width: 80%;
+            }
           }
         }
       }
     }
   }
-}
 }
 @media screen and (max-width: 450px) {
   .service-wrap {
     padding: $mo-spacing 0;
-    .title{
-    font-size: 20px;
-  }
-  .inner{
-    .card-list{
-      margin-top: 24px;
-      flex-wrap: wrap;
-      gap: 10px;
-      .card{
-        padding: 16px;
-        max-width: 140px;
-        height: 200px;
-        flex: auto;
-        .txt{
-          h2{
-            font-size: 14px;
+    .title {
+      font-size: 20px;
+    }
+    .inner {
+      .card-list {
+        margin-top: 24px;
+        flex-wrap: wrap;
+        gap: 8px;
+        .card {
+          padding: 16px 12px 8px 12px;
+          border-radius: 10px;
+          max-width: 140px;
+          height: 190px;
+          flex: auto;
+          .txt {
+            h2 {
+              font-size: 14px;
+            }
+            p {
+              font-size: 12px;
+              padding-top: 8px;
+            }
           }
-          p{
-            font-size: 12px;
-            padding-top: 8px;
-          }
-        }
-        .contents{
-          .box{
-            width: 80%;
+          .contents {
+            .before-after {
+              gap: 3px;
+
+              li {
+                i {
+                  font-size: 16px;
+                }
+                img {
+                  border-radius: 8px;
+                }
+                p {
+                  font-size: 12px;
+                  bottom: -18px;
+                }
+              }
+            }
+            .box {
+              padding: 10px 8px 20px 8px;
+              width: 100%;
+              gap: 8px;
+              li {
+                font-size: 12px;
+              }
+            }
+            .box2 {
+              padding: 20px 10px 30px 10px;
+              li {
+                .fa-user {
+                  font-size: $medium-txt-1;
+                }
+                p {
+                  font-size: 12px;
+                }
+              }
+            }
           }
         }
       }
     }
-  }
   }
 }
 </style>
