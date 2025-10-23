@@ -7,7 +7,7 @@
       <!-- 모달창 배경 -->
       <img src="/images/event_modal.png" alt="이벤트모달" />
       <!-- 이동버튼 -->
-      <div class="glass-btn">
+      <div @click="goReview" class="glass-btn">
         <p>리뷰 작성 하고 쿠폰 받기</p>
         <img src="/images/download.svg" alt="리뷰쓰고 쿠폰 다운" />
       </div>
@@ -24,6 +24,9 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const eventModal = ref(true);
 // 오늘 날짜 문자열 생성 (예: "2025-10-22")
@@ -43,6 +46,11 @@ onMounted(() => {
     eventModal.value = false; // 오늘 이미 눌렀으면 안보이게
   }
 });
+
+// 버튼 누르면 리뷰페이지가기
+const goReview = () => {
+  router.push("/review");
+};
 </script>
 
 <style lang="scss" scoped>

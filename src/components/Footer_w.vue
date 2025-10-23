@@ -28,7 +28,7 @@
 
 .footer {
   width: 100%;
-  background-color: $grey-color;
+  // background-color: $grey-color;
 
   padding: 30px 0;
 
@@ -53,15 +53,18 @@
     font-size: $small-txt;
 
     line-height: 1.8;
+    p {
+      color: $border-color;
+    }
 
     a {
-      color: #000000;
+      color: $border-color;
       text-decoration: none;
     }
 
     .footer__copy {
       margin-top: 15px;
-      color: #999;
+      color: $border-color;
       font-size: $small-txt;
     }
   }
