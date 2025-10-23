@@ -87,7 +87,7 @@ import Side_menu from "@/components/Side_menu.vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 
-const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+const SHEETDB_API = "https://sheetdb.io/api/v1/63h80yl17hy1y";
 const router = useRouter();
 const brandInfo = ref([]);
 // 브랜드 목록
@@ -95,9 +95,9 @@ const brandInfo = ref([]);
 const getBrandList = async () => {
   try {
     const response = await fetch(`${SHEETDB_API}?sheet=TB_BRAND`);
-    const data = await response.json();
+    const result = await response.json();
 
-    brandInfo.value = data.map((item) => ({
+    brandInfo.value = result.map((item) => ({
       id: item.ID,
       name: item.BRAND_NM || "",
       price: Number(item.PRICE) || 0,
@@ -139,8 +139,11 @@ const totalPrice = computed(() => {
   return brandPrice + sizePrice;
 });
 
-const selBrand = brandInfo.value[selectedIndex.value];
-const selSize = sizeList[selectedI.value];
+// const selBrand = brandInfo.value[selectedIndex.value];
+// const selSize = sizeList[selectedI.value];
+// debugger;
+// console.log(selBrand.value);
+// console.log(selSize.value);
 
 const modelName = ref("");
 // 다음 페이지 넘어가기
@@ -160,9 +163,12 @@ const goNextPage = () => {
   router.push({
     path: "/estimate02",
     query: {
-      name: brandInfo.value[selectedIndex.value].name,
-      // name: modelName.value,
-      price: totalPrice.value,
+      mdId: brandInfo.value[selectedIndex.value].id,
+      mdNm: brandInfo.value[selectedIndex.value].name,
+      mdPrice: brandInfo.value[selectedIndex.value].price,
+      size: sizeList[selectedI.value].size,
+      sizePrice: sizeList[selectedI.value].price,
+      totalPrice: totalPrice.value,
     },
   });
   // router.push({
