@@ -85,7 +85,7 @@ export default {
     font-size: $main-title;
     font-weight: bold;
     color: $point-color;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     text-align: left;
   }
 
@@ -139,11 +139,11 @@ export default {
 
   /*  768px 이하 (태블릿) */
   @media (max-width: 768px) {
-    padding: 60px 24px; /* 위아래 여백 줄임 */
+    padding: 50px 24px; /* 위아래 여백 줄임 */
 
     .faq-title {
       font-size: 26px;
-      margin-bottom: 28px;
+      margin-bottom: 30px;
       color: $point-color;
     }
 
@@ -166,18 +166,17 @@ export default {
 /*  390px 이하 (모바일) */
 @media (max-width: 390px) {
   .faq {
-    padding: 40px 0; /* 위아래 줄이되 자연스럽게 */
+    padding: 30px 0; /* 위아래 줄이되 자연스럽게 */
     background: #fff;
     .faq-title {
       text-align: left;
       font-size: 22px;
       letter-spacing: 1px;
       color: #004b9b;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .faq-item {
-      // background: #fff;
       border: none;
       border-radius: 8px;
       // margin-bottom: 10px;

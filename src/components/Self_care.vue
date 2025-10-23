@@ -106,7 +106,7 @@ const cards = ref([
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 .care-wrap {
-  background: #f7faff;
+  background: $main-color;
   // min-height: 100vh;
   // display: flex;
   // justify-content: center;
@@ -134,7 +134,7 @@ const cards = ref([
       }
 
       .sub {
-        font-size: $medium-txt-1;
+        font-size: $main-title;
         font-weight: bold;
         color: $point-color;
       }
@@ -232,6 +232,8 @@ const cards = ref([
       }
       .hover-desc {
         position: absolute;
+        top: 0;
+
         height: 100%;
         background-color: rgba(0, 0, 0, 0.9);
         color: #fff;
@@ -266,29 +268,37 @@ const cards = ref([
 @media screen and (max-width: 768px) {
   // 셀프케어 영역
   .care-wrap {
-    padding: 80px 0;
+    padding: 50px 0;
 
     .inner {
       border-radius: 40px;
 
       .inner-2 {
         width: 90%;
-        padding: 60px 0;
+        padding: 30px 0;
       }
 
-      .header .title {
-        font-size: 24px;
+      .header {
+        margin-bottom: 30px;
+        .sub {
+          font-size: 24px;
+        }
+        .logo {
+          // margin-bottom: 15px;
+          width: 140px;
+        }
       }
 
       .progress {
         height: 36px;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
       }
 
       .grid {
         width: 100%;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
+        margin-bottom: 30px;
 
         .card {
           padding: 30px 15px;
@@ -314,21 +324,22 @@ const cards = ref([
 // 셀프케어 영역
 @media screen and (max-width: 390px) {
   .care-wrap {
-    padding: 60px 0;
+    padding: 30px 0 0;
 
     .inner {
       border-radius: 30px;
 
       .inner-2 {
         width: 92%;
-        padding: 30px 0;
+        padding: 24px 0;
       }
       .header {
-       .logo{
-          width: 130px;
+        margin-bottom: 20px;
+        .logo {
+          width: 100px;
         }
         .sub {
-          font-size: $medium-txt-2;
+          font-size: 20px;
         }
       }
 
@@ -349,35 +360,51 @@ const cards = ref([
 
       .grid {
         display: flex;
-        flex-direction: column;
+        // flex-direction: column;
         align-items: center;
         width: 100%;
-        gap: 18px;
-        margin: 30px 0;
+        gap: 10px;
+        margin: 20px 0;
 
         .card {
-          width: 90%;
+          width: calc((100% - 10px) / 2);
           background: $sub-color;
           border-radius: 20px;
           text-align: center;
-          padding: 25px 15px;
+          height: 200px;
+          padding: 30px 15px 20px;
           transition: 0.3s;
 
           .title {
-            font-size: 20px;
+            font-size: 16px;
             margin-bottom: 15px;
             color: $font-color;
           }
 
-          .img img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
+          .img {
+
+            &.lastCard {
+              img {
+                padding: 5px;
+              }
+            }
+            img {
+              width: 100%;
+              height: auto;
+              object-fit: contain;
+            }
           }
 
           &:hover {
             transform: translateY(-4px);
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
+          }
+          .hover-desc {
+            padding: 8px;
+            p {
+              font-size: 12px;
+              line-height: 1.5;
+            }
           }
         }
       }
@@ -386,7 +413,7 @@ const cards = ref([
         font-size: 14px;
         // color: #666;
         text-align: center;
-        .arrow{
+        .arrow {
           font-size: 14px;
         }
       }

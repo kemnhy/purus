@@ -41,13 +41,14 @@ const goEstimate = ()=>{
 }
 
 .text {
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 400;
   margin: 0;
   line-height: 1.2;
 
   // 강조 부분 (제빙기 청소)
   .highlight {
+    font-size: 40px;
     font-weight: 700;
     color: $sub-color;
     font-family: "Pretendard-Bold", sans-serif;
@@ -93,13 +94,14 @@ const goEstimate = ()=>{
   }
 
   .text {
-    font-size: $medium-txt-2;
+    font-size: 22px;
     line-height: 1.4;
     margin: 0;
     text-align: center;
 
     .highlight {
       font-weight: bold;
+      font-size: $medium-txt-2;
     }
   }
 

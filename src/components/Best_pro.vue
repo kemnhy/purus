@@ -9,55 +9,23 @@
         <p class="desc">별 다섯 개의 기사님, 지금 만나보세요 !</p>
       </div>
 
-      <!--  390px 이하 전용 -->
+      <!-- ✅ Swiper 하나로 breakpoints 사용 -->
       <swiper
-        v-if="isMobile"
-        :modules="[Autoplay, Pagination]"
-        :slides-per-view="1"
-        :space-between="20"
-        :autoplay="{ delay: 1500, disableOnInteraction: false }"
-        :pagination="{ clickable: true }"
-        :loop="true"
-        class="mobile-swiper"
-      >
-        <swiper-slide v-for="(item, index) in items" :key="'mobile-' + index">
-          <div class="pro-card">
-            <h3 class="pro-title">{{ item.title }}</h3>
-            <div class="pro-img-box">
-              <img :src="item.image" alt="기사님 이미지" class="pro-img" />
-            </div>
-            <p class="pro-name">{{ item.name }}<span>기사님</span></p>
-            <div class="line"></div>
-            <div class="pro-detail">
-              <div>
-                <p>현장출동</p>
-                <b>{{ item.activity }}</b>
-              </div>
-              <div>
-                <p>총경력</p>
-                <b>{{ item.career }}</b>
-              </div>
-              <div>
-                <p>리뷰</p>
-                <b>{{ item.review }}</b>
-              </div>
-            </div>
-          </div>
-        </swiper-slide>
-      </swiper>
-
-      <!--  391~768px : 2개씩 슬라이드 + autoplay 추가됨 -->
-      <swiper
-        v-else-if="isTablet"
         :modules="[Pagination, Autoplay]"
-        :slides-per-view="2"
+        :slides-per-view="3"
         :space-between="20"
         :autoplay="{ delay: 1500, disableOnInteraction: false }"
         :pagination="{ clickable: true }"
         :loop="true"
-        class="tablet-swiper"
+        :breakpoints="{
+          0: { slidesPerView: 1 }, // 모바일 (0~390)
+          391: { slidesPerView: 2 }, // 태블릿 (391~768)
+          769: { slidesPerView: 3 }, // PC (769 이상)
+        }"
+        ref="mySwiper"
+        class="pro-swiper"
       >
-        <swiper-slide v-for="(item, index) in items" :key="'tablet-' + index">
+        <swiper-slide v-for="(item, index) in items" :key="index">
           <div class="pro-card">
             <h3 class="pro-title">{{ item.title }}</h3>
             <div class="pro-img-box">
@@ -82,32 +50,6 @@
           </div>
         </swiper-slide>
       </swiper>
-
-      <!--  PC 버전 -->
-      <div v-else class="pro-list">
-        <div class="pro-card" v-for="(item, index) in items" :key="'pc-' + index">
-          <h3 class="pro-title">{{ item.title }}</h3>
-          <div class="pro-img-box">
-            <img :src="item.image" alt="기사님 이미지" class="pro-img" />
-          </div>
-          <p class="pro-name">{{ item.name }}<span>기사님</span></p>
-          <div class="line"></div>
-          <div class="pro-detail">
-            <div>
-              <p>현장출동</p>
-              <b>{{ item.activity }}</b>
-            </div>
-            <div>
-              <p>총경력</p>
-              <b>{{ item.career }}</b>
-            </div>
-            <div>
-              <p>리뷰</p>
-              <b>{{ item.review }}</b>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 </template>
@@ -117,7 +59,17 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, ref } from "vue";
+
+const mySwiper = ref(null)
+onMounted(() => {
+  // 3초 후 다음 슬라이드로 넘기기
+  setTimeout(() => {
+    if (mySwiper.value) {
+      mySwiper.value.swiper.slideNext();
+    }
+  }, 3000);
+});
 
 const items = [
   {
@@ -145,25 +97,7 @@ const items = [
     review: "5.0",
   },
 ];
-
-const isMobile = ref(false);
-const isTablet = ref(false);
-
-const handleResize = () => {
-  const width = window.innerWidth;
-  isMobile.value = width <= 390;
-  isTablet.value = width > 390 && width <= 768;
-};
-
-onMounted(() => {
-  handleResize();
-  window.addEventListener("resize", handleResize);
-});
-onUnmounted(() => {
-  window.removeEventListener("resize", handleResize);
-});
 </script>
-
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
 
@@ -179,7 +113,7 @@ onUnmounted(() => {
   }
 
   .title-box {
-    margin-bottom: 50px;
+    margin-bottom: 60px;
 
     .title-top {
       display: flex;
@@ -200,8 +134,9 @@ onUnmounted(() => {
 
     .desc {
       font-size: $medium-txt-1;
-      margin-top: 10px;
-      font-weight: bold;
+      margin-top: 15px;
+      font-weight: 500;
+      color: $font-color;
     }
   }
 
@@ -235,7 +170,7 @@ onUnmounted(() => {
       font-weight: 500;
       color: $font-color;
       margin-bottom: 14px;
-      line-height: 1.25;
+
       min-height: 52px;
     }
 
@@ -302,78 +237,81 @@ onUnmounted(() => {
 
   /* ✅ 391~768px : 스와이퍼 카드 2개씩 */
   @media (max-width: 768px) {
-     
-      padding: $tab-spacing 0;
-      .inner {
-        padding: 0 16px;
-        .title-box {
-          margin-bottom: 40px;
-
-          .title-top img {
-            width: 160px;
-          }
-
-          .title-top h2 {
-            font-size: $medium-txt-2;
-          }
-
-          .desc {
-            font-size: $small-txt;
-          }
+    padding: $tab-spacing 0;
+    .inner {
+      padding: 0 16px;
+      .title-box {
+        margin-bottom: 30px;
+        .title-top {
+          align-items: flex-end;
+        }
+        .title-top img {
+          width: 140px;
         }
 
-        .tablet-swiper {
-          padding-bottom: 40px;
+        .title-top h2 {
+          line-height: 0.95;
+          font-size: $medium-txt-2;
         }
 
-        .pro-card {
-          max-width: 100%;
-          padding: 30px 20px;
-          border-radius: 24px;
-          min-height: 420px;
+        .desc {
+          font-size: $small-txt;
+        }
+      }
 
-          .pro-title {
+      .pro-swiper {
+        padding-bottom: 40px;
+      }
+
+      .pro-card {
+        max-width: 100%;
+        padding: 30px 20px;
+        border-radius: 24px;
+        min-height: 420px;
+
+        .pro-title {
+          font-size: 16px;
+          min-height: 46px;
+        }
+
+        .pro-img-box {
+          width: 160px;
+          margin-bottom: 14px;
+        }
+
+        .pro-name {
+          font-size: 18px;
+          span {
             font-size: 16px;
-            min-height: 46px;
           }
+        }
 
-          .pro-img-box {
-            width: 160px;
-            margin-bottom: 14px;
-          }
-
-          .pro-name {
-            font-size: 18px;
-            span {
-              font-size: 16px;
+        .pro-detail {
+          max-width: 100%;
+          div {
+            p {
+              font-size: 13px;
             }
-          }
-
-          .pro-detail {
-            max-width: 100%;
-            div {
-              p {
-                font-size: 13px;
-              }
-              b {
-                font-size: 16px;
-              }
+            b {
+              font-size: 16px;
             }
           }
         }
       }
     }
-  
+  }
 
   /* ✅ 390px 이하 전용 */
   @media (max-width: 390px) {
     padding: 30px 0;
 
     .title-box {
-      margin-bottom: 30px;
+      margin-bottom: 24px !important;
 
       .title-top {
         flex-direction: column;
+        align-items: center !important;
+
         gap: 10px;
 
         img {
