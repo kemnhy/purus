@@ -3,38 +3,43 @@ import { ref, computed, onMounted } from "vue";
 // import { PostModal } from "@/components/Post_Modal.vue";
 // const PostModal = useModal();
 
-const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+const SHEETDB_API = "https://sheetdb.io/api/v1/63h80yl17hy1y";
 const revInfo = ref([]);
 const rating = ref(0);
-// const sliceImg =
+const selRating = ref(0);
 const activeFilter = ref("추천순");
-
-const getReviewsInfo = async () => {
-  try {
-    const response = await fetch(SHEETDB_API);
-    const data = await response.json();
-    revInfo.value = data.map((item) => ({
-      id: item.id,
-      username: item.USER_NM,
-      rating: Number(item.REV_RATING) || 0,
-      comment: item.REV_COMMENT || "",
-      date: item.REV_DT || "",
-      service: item.SERVICE || "",
-      likes: Number(item.REV_LIKES) || 0,
-      images: item.REV_IMG ? item.REV_IMG.split(",").map((img) => img.trim()) : [],
-      userImage: item.USER_IMG ? item.USER_IMG : [],
-    }));
-    console.log("리뷰 불러오기 성공:", revInfo.value);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
 
 onMounted(() => {
   getReviewsInfo();
   console.log(averageScore.value);
 });
-//  이미지 여러개일떄 짤라서
+
+const getReviewsInfo = async () => {
+  try {
+    const response = await fetch(SHEETDB_API);
+    const data = await response.json();
+
+    // comment가 있는 것만 필터링 후 map
+    revInfo.value = data
+      .filter((item) => item.REV_COMMENT) // comment가 있는 것만 먼저 필터링
+      .map((item) => ({
+        id: item.id,
+        username: item.USER_NM,
+        rating: Number(item.REV_RATING) || 0,
+        comment: item.REV_COMMENT,
+        date: item.REV_DT || "",
+        service: item.SERVICE || "",
+        likes: Number(item.REV_LIKES) || 0,
+        images: item.REV_IMG ? item.REV_IMG.split(",").map((img) => img.trim()) : [],
+        userImage: item.USER_IMG ? item.USER_IMG : [],
+      }));
+
+    console.log("리뷰 불러오기 확인:", revInfo.value);
+    console.log("리뷰 개수:", revInfo.value.length);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 // 총 리뷰 개수
 const totalReviews = computed(() => revInfo.value?.length || 0);
@@ -105,129 +110,131 @@ const isLiked = (reviewId) => {
       <div class="postrev-cnt">리뷰 수 {{ totalReviews }}</div>
 
       <button @click="openModal" class="postrev-btn">리뷰 남기기</button>
-
-      <!-- <div class="modal_bg">
-        <Modal class="modal_section" v-model="isModalOpen" title="폼">
-          <input v-model="txtId" placeholder="아이디 입력" />
-          
-          <input v-model="selRating" type="number" min="1" max="5" placeholder="별점(1~5)" />
-          <textarea v-model="tbReview" placeholder="리뷰를 입력하세요."></textarea>
-          <button @click="saveReview">리뷰 저장하기</button>
-        </Modal>
-      </div>
-      -->
     </div>
 
-    <!-- 총 만족도 ==========================-->
-    <div class="rating-section">
-      <div class="rating-summary">
-        <div class="rating-score">
-          <i class="score-text">{{ averageScore }}</i>
-          <div class="stars-container">
-            <!-- 배경 (빈 별) -->
-            <div class="stars stars-bg">
-              <i v-for="star in 5" :key="`bg-${star}`" class="fas fa-star"></i>
+    <div class="review-section">
+      <div class="show-review">
+        <!-- 총 만족도 ==========================-->
+        <div class="rating-section">
+          <div class="rating-summary">
+            <div class="rating-score">
+              <i class="score-text">{{ averageScore }}</i>
+              <div class="stars-container">
+                <!-- 배경 (빈 별) -->
+                <div class="stars stars-bg">
+                  <i v-for="star in 5" :key="`bg-${star}`" class="fas fa-star"></i>
+                </div>
+                <!-- 채워진 별 (평점만큼) -->
+                <div class="stars stars-fill" :style="{ width: `${(averageScore / 5) * 100}%` }">
+                  <i v-for="star in 5" :key="`fill-${star}`" class="fas fa-star"></i>
+                </div>
+              </div>
             </div>
-            <!-- 채워진 별 (평점만큼) -->
-            <div class="stars stars-fill" :style="{ width: `${(averageScore / 5) * 100}%` }">
-              <i v-for="star in 5" :key="`fill-${star}`" class="fas fa-star"></i>
+            <div class="divider-line"></div>
+          </div>
+
+          <div class="allscore">
+            <i class="stats-title">총 만족도</i>
+            <div class="stat-item" v-for="ratingCnt in [5, 4, 3, 2, 1]" :key="ratingCnt">
+              <div class="stat-label">
+                <span class="point">{{ ratingCnt }}</span>
+                <span class="unit">점</span>
+              </div>
+              <!-- <div class="stat-count" v-if="ratingCounts.counts.le === ">{{ }}</div> -->
+              <div class="stat-count">{{ getRatingCounts[ratingCnt] }}</div>
+              <!-- 개수 바 -->
+              <div class="stat-bar-container">
+                <div class="stat-bar-bg"></div>
+                <div class="stat-bar-fill" :style="{ width: `${(getRatingCounts[rating] / totalReviews) * 100}%` }"></div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="divider-line"></div>
-      </div>
+        <!-- 리뷰 목록 -->
+        <div class="review-list">
+          <div class="divider"></div>
+          <div class="grp-btn">
+            <!-- 필터 버튼 -->
+            <div class="filter-tabs">
+              <!-- <div class="filler-icon"></div> -->
+              <button class="filter-btn" @click="seqLast">최신순</button>
+              <button class="filter-btn" @click="seqBest">추천순</button>
+              <button class="filter-btn photo" @click="selPhoto">
+                <div class="img-icon"></div>
+                사진 리뷰
+              </button>
+            </div>
 
-      <div class="allscore">
-        <i class="stats-title">총 만족도</i>
-        <div class="stat-item" v-for="ratingCnt in [5, 4, 3, 2, 1]" :key="ratingCnt">
-          <div class="stat-label">
-            <span class="point">{{ ratingCnt }}</span>
-            <span class="unit">점</span>
-          </div>
-          <!-- <div class="stat-count" v-if="ratingCounts.counts.le === ">{{ }}</div> -->
-          <div class="stat-count">{{ getRatingCounts[ratingCnt] }}</div>
-          <!-- 개수 바 -->
-          <div class="stat-bar-container">
-            <div class="stat-bar-bg"></div>
-            <div
-              class="stat-bar-fill"
-              :style="{ width: `${(getRatingCounts[rating] / totalReviews) * 100}%` }"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 리뷰 목록 -->
-    <div class="review-list">
-      <div class="divider"></div>
-      <div class="grp-btn">
-        <!-- 필터 버튼 -->
-        <div class="filter-tabs">
-          <!-- <div class="filler-icon"></div> -->
-          <button class="filter-btn" @click="seqLast">최신순</button>
-          <button class="filter-btn" @click="seqBest">추천순</button>
-          <button class="filter-btn photo" @click="selPhoto">
-            <div class="img-icon"></div>
-            사진 리뷰
-          </button>
-        </div>
-
-        <!--  상세 필터 ===============================-->
-        <div class="filter-detail">
+            <!--  상세 필터 ===============================-->
+            <!-- <div class="filter-detail">
           <i class="fa-solid fa-filter"></i>
           <button class="filter-btn">상세 필터</button>
-        </div>
-      </div>
+        </div> -->
+          </div>
 
-      <div class="divider"></div>
+          <div class="divider"></div>
 
-      <!-- 리뷰 아이템 -->
-      <div class="review-item" v-for="(review, i) in revInfo" :key="i">
-        <!-- 사용자 정보 -->
-        <div class="user-info">
-          <img v-if="review.userImage" :src="review.userImage" alt="프로필" class="profile-img" />
-          <!-- 개별 점수 -->
-          <div class="user-details">
-            <span class="username">{{ review.username }}</span>
-            <div class="stars-container">
-              <div class="stars stars-bg">
-                <i v-for="star in 5" :key="`bg-${star}`" class="fas fa-star"></i>
+          <!-- 리뷰 아이템 -->
+          <div class="review-item" v-for="(review, i) in revInfo" :key="i">
+            <!-- 사용자 정보 -->
+            <div class="user-info">
+              <img v-if="review.userImage" :src="review.userImage" alt="프로필" class="profile-img" />
+              <!-- 개별 점수 -->
+              <div class="user-details">
+                <span class="username">{{ review.username }}</span>
+                <div class="stars-container">
+                  <div class="stars stars-bg">
+                    <i v-for="star in 5" :key="`bg-${star}`" class="fas fa-star"></i>
+                  </div>
+                  <div class="stars stars-fill" :style="{ width: `${(review.rating / 5) * 100}%` }">
+                    <i v-for="star in 5" :key="`fill-${star}`" class="fas fa-star"></i>
+                  </div>
+                </div>
               </div>
-              <div class="stars stars-fill" :style="{ width: `${(review.rating / 5) * 100}%` }">
-                <i v-for="star in 5" :key="`fill-${star}`" class="fas fa-star"></i>
-              </div>
+            </div>
+            <div class="review-meta">{{ review.date }} ∙ {{ review.service }}</div>
+
+            <!-- 이미지 갤러리 -->
+            <div class="image-gallery" v-if="review.images && review.images.length > 0">
+              <img v-for="(img, idx) in review.images" :key="idx" :src="img" alt="리뷰 이미지" class="review-img" />
+              {{ (img, idx) }}
+            </div>
+
+            <!-- 리뷰 내용 -->
+            <div class="review-text" v-if="review.comment">
+              <p>{{ review.comment }}</p>
+            </div>
+
+            <!-- 좋아요 버튼 -->
+            <div class="like-div">
+              <button class="like-btn" @click="toggleLike(review.id)" :class="{ active: isLiked(review.id) }">
+                <i class="like-icon" :class="{ filled: isLiked(revInfo.id) }"></i>
+                <span>{{ review.likes }}</span>
+              </button>
             </div>
           </div>
         </div>
-        <div class="review-meta">{{ review.date }} ∙ {{ review.service }}</div>
+      </div>
 
-        <!-- 이미지 갤러리 -->
-        <div class="image-gallery" v-if="review.images && review.images.length > 0">
-          <img
-            v-for="(img, idx) in review.images"
-            :key="idx"
-            :src="img"
-            alt="리뷰 이미지"
-            class="review-img" />
-          {{ (img, idx) }}
+      <div class="show-postcard">
+        <div class="carddiv">
+          <div class="card-rating">
+            <!-- 별점 선택 -->
+            <span @click="selRating = n" :class="{ spanActive: n <= selRating }">
+              <i class="fas fa-star" v-for="n in 5" :key="n"></i>
+            </span>
+          </div>
+          <div class="text-box">
+            <!-- 후기 작성 -->
+            <textarea v-model="txtRevCon" placeholder="리뷰를 작성하세요."></textarea>
+            <!-- 사진 업로드 -->
+            <div class="file-btn">
+              <input type="file" @change="uploadImage" accept="image/*" />
+              <!-- 등록 버튼 -->
+            </div>
+            <button class="submit-btn" @click="submitReview">등록하기</button>
+          </div>
         </div>
-
-        <!-- 리뷰 내용 -->
-        <div class="review-text" v-if="review.comment">
-          <p>{{ review.comment }}</p>
-        </div>
-
-        <!-- 좋아요 버튼 -->
-        <div class="like-div">
-          <button
-            class="like-btn"
-            @click="toggleLike(review.id)"
-            :class="{ active: isLiked(review.id) }">
-            <i class="like-icon" :class="{ filled: isLiked(revInfo.id) }"></i>
-            <span>{{ review.likes }}</span>
-          </button>
-        </div>
-
-        <!-- <div class="divider"></div> -->
       </div>
     </div>
   </div>
@@ -235,9 +242,8 @@ const isLiked = (reviewId) => {
 
 <style lang="scss" scoped>
 @use "../assets/styles/_variables" as *;
-
 .rev-con {
-  width: 100%;
+  display: block;
   height: auto;
   background-color: #fff;
   font-style: normal;
@@ -246,13 +252,12 @@ const isLiked = (reviewId) => {
 // 타이틀 박스
 .title-section {
   padding: 100px 0;
-  // height: max-content;
   text-align: center;
   color: $font-color;
 
   h2 {
     font-size: $main-title;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
   }
 
   p {
@@ -261,6 +266,60 @@ const isLiked = (reviewId) => {
   }
 }
 
+.review-section {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  gap: 0 50px;
+
+  .revlist-wrap {
+    width: 60%;
+  }
+
+  .show-postcard {
+    display: block;
+    align-items: center;
+    width: 40%;
+    position: sticky;
+
+    .carddiv {
+      // width: 100%;
+      height: 50vh;
+      border-radius: 16px;
+      background-color: $sub-color;
+      padding: 30px;
+    }
+    
+    .card-rating {
+      &:spanactive {
+        border-color: $point-color;
+        color: $point-color;
+        font-weight: bold;
+        .i {
+          color: $point-color;
+        }
+      }
+      //
+    }
+
+    .text-box {
+      width: 100%;
+      height: 8vh;
+      border-radius: 16px;
+      border: 1px solid #ccc;
+    }
+  }
+}
+.submit-btn {
+  width: 100%;
+  background: #0a66c2;
+  color: $sub-font-color;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: $main-color;
+}
 // 평점 섹션 =========================
 .rating-section {
   display: flex;
@@ -570,21 +629,45 @@ const isLiked = (reviewId) => {
 }
 
 // 좋아요 버튼
-.like-div {
-  .like-btn {
-    color: $border-color;
-    padding: 10px 20px;
-    border: 1px solid $border-color;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    background: transparent;
-    font-size: $esti-medium-txt;
-    border-radius: 50px;
-    box-sizing: border-box;
-    cursor: pointer;
+// .like-div {
 
+// }
+.like-btn {
+  color: $border-color;
+  padding: 10px 20px;
+  border: 1px solid $border-color;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  font-size: $esti-medium-txt;
+  border-radius: 50px;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $point-color;
+    color: $point-color;
+    font-weight: bold;
+    .like-icon {
+      color: $point-color;
+    }
+  }
+
+  &:active {
+    border-color: $point-color;
+    color: $point-color;
+    font-weight: bold;
+    .like-icon {
+      color: $point-color;
+    }
+  }
+
+  .like-icon {
+    font-style: normal;
+    font-family: "Font Awesome 5 Free";
+    color: $border-color;
     &:hover {
       border-color: $point-color;
       color: $point-color;
@@ -602,15 +685,12 @@ const isLiked = (reviewId) => {
         color: $point-color;
       }
     }
-
-    .like-icon {
-      font-style: normal;
-      font-family: "Font Awesome 5 Free";
-      color: $border-color;
-    }
   }
 }
 
+// ============================================
+// @media screen and (max-width: 1200px)
+// @media screen and (max-width: 850px)
 @media (max-width: 768px) {
   .rev-con {
     .title-section {
@@ -621,6 +701,40 @@ const isLiked = (reviewId) => {
       }
       p {
         font-size: 16px;
+      }
+    }
+
+    .review-section {
+      position: relative;
+      display: block;
+      justify-content: space-around;
+      gap: 50px;
+
+      .revlist-wrap {
+        width: 100%;
+      }
+
+      .show-postcard {
+        width: 100%;
+      }
+
+      .post-card {
+        // margin: 15px auto;
+
+        input,
+        textarea {
+          margin: 30px;
+        }
+
+        button {
+          width: 100%;
+          background: #0a66c2;
+          color: var(--button-text);
+          border: none;
+          padding: 8px;
+          border-radius: 8px;
+          cursor: pointer;
+        }
       }
     }
 
@@ -667,6 +781,8 @@ const isLiked = (reviewId) => {
     min-width: 200px;
   }
 }
+
+// @media screen and (max-width: 450px)
 
 @media (max-width: 390px) {
   .rev-con {

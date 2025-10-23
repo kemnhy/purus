@@ -87,7 +87,7 @@ import Side_menu from "@/components/Side_menu.vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 
-const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+const SHEETDB_API = "https://sheetdb.io/api/v1/63h80yl17hy1y";
 const router = useRouter();
 const brandInfo = ref([]);
 // 브랜드 목록
@@ -95,9 +95,9 @@ const brandInfo = ref([]);
 const getBrandList = async () => {
   try {
     const response = await fetch(`${SHEETDB_API}?sheet=TB_BRAND`);
-    const data = await response.json();
+    const result = await response.json();
 
-    brandInfo.value = data.map((item) => ({
+    brandInfo.value = result.map((item) => ({
       id: item.ID,
       name: item.BRAND_NM || "",
       price: Number(item.PRICE) || 0,

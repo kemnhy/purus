@@ -111,7 +111,7 @@
 import Header_w from "@/components/Header_w.vue";
 import Side_menu from "@/components/Side_menu.vue";
 import { ref } from "vue";
-const SHEETDB_API = "https://sheetdb.io/api/v1/u60qj2i8q04ld";
+const SHEETDB_API = "https://sheetdb.io/api/v1/63h80yl17hy1y";
 
 import { useRoute, useRouter } from "vue-router";
 
@@ -154,15 +154,15 @@ const savetest = async () => {
     }
 
     const existingData = await getResponse.json();
-    console.log("기존 데이터:", existingData);
+    // console.log("기존 데이터:", existingData);
 
     let newId = 1; // 기본값
     if (existingData && existingData.length > 0) {
       const maxId = Math.max(...existingData.map((item) => Number(item.ID) || 0));
       newId = maxId + 1;
     }
-    console.log(String(userName.value));
-    console.log(Number(userPhone.value));
+    // console.log(String(userName.value));
+    // console.log(Number(userPhone.value));
 
     const newEstim = {
       ID: Number(newId),
@@ -170,7 +170,7 @@ const savetest = async () => {
       SEL_NUMBER: Number(userPhone.value),
       // CREATE_DT: TIMESTAMP,
     };
-    console.log("test" + newEstim.value);
+    // console.log("test" + newEstim.value);
 
     const response = await fetch(SHEETDB_API, {
       method: "POST",

@@ -12,11 +12,7 @@
         </div>
         <div class="input_w">
           <label for="userphone">전화번호</label>
-          <input
-            v-model="userphone"
-            type="phone"
-            id="userphone"
-            placeholder="전화번호를 입력해주세요. (예: 01012345678)" />
+          <input v-model="userphone" type="phone" id="userphone" placeholder="전화번호를 입력해주세요. (예: 01012345678)" />
         </div>
       </div>
       <button class="check_btn btn" @click="gotoList">예약 내역 조회하기</button>
@@ -30,6 +26,42 @@ import { ref } from "vue";
 const username = ref("");
 const userphone = ref("");
 const emit = defineEmits(["next"]);
+// const emitList = ref([]);
+
+// const existingData = await getResponse.json();
+// // console.log("기존 데이터:", existingData);
+
+// const getEmitData = async () => {
+//   try {
+//     const response = await fetch(SHEETDB_API);
+//     const result = await response.json();
+
+//     const
+//     // emitList.value = result.map((item) => ({
+//     //   id: item.ID,
+//     //   name: username.value,
+//     //   phoneNum: userphone.value,
+//     // }));
+
+// // const srcUserInfo = async
+// const getEmitData = await fetch(SHEETDB_API, {
+//   method: "GET",
+//   headers: {
+//     "Content-Type": "application/json",
+//     Accept: "application/json",
+//     body: JSON.stringify({ data: [newEstim] }),
+//   },
+// });
+
+// if (!getEmitData.ok) {
+//   throw new Error(`GET 실패! status: ${getEmitData.status}`);
+// }
+
+//   } catch (error) {
+//     //
+//   }
+// };
+
 // 예약조회버튼 클릭시 목록으로
 const gotoList = () => {
   if (username.value.trim() === "") {
