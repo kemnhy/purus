@@ -84,7 +84,7 @@
 
     .desc {
       font-size: $medium-txt-2;
-      line-height: 1.5;
+      line-height: 1.2;
       margin-bottom: 30px;
     }
 

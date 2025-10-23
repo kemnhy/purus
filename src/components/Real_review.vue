@@ -181,17 +181,18 @@ onBeforeUnmount(() => {
 @media (max-width: 768px) {
   .inner {
     .title-box {
-      margin-bottom: 50px;
+      margin-bottom: 30px;
       .stars {
-        font-size: $medium-txt-1;
+        font-size: 28px;
+        margin-bottom: 0;
       }
       .title {
-        font-size: $medium-txt-1;
+        font-size: $medium-txt-2;
       }
     }
   }
   .real-review {
-    padding: 50px 0;
+    padding: 50px 0 0;
     .review-list {
       gap: 30px;
       .review-item {
@@ -224,12 +225,12 @@ onBeforeUnmount(() => {
 @media (max-width: 390px) {
   .inner {
     .title-box {
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       .stars {
-        font-size: $medium-txt-2;
+        font-size: 20px;
       }
       .title {
-        font-size: $medium-txt-2;
+        font-size: 20px;
       }
     }
   }
