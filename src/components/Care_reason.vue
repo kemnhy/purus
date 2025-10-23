@@ -4,36 +4,71 @@
       <h2>제빙기 케어는 왜, 필요할까요?</h2>
       <p><span>깨끗한 얼음</span>은 보이지 않는 곳부터</p>
     </div>
-    <div class="card-wrap">
-      <div v-for="item in cares" :key="item.id" class="card web-tab">
+
+    <!-- 웹(PC)용 카드 4개 -->
+    <div v-if="!isMobile" class="web-cards">
+      <div v-for="item in cares" :key="item.id" class="card">
         <img :src="item.img" :alt="item.name" />
         <div class="gradient"></div>
         <p>{{ item.dscr }}</p>
       </div>
-      <!-- mobile swiper -->
-      <div class="swiper care-swiper">
-        <div class="swiper-wrapper">
-          <div
-            class="swiper-slide card swiper-card"
-            v-for="item in cares"
-            :key="item.id"
-          >
-            <img :src="item.img" :alt="item.name" />
-            <div class="gradient"></div>
-            <p>{{ item.dscr }}</p>
-          </div>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
     </div>
+
+    <!-- 모바일/태블릿 Swiper -->
+    <swiper
+      v-else
+      :modules="[EffectCoverflow, Autoplay, Pagination]"
+      effect="coverflow"
+      :grab-cursor="true"
+      :centered-slides="true"
+      :loop="true"
+      :slides-per-view="auto"
+      :space-between="-80"
+      :initial-slide="1"
+      :autoplay="{
+        delay: 1500,
+        disableOnInteraction: false,
+      }"
+      :initialSlide="0"
+      :coverflow-effect="{
+        rotate: 0, // 좌우 회전각 (0이면 평면)
+        stretch: 0, // 카드 간 거리
+        depth: 200, // 깊이감 (값이 클수록 멀리감)
+        modifier: 1, // 효과 강도
+        scale: 0.5, // 양옆 카드 축소 비율
+        slideShadows: false,
+      }"
+      :breakpoints="{
+        0: {
+          spaceBetween: -230,
+          coverflowEffect: {
+            scale: 0.5,
+          },
+        },
+        449: {
+          spaceBetween: -350,
+          coverflowEffect: {
+            scale: 0.3,
+          },
+        },
+      }"
+      class="care-swiper"
+    >
+      <swiper-slide v-for="item in cares" :key="item.id">
+        <div class="card">
+          <img :src="item.img" :alt="item.name" />
+          <div class="gradient"></div>
+          <p>{{ item.dscr }}</p>
+        </div>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, nextTick } from "vue";
-import Swiper from "swiper";
-import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
+import { ref, onMounted, onUnmounted } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
@@ -59,80 +94,31 @@ const cares = [
   },
   { id: 4, name: "care4", img: "/images/care4.png", dscr: "고객 신뢰 유지" },
 ];
-// swiper
-let swiperInstance = null;
-const handleSwiper = async () => {
-  const screenWidth = window.innerWidth;
-  if (screenWidth <= 450) {
-    if (!swiperInstance) {
-      await nextTick();
-      swiperInstance = new Swiper(".care-swiper", {
-        modules: [EffectCoverflow, Navigation, Autoplay],
-        effect: "coverflow",
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: "auto",
-        loop: true,
-        spaceBetween: -80,
-        coverflowEffect: {
-          rotate: 0,
-          stretch: 0,
-          depth: 200,
-          scale: 0.5,
-          modifier: 1,
-          slideShadows: false,
-        },
-        navigation: {
-          nextEl: ".swiper-button-prev",
-          prevEl: ".swiper-button-next",
-        },
-        autoplay: {
-          delay: 1500,
-          disableOnInteraction: false,
-        },
-        initialSlide: 0,
-        breakpoints: {
-          0: {
-            spaceBetween: -130,
-            coverflowEffect: {
-              scale: 0.3,
-            },
-          },
-          450: {
-            spaceBetween: -80,
-            coverflowEffect: {
-              scale: 0.6,
-            },
-          },
-        },
-      });
-    }
-  } else {
-    if (swiperInstance) {
-      swiperInstance.destroy(true, true);
-      swiperInstance = null;
-    }
-  }
+
+// 모바일 판단 (768px 이하에서 스와이퍼 적용)
+const isMobile = ref(window.innerWidth <= 450);
+
+// 화면 크기 변경 시 자동 체크
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 450;
 };
-//
+
 onMounted(() => {
-  handleSwiper();
-  window.addEventListener("resize", handleSwiper);
+  window.addEventListener("resize", handleResize);
 });
+
 onUnmounted(() => {
-  window.removeEventListener("resize", handleSwiper);
-  // 스와이퍼 인스턴스가 남아있으면 파괴
-  if (swiperInstance) {
-    swiperInstance.destroy(true, true);
-    swiperInstance = null;
-  }
+  window.removeEventListener("resize", handleResize);
 });
 </script>
 
 <style lang="scss" scoped>
 @use "../assets/styles/variables" as *;
+
 .care-wrap {
+  overflow: hidden;
   padding: $web-spacing 0;
+  width: 100%;
   .care-title {
     text-align: center;
     h2 {
@@ -147,147 +133,162 @@ onUnmounted(() => {
       }
     }
   }
-  .card-wrap {
-    display: flex;
-    justify-content: space-between;
-    .care-swiper {
-      display: none;
-    }
+  .web-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    margin-top: 60px;
     .card {
-      width: 310px;
-      margin-top: 60px;
-      padding: 0px;
-      border-radius: 25px;
       position: relative;
+      border-radius: 25px;
       overflow: hidden;
-      img {
-        display: block;
-        width: 100%;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      padding: 0;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
       }
-      .gradient {
-        position: absolute;
-        left: 0;
-        bottom: 0;
+
+      img {
         width: 100%;
         height: 100%;
+        display: block;
+      }
+
+      .gradient {
+        position: absolute;
+        inset: 0;
         background: linear-gradient(
           to top,
-          rgba(0, 0, 0, 1) 0%,
+          rgba(0, 0, 0, 0.8) 0%,
           rgba(0, 0, 0, 0) 60%
         );
       }
+
       p {
-        width: 100%;
         position: absolute;
-        font-size: $medium-txt-2;
-        font-weight: 500;
-        left: 0;
         bottom: 0;
+        left: 0;
+        right: 0;
         color: #fff;
+        font-weight: 500;
+        font-size: $medium-txt-2;
+        padding: 55px 0px;
+        margin: 0;
         text-align: center;
-        padding: 55px 0;
+      }
+    }
+  }
+
+  .care-swiper {
+    margin-top: 50px;
+
+    .swiper-slide {
+      .card {
+        padding: 0;
+        width: 90%;
+        height: auto;
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+
+        img {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+
+        .gradient {
+          position: absolute;
+          inset: 0;
+
+          background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.8) 0%,
+            rgba(0, 0, 0, 0) 60%
+          );
+        }
+
+        p {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          color: #fff;
+          font-weight: 600;
+          font-size: $small-txt;
+          padding: 20px 15px;
+          margin: 0;
+          text-align: center;
+          line-height: 1.3;
+        }
       }
     }
   }
 }
-@media screen and (max-width: 768px) {
+
+// 태블릿 스타일
+@media (max-width: 768px) {
   .care-wrap {
     padding: $tab-spacing 0;
+
     .care-title {
       h2 {
         font-size: $medium-txt-2;
+        margin-bottom: 15px;
       }
       p {
         font-size: $small-txt;
         margin-top: 8px;
       }
     }
-    .card-wrap {
+
+    .web-cards {
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 30px;
+
       .card {
         border-radius: 12px;
-        margin-top: 30px;
-        width: 145px;
         p {
-          // width: 80%;
-          font-size: 12px;
+          font-size: 13px;
           padding: 25px 0;
         }
       }
     }
   }
 }
-@media screen and (max-width: 450px) {
+
+// 모바일 스타일
+@media (max-width: 450px) {
   .care-wrap {
     padding: $mo-spacing 0;
 
     .care-title {
       h2 {
         font-size: 20px;
+        margin-bottom: 10px;
       }
       p {
         font-size: 12px;
-        margin-top: 8px;
+        margin-top: 5px;
       }
     }
-    .card-wrap {
-      display: block;
-      position: relative;
-      .web-tab {
-        display: none;
-      }
-      .care-swiper {
-        overflow: visible !important;
-        display: block;
-        .swiper-wrapper {
-          .swiper-slide {
-            width: 200px;
-            border-radius: 16px;
-            overflow: hidden;
-            img {
-              width: 100%;
-              object-fit: cover;
-              display: block;
-            }
-            p {
-              font-size: 16px;
-              padding: 25px 0;
-            }
-          }
-          .swiper-slide-active {
-            transform: scale(1.05);
-            z-index: 2;
-          }
-          .swiper-slide-next,
-          .swiper-slide-prev {
-            opacity: 1;
-          }
 
-          .swiper-slide:not(.swiper-slide-active):not(.swiper-slide-next):not(
-              .swiper-slide-prev
-            ) {
-            opacity: 0;
-            pointer-events: none;
+    .care-swiper {
+      margin-top: 24px;
+      .swiper-slide {
+        .card {
+          max-width: 200px;
+          p {
+            font-size: 16px;
+            padding: 30px 0;
           }
-        }
-        .swiper-button-prev {
-          line-height: 1;
-          position: absolute;
-          top: 50%;
-          right: -12%;
-          z-index: 10;
-          opacity: 0.4;
-        }
-        .swiper-button-next {
-          line-height: 1;
-          position: absolute;
-          top: 50%;
-          left: -12%;
-          transform: rotate(180deg);
-          z-index: 10;
-          // border: 1px solid #aaa;
-          // padding: 4px 8px 4px 10px;
-          // border-radius: 30px;
-          opacity: 0.4;
         }
       }
     }

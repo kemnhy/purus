@@ -42,7 +42,7 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
 
 const current = ref(0);
-const openedIndex = ref(null);
+const openedIndex = ref(0);
 const isMobile = ref(false);
 
 const process = [
@@ -239,7 +239,6 @@ onBeforeUnmount(() => {
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
-            background: #f2f6f8;
             border-bottom: 1px solid rgba(9, 40, 87, 0.1);
             position: relative;
             overflow: hidden;

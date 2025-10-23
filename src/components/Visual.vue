@@ -31,30 +31,12 @@ const texts = [
 ];
 const currentIndex = ref(0);
 const wheelCount = ref(0);
-// const currentLine = ref(0);
 const router = useRouter();
 const visibleLine = ref([]);
 const allVisible = ref(false);
 const activeLines = ref(Array(texts.length).fill(false));
-// interval id(mobile)
 let intervalId = null;
 
-// const displayedLines = ref(["", "", ""]);
-
-// typing
-// const typeLine = (lineIndex) => {
-//   if (lineIndex >= texts.length) return;
-//   let charIndex = 0;
-//   const typing = setInterval(() => {
-//     displayedLines.value[lineIndex] += texts[lineIndex][charIndex];
-//     charIndex++;
-//     if (charIndex === texts[lineIndex].length) {
-//       clearInterval(typing);
-//       // currentLine.value++;
-//       // setTimeout(() => typeLine(lineIndex + 1), 300);
-//     }
-//   }, 30);
-// };
 
 const handleScroll = async (e) => {
   if (window.scrollY !== 0) return;
@@ -154,7 +136,7 @@ video {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   object-fit: cover;
   display: block;
   filter: brightness(40%);
