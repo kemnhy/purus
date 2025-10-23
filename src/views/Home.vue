@@ -17,7 +17,6 @@
     <FAQ />
     <QR_banner />
     <Footer_w />
-    <Quick_btn />
   </div>
 </template>
 <script setup>
@@ -29,7 +28,6 @@ import Main_banner from "@/components/Main_banner.vue";
 import Point_banner from "@/components/Point_banner.vue";
 import Process from "@/components/Process.vue";
 import QR_banner from "@/components/QR_banner.vue";
-import Quick_btn from "@/components/Quick_btn.vue";
 import Real_review from "@/components/Real_review.vue";
 import Self_care from "@/components/Self_care.vue";
 import Service from "@/components/Service.vue";
@@ -42,7 +40,8 @@ import Event_modal from "@/components/Event_modal.vue";
 .top_wrap {
   overflow: hidden;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   position: relative;
 }
+
 </style>
