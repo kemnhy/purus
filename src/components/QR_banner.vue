@@ -86,6 +86,7 @@
       font-size: $medium-txt-2;
       line-height: 1.2;
       margin-bottom: 30px;
+      color: $font-color;
     }
 
     .qr-section {
@@ -138,15 +139,20 @@
         font-size: 20px;
       }
       .qr-section {
+        gap: 20px;
         .qr-1 {
           .qr {
+            display: none;
             width: 80px;
           }
           .button {
-            width: 80px;
+            width: 120px;
           }
         }
       }
+    }
+    .notice {
+      display: none;
     }
   }
 }
@@ -156,7 +162,7 @@
     padding: 30px 0;
     .inner {
       flex-direction: column;
-      gap: 30px;
+      gap: 20px;
     }
     .qr-banner__image {
       justify-content: center;
@@ -184,14 +190,13 @@
             display: none;
           }
           .button {
-            width: 100%;
+            width: 90%;
           }
         }
       }
     }
     .notice {
-      font-size: 12px;
-      margin-top: 20px;
+      display: none;
     }
   }
 }

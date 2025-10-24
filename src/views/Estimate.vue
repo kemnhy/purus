@@ -31,8 +31,7 @@
                 v-for="(brand, index) in brandInfo"
                 :key="index"
                 :class="{ active: selectedIndex === index }"
-                class="brand_list"
-              >
+                class="brand_list">
                 <input type="radio" name="brand" :value="index" v-model="selectedIndex" />
                 {{ brand.name }}
               </label>
@@ -45,7 +44,11 @@
               <span>(필수)</span>
             </p>
             <div>
-              <label v-for="(size, index) in sizeList" :key="index" :class="{ active: selectedI === index }" class="size_list">
+              <label
+                v-for="(size, index) in sizeList"
+                :key="index"
+                :class="{ active: selectedI === index }"
+                class="size_list">
                 <input type="radio" name="size" :value="index" v-model="selectedI" />
                 {{ size.size }}
               </label>
@@ -75,7 +78,9 @@
             {{ typeof totalPrice === "number" ? totalPrice.toLocaleString() + "원" : totalPrice }}
           </div>
         </div>
-        <button @click="goNextPage" class="btn">가능한 일정 확인하기</button>
+        <button :class="{ active: modelName }" @click="goNextPage" class="btn">
+          가능한 일정 확인하기
+        </button>
       </div>
     </div>
   </div>
@@ -121,7 +126,7 @@ const selectedI = ref(null);
 
 // 게이지 계산 (단계별로 3단계)
 const gaugeWidth = computed(() => {
-  if (selectedI.value !== null) return "100%"; // 3단계
+  if (selectedI.value !== null) return "95%"; // 3단계
   if (selectedIndex.value !== null) return "66%"; // 2단계
   return "33%"; // 1단계 (브랜드 선택 시작)
 });
@@ -146,6 +151,7 @@ const totalPrice = computed(() => {
 // console.log(selSize.value);
 
 const modelName = ref("");
+
 // 다음 페이지 넘어가기
 const goNextPage = () => {
   if (selectedIndex.value === null) return 0;
@@ -341,11 +347,17 @@ onBeforeUnmount(() => {
     }
   }
   .btn {
+    background-color: $grey-color;
+    color: $border-color;
     display: inline-block;
     text-align: center;
     margin: auto;
     width: 100%;
     font-weight: 600;
+    &.active {
+      background-color: $point-color;
+      color: #fff;
+    }
   }
 }
 
