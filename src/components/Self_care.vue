@@ -62,7 +62,7 @@ onMounted(() => {
 });
 //
 const animateProgress = () => {
-  const duration = 1800;
+  const duration = 1500;
   let start = null;
 
   function animate(timestamp) {
