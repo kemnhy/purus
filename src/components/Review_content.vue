@@ -7,7 +7,12 @@ const SHEETDB_API = "https://sheetdb.io/api/v1/63h80yl17hy1y";
 const revInfo = ref([]);
 const rating = ref(0);
 const selRating = ref(0);
-const activeFilter = ref("추천순");
+const activeFilter = ref("최신순");
+const isLoading = ref(true);
+const selectedImage = ref(null);
+const showImageModal = ref(false);
+const copiedSuccess = ref(false);
+const hoverRating = ref(0);
 
 onMounted(() => {
   getReviewsInfo();
@@ -40,6 +45,38 @@ const getReviewsInfo = async () => {
     console.error("Error:", error);
   }
 };
+
+
+// 카드형 리뷰 데이터
+// const reviewCards = ref([
+//   {
+//     profileImg: "/images/profile.png",
+//     username: "000 고객님",
+//     date: "2025.09.16",
+//     service: "카이저제빙기 디테일 클리어서비스 이용",
+//     mainImage: "/images/img1.png",
+//     description:
+//       "퓨어러스는 제빙기 내부에 있는 모든 오염들에 대해 완벽한 케어를 목표로 하고 있습니다. 전문적인 장비와 기술로 깨끗하게 청소해주셔서 정말 만족스럽습니다.",
+//   },
+//   {
+//     profileImg: "/images/profile.png",
+//     username: "000 고객님",
+//     date: "2025.09.16",
+//     service: "카이저제빙기 디테일 클리어서비스 이용",
+//     mainImage: "/images/img2.png",
+//     description:
+//       "퓨어러스는 제빙기 내부에 있는 모든 오염들에 대해 완벽한 케어를 목표로 하고 있습니다. 전문적인 장비와 기술로 깨끗하게 청소해주셔서 정말 만족스럽습니다.",
+//   },
+//   {
+//     profileImg: "/images/profile.png",
+//     username: "000 고객님",
+//     date: "2025.09.16",
+//     service: "카이저제빙기 디테일 클리어서비스 이용",
+//     mainImage: "/images/img3.png",
+//     description:
+//       "퓨어러스는 제빙기 내부에 있는 모든 오염들에 대해 완벽한 케어를 목표로 하고 있습니다. 전문적인 장비와 기술로 깨끗하게 청소해주셔서 정말 만족스럽습니다.",
+//   },
+// ]);
 
 // 총 리뷰 개수
 const totalReviews = computed(() => revInfo.value?.length || 0);
@@ -289,7 +326,7 @@ const isLiked = (reviewId) => {
       background-color: $sub-color;
       padding: 30px;
     }
-    
+
     .card-rating {
       &:spanactive {
         border-color: $point-color;
