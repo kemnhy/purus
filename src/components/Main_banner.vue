@@ -1,11 +1,14 @@
 <template>
+  <!-- banner wrap -->
   <div class="banner-wrap" ref="bannerRef">
     <div class="inner">
+      <!-- text -->
       <div class="txt">
         <div class="banner-title">
           <p>Purus에 제빙기사님이 오셨어요!</p>
           <h2>불편사항은 Purus에게 맡겨주세요!</h2>
         </div>
+        <!-- scroll event text -->
         <div class="animation-txt">
           <div
             v-for="(text, i) in texts"
@@ -18,6 +21,7 @@
           </div>
         </div>
       </div>
+      <!-- image -->
       <div class="img">
         <img src="/images/cleaner.png" alt="cleaner" />
       </div>
@@ -28,23 +32,27 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
+// scroll event text data
 const texts = [
   "휴일에도 신속히 처리해드립니다.",
   "원하는 시간, 일정만 입력하면 <br />Purus가 알아서 청소해드립니다.",
   "작업 후 청소 전 후 사진을 고객님께 <br />전송해 드립니다.",
 ];
+
 const bannerRef = ref(null);
 const isVisible = ref(false);
 
+// 스크롤 위치 감지 -> 화면 중간 진입 시 애니메이션 시작 설정
 const handleScroll = () => {
   if (!bannerRef.value) return;
   const rect = bannerRef.value.getBoundingClientRect();
   const windowHeight = window.innerHeight;
-  if (rect.top < windowHeight * 0.8) {
+  if (rect.top < windowHeight * 0.5) {
     isVisible.value = true;
   }
 };
 
+// 페이지 진입 / 스크롤 이벤트 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   handleScroll();
@@ -60,8 +68,10 @@ onMounted(() => {
   .inner {
     display: flex;
     align-items: center;
+    // 텍스트 영역
     .txt {
       width: 60%;
+      // 타이틀
       .banner-title {
         margin-left: 120px;
         p {
@@ -75,6 +85,7 @@ onMounted(() => {
           line-height: 1.1;
         }
       }
+      // 스크롤 이벤트 텍스트
       .animation-txt {
         display: flex;
         flex-direction: column;
@@ -87,6 +98,7 @@ onMounted(() => {
           opacity: 0;
           transform: translateY(80px);
           transition: all 0.8s ease;
+          // 애니메이션 텍스트 bgc, 위치 조정
           &:first-child {
             margin-left: 150px;
           }
@@ -106,6 +118,7 @@ onMounted(() => {
             justify-content: center;
             line-height: 1.2;
           }
+          // 스크롤 후 애니메이션 활성화 상태 스타일
           &.visible {
             opacity: 1;
             transform: translateY(0);
@@ -113,6 +126,7 @@ onMounted(() => {
         }
       }
     }
+    // 이미지 영역
     .img {
       width: 40%;
       height: 100%;
@@ -125,6 +139,7 @@ onMounted(() => {
     }
   }
 }
+// responsive
 @media screen and (max-width: 1200px) {
   .banner-wrap {
     .inner {
@@ -150,6 +165,7 @@ onMounted(() => {
     }
   }
 }
+// 태블릿 스타일
 @media screen and (max-width: 850px) {
   .banner-wrap {
     padding: $tab-spacing 0;
@@ -185,6 +201,7 @@ onMounted(() => {
     }
   }
 }
+// 모바일 스타일
 @media screen and (max-width: 450px) {
   .banner-wrap {
     padding: 0 0 $mo-spacing 0;

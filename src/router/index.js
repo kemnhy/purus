@@ -7,6 +7,7 @@ import Estimate_03 from "@/views/Estimate_03.vue";
 import Review from "@/views/Review.vue";
 import Home from "@/views/Home.vue";
 import Side_menu from "@/components/Side_menu.vue";
+import Review2 from "@/views/Review2.vue";
 
 const routes = [
   { path: "/", component: Home },

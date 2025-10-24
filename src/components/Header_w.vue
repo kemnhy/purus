@@ -1,6 +1,9 @@
 <template>
+  <!-- header wrap -->
   <div class="inner header">
+    <!-- 로고 클릭 시 홈으로 이동 -->
     <img src="/images/logo.png" alt="logo" @click="goHome" class="web-logo" />
+    <!-- 햄버거 메뉴 버튼 -->
     <div class="hamburger" @click="toggleSide">
       <div
         class="line"
@@ -10,6 +13,7 @@
       ></div>
     </div>
   </div>
+  <!-- 사이드 메뉴 컴포넌트 (열림 / 담힘 제어) -->
   <Side_menu :isOpen="isSideOpen" @close="isSideOpen = false" />
 </template>
 
@@ -18,17 +22,22 @@ import { ref } from "vue";
 import Side_menu from "./Side_menu.vue";
 import { useRouter } from "vue-router";
 
+// props (햄버거 라인 색상 )
 const props = defineProps({
   lineColor: {
     type: String,
     default: "#fff", // 기본색: 흰색
   },
 });
-//showSide
+
+// Sidemenu status
 const isSideOpen = ref(false);
+
+// toggle sidemenu
 const toggleSide = () => {
   isSideOpen.value = !isSideOpen.value;
 };
+
 // goHome
 const router = useRouter();
 const goHome = () => {
@@ -44,14 +53,13 @@ const goHome = () => {
   justify-content: space-between;
   padding: 16px 0;
   z-index: 9;
+  // 로고이미지
   img {
     min-width: 100px;
     width: 10%;
     cursor: pointer;
   }
-  .web-logo {
-    display: block;
-  }
+  // 햄버거 메뉴
   .hamburger {
     cursor: pointer;
     width: 3%;
@@ -69,18 +77,8 @@ const goHome = () => {
     }
   }
 }
-// responsive
-// @media screen and (max-width: 768px) {
-//   .header {
-//     .web-logo {
-//       display: none;
-//     }
-//     .mobile-logo {
-//       display: block;
-//       max-width: 38px;
-//     }
-//   }
-// }
+
+// 모바일 스타일
 @media screen and (max-width: 480px) {
   .header {
     padding: 10px 0;

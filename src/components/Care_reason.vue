@@ -1,11 +1,12 @@
 <template>
   <div class="care-wrap inner">
+    <!-- 타이틀  -->
     <div class="care-title">
       <h2>제빙기 케어는 왜, 필요할까요?</h2>
       <p><span>깨끗한 얼음</span>은 보이지 않는 곳부터</p>
     </div>
 
-    <!-- 웹(PC)용 카드 4개 -->
+    <!-- 웹 / 태블릿용 카드 -->
     <div v-if="!isMobile" class="web-cards">
       <div v-for="item in cares" :key="item.id" class="card">
         <img :src="item.img" :alt="item.name" />
@@ -14,46 +15,40 @@
       </div>
     </div>
 
-    <!-- 모바일/태블릿 Swiper -->
+    <!-- 모바일 Swiper -->
     <swiper
       v-else
-      :modules="[EffectCoverflow, Autoplay, Pagination]"
+      :modules="[EffectCoverflow, Autoplay]"
       effect="coverflow"
+      :watch-slides-progress="true"
       :grab-cursor="true"
       :centered-slides="true"
       :loop="true"
-      :slides-per-view="auto"
-      :space-between="-80"
-      :initial-slide="1"
+      slides-per-view="auto"
       :autoplay="{
         delay: 1500,
         disableOnInteraction: false,
       }"
       :initialSlide="0"
       :coverflow-effect="{
-        rotate: 0, // 좌우 회전각 (0이면 평면)
-        stretch: 0, // 카드 간 거리
-        depth: 200, // 깊이감 (값이 클수록 멀리감)
+        rotate: 0, // 좌우 회전각 
+        stretch: 130, // 카드 간 거리
+        depth: 200, // 깊이감 
         modifier: 1, // 효과 강도
-        scale: 0.5, // 양옆 카드 축소 비율
+        scale: 0.9, // 양옆 카드 축소 비율
         slideShadows: false,
       }"
       :breakpoints="{
         0: {
-          spaceBetween: -230,
-          coverflowEffect: {
-            scale: 0.5,
-          },
+          coverflowEffect: { stretch: 130 },
         },
-        449: {
-          spaceBetween: -350,
-          coverflowEffect: {
-            scale: 0.3,
-          },
+        400: {
+          coverflowEffect: { stretch: 110 },
         },
       }"
       class="care-swiper"
     >
+    <!-- swiper 카드 -->
       <swiper-slide v-for="item in cares" :key="item.id">
         <div class="card">
           <img :src="item.img" :alt="item.name" />
@@ -68,11 +63,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
+import { EffectCoverflow, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 
+// 카드 데이터
 const cares = [
   {
     id: 1,
@@ -95,10 +91,10 @@ const cares = [
   { id: 4, name: "care4", img: "/images/care4.png", dscr: "고객 신뢰 유지" },
 ];
 
-// 모바일 판단 (768px 이하에서 스와이퍼 적용)
+// 모바일 판단 (450px 이하에서 스와이퍼 적용)
 const isMobile = ref(window.innerWidth <= 450);
 
-// 화면 크기 변경 시 자동 체크
+// 사이즈 핸들러 (반응형 감지)
 const handleResize = () => {
   isMobile.value = window.innerWidth <= 450;
 };
@@ -116,9 +112,8 @@ onUnmounted(() => {
 @use "../assets/styles/variables" as *;
 
 .care-wrap {
-  overflow: hidden;
   padding: $web-spacing 0;
-  width: 100%;
+  // 타이틀
   .care-title {
     text-align: center;
     h2 {
@@ -133,6 +128,7 @@ onUnmounted(() => {
       }
     }
   }
+  // 웹 / 태블릿 카드
   .web-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -142,15 +138,10 @@ onUnmounted(() => {
       position: relative;
       border-radius: 25px;
       overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      // box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
       cursor: pointer;
       padding: 0;
-
-      &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      }
 
       img {
         width: 100%;
@@ -183,6 +174,7 @@ onUnmounted(() => {
     }
   }
 
+  // 모바일 swiper
   .care-swiper {
     margin-top: 50px;
 
@@ -282,13 +274,36 @@ onUnmounted(() => {
 
     .care-swiper {
       margin-top: 24px;
-      .swiper-slide {
-        .card {
-          max-width: 200px;
-          p {
-            font-size: 16px;
-            padding: 30px 0;
+      .swiper-wrapper {
+        .swiper-slide {
+          width: auto;
+          overflow: hidden;
+          transition: transform 0.3s, opacity 0.3s;
+          .card {
+            width: 200px;
+            p {
+              font-size: 16px;
+              padding: 30px 0;
+            }
           }
+        }
+        .swiper-slide-active {
+          transform: scale(1.05);
+          z-index: 3;
+          opacity: 1;
+        }
+        .swiper-slide-prev,
+        .swiper-slide-next {
+          z-index: 2;
+          opacity: 0.9;
+          filter: blur(1px);
+        }
+        // 나머지 슬라이드는 완전히 숨김
+        .swiper-slide:not(.swiper-slide-active):not(.swiper-slide-prev):not(
+            .swiper-slide-next
+          ) {
+          opacity: 0 !important;
+          pointer-events: none;
         }
       }
     }

@@ -1,8 +1,12 @@
 <template>
+  <!-- service wrap -->
   <div class="service-wrap">
     <div class="inner">
+      <!-- 타이틀 -->
       <h2 class="title">고객 경험이 달라지는 순간</h2>
+      <!-- 카드리스트 -->
       <ul class="card-list">
+        <!-- 카드 - 간단한절차 -->
         <li class="card">
           <div class="txt">
             <h2>간단한 절차</h2>
@@ -20,6 +24,7 @@
             </ul>
           </div>
         </li>
+        <!-- 카드 - 확실한 보고 -->
         <li class="card">
           <div class="txt">
             <h2>확실한 보고</h2>
@@ -43,6 +48,7 @@
             </ul>
           </div>
         </li>
+        <!-- 카드 - 1:1 맞춤 서비스 -->
         <li class="card">
           <div class="txt">
             <h2>1:1 맞춤 서비스</h2>
@@ -61,6 +67,7 @@
             </ul>
           </div>
         </li>
+        <!-- 카드 - 365일 고객센터 운영 -->
         <li class="card">
           <div class="txt">
             <h2>{{ serviceTitle }}</h2>
@@ -79,14 +86,19 @@
 </template>
 
 <script setup>
+// 반응형 텍스트 변경 (br 유무 , 고객센터 문구 줄임)
 import { onMounted, onUnmounted, ref } from "vue";
 
 const serviceTitle = ref("365일 고객센터 운영");
 const isMobile = ref(false);
+
+// 리사이즈 핸들러
 const handleResize = () => {
   const screenWidth = window.innerWidth;
+
   // 450미만
   isMobile.value = screenWidth < 450;
+
   // 365일 문구변경
   if (screenWidth < 450) {
     serviceTitle.value = "365일 고객센터";
@@ -95,6 +107,7 @@ const handleResize = () => {
   }
 };
 
+// 리스너 등록 / 해제
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
@@ -110,22 +123,23 @@ onUnmounted(() => {
 @use "../assets/styles/variables" as *;
 .service-wrap {
   padding: $web-spacing 0;
+  // 타이틀
   .title {
     text-align: center;
     font-size: $main-title;
   }
   .inner {
     overflow: hidden;
+    // 카드 그리드
     .card-list {
       width: 100%;
       margin-top: 60px;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      // 개별카드
       .card {
         background-color: $main-color;
-        flex: 1;
-        max-width: 310px;
         height: 350px;
         display: flex;
         flex-direction: column;
@@ -134,6 +148,7 @@ onUnmounted(() => {
         &:nth-child(3) {
           padding-bottom: 0;
         }
+        // 설명 텍스트
         .txt {
           width: 100%;
           h2 {
@@ -148,8 +163,10 @@ onUnmounted(() => {
             }
           }
         }
+        // 카드 안 콘텐츠 영역
         .contents {
           width: 100%;
+          // 비포애프터 콘텐츠
           .before-after {
             display: flex;
             align-items: center;
@@ -176,6 +193,7 @@ onUnmounted(() => {
               }
             }
           }
+          // 첫번째 , 세번째 카드안 콘텐츠 감싸는 흰박스 공통
           .box {
             width: 70%;
             padding: 20px 20px 40px 20px;
@@ -198,6 +216,7 @@ onUnmounted(() => {
               }
             }
           }
+          // 1:1 카드안 콘텐츠 박스
           .box2 {
             flex-direction: row;
             align-items: center;
@@ -221,6 +240,7 @@ onUnmounted(() => {
               }
             }
           }
+          // 고객센터 운영 이미지
           &:last-child {
             height: 50%;
             img {
@@ -234,19 +254,8 @@ onUnmounted(() => {
     }
   }
 }
-@media screen and (max-width: 1200px) {
-  .service-wrap {
-    .inner {
-      .card-list {
-        flex-wrap: wrap;
-        .card {
-          flex: auto;
-        }
-      }
-    }
-  }
-}
-@media screen and (max-width: 768px) {
+// 태블릿 스타일
+@media screen and (max-width: 768px) and (min-width:451px) {
   .service-wrap {
     padding: $tab-spacing 0;
     .title {
@@ -255,13 +264,10 @@ onUnmounted(() => {
     .inner {
       .card-list {
         margin-top: 30px;
-        flex-wrap: wrap;
         gap: 20px;
+        grid-template-columns: repeat(2, calc((100% - 20px) / 2));
         .card {
-          max-width: 290px;
           height: 330px;
-          width: calc((100% - 20px) / 2);
-          flex: auto;
           .txt {
             h2 {
               font-size: 20px;
@@ -281,6 +287,7 @@ onUnmounted(() => {
     }
   }
 }
+// 모바일 스타일
 @media screen and (max-width: 450px) {
   .service-wrap {
     padding: $mo-spacing 0;
@@ -290,13 +297,12 @@ onUnmounted(() => {
     .inner {
       .card-list {
         margin-top: 24px;
-        flex-wrap: wrap;
+        grid-template-columns: repeat(2, calc((100% - 8px) / 2));
         gap: 8px;
         .card {
           padding: 16px 12px 8px 12px;
           border-radius: 10px;
-          max-width: 140px;
-          height: 190px;
+          height: 230px;
           flex: auto;
           .txt {
             h2 {
@@ -344,6 +350,17 @@ onUnmounted(() => {
               }
             }
           }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 390px) {
+  .service-wrap {
+    .inner {
+      .card-list {
+        .card {
+          height: 190px;
         }
       }
     }

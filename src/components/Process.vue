@@ -1,7 +1,10 @@
 <template>
+  <!-- process wrap -->
   <div class="process-wrap" ref="processRef">
     <div class="inner">
+      <!-- 타이틀 -->
       <h2 class="title">청소 과정 한눈에</h2>
+      <!-- 웹 / 태블릿용 슬라이드 (모바일에서 아코디언으로 변경) -->
       <div class="slide-wrap">
         <ul class="process">
           <li
@@ -16,6 +19,7 @@
             ]"
             @click="handleClick(index)"
           >
+          <!-- 과정 텍스트 -->
             <p>{{ pro.id }} {{ pro.title }}</p>
 
             <transition name="accordion">
@@ -33,6 +37,7 @@
           </li>
         </ul>
       </div>
+      <!-- 모바일용 안내 문구 -->
       <p class="clickTxt" v-if="isMobile">▲ 과정을 클릭해보세요 !</p>
     </div>
   </div>
@@ -41,9 +46,10 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from "vue";
 
-const current = ref(0);
-const openedIndex = ref(0);
-const isMobile = ref(false);
+const current = ref(0); //슬라이드 현재 인덱스
+const openedIndex = ref(0); //모바일에서 열린 아코디언 인덱스
+const isMobile = ref(false); //모바일 여부감지
+const processRef = ref(null); //스크롤 트리거 감지용
 
 const process = [
   { id: "01", title: "제품 완전 분해" },
@@ -62,32 +68,36 @@ const processImg = [
   { img: "/images/process6.png", alt: "process6" },
 ];
 
-let interval = null;
-let inProcess = false;
+let interval = null; //슬라이드 타이머
+let inProcess = false; //슬라이드 실행 중 여부
 let clickTimeout = null;
-const processRef = ref(null);
+
 
 const startSlide = () => {
-  if (isMobile.value) return;
+  if (isMobile.value) return; //모바일에서는 자동재생 안함
   clearInterval(interval);
   current.value = 0;
   interval = setInterval(() => {
     current.value = (current.value + 1) % process.length;
   }, 1500);
 };
+
 const stopSlide = () => {
   clearInterval(interval);
   current.value = 0;
   inProcess = false;
 };
 
+// 클릭핸들러
 const handleClick = (index) => {
+  // 모바일 - 아코디언 토글
   if (isMobile.value) {
     openedIndex.value = openedIndex.value === index ? null : index;
     current.value = index;
     return;
   }
 
+  //웹 / 태블릿 - 클릭 시 해당 항목으로 이동 + 클릭한 인덱스에서 슬라이드 재시작
   clearInterval(interval);
   clearTimeout(clickTimeout);
 
@@ -95,8 +105,11 @@ const handleClick = (index) => {
   current.value = index;
 };
 
+//스크롤 핸들러 (섹션 진입 시 자동 재생)
 const handleScroll = () => {
-  if (!processRef.value || isMobile.value) return;
+  if (!processRef.value || isMobile.value) return; //!섹션 진입 , 모바일 - 실행 안함
+
+  // 슬라이드 시작할 위치값 
   const rect = processRef.value.getBoundingClientRect();
   const windowHeight = window.innerHeight;
   const isVisible = rect.top < windowHeight * 0.8 && rect.bottom > 0;
@@ -109,10 +122,12 @@ const handleScroll = () => {
   }
 };
 
+// 리사이즈 핸들러
 const handleResize = () => {
-  isMobile.value = window.innerWidth <= 390;
+  isMobile.value = window.innerWidth <= 450;
 };
 
+// 마운트 시 이벤트 등록 / 언마운트 시 해제
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
@@ -132,20 +147,24 @@ onBeforeUnmount(() => {
 .process-wrap {
   padding-bottom: $web-spacing;
   .inner {
+    // 타이틀
     .title {
       text-align: center;
       font-size: $main-title;
       margin-bottom: 60px;
     }
+    //슬라이드 래퍼
     .slide-wrap {
       width: 100%;
       border-radius: 30px;
       overflow: hidden;
+      //리스트
       .process {
         width: 100%;
         height: 500px;
         position: relative;
 
+        //각 단계 텍스트
         .txt {
           width: 40%;
           height: calc(100% / 6);
@@ -160,15 +179,16 @@ onBeforeUnmount(() => {
             font-weight: 500;
             color: $font-color;
           }
+          //클릭된 상태
           &.click {
             background-color: #daecf8;
           }
           &.click p {
-            background-color: #daecf8;
             font-weight: bold;
             font-size: 28px;
           }
 
+          //이미지 영역
           .img {
             position: absolute;
             right: 0;
@@ -184,6 +204,7 @@ onBeforeUnmount(() => {
         }
       }
     }
+    //모바일용 안내 텍스트
     .clickTxt{
       font-size: 14px;
       color: $font-color;
@@ -193,6 +214,7 @@ onBeforeUnmount(() => {
   }
 }
 
+//태블릿용 스타일
 @media screen and (max-width: 768px) {
   .process-wrap {
     padding-bottom: $tab-spacing;
@@ -221,7 +243,8 @@ onBeforeUnmount(() => {
     }
   }
 }
-@media screen and (max-width: 390px) {
+// 모바일용 텍스트
+@media screen and (max-width: 450px) {
   .process-wrap {
     padding-bottom: $mo-spacing;
     .inner {
@@ -270,6 +293,7 @@ onBeforeUnmount(() => {
     }
   }
 
+  //아코디언 애니메이션
   .accordion-enter-active,
   .accordion-leave-active {
     transition: all 0.3s ease;
