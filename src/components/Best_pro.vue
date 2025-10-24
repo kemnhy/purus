@@ -59,15 +59,15 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
-import { onMounted, ref } from "vue";
+import { onMounted, ref,nextTick } from "vue";
 
 const mySwiper = ref(null)
-onMounted(() => {
-  // 3초 후 다음 슬라이드로 넘기기
+onMounted(async () => {
+  await nextTick(); // DOM 렌더링이 끝날 때까지 대기
   setTimeout(() => {
-    if (mySwiper.value) {
+    if (mySwiper.value?.swiper) {
       mySwiper.value.swiper.slideNext();
-    }
+    } 
   }, 3000);
 });
 
@@ -110,6 +110,9 @@ const items = [
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    .pro-swiper{
+      padding: 20px 0;
+    }
   }
 
   .title-box {
@@ -177,7 +180,7 @@ const items = [
     .pro-img-box {
       width: 200px;
       border-radius: 12px;
-      overflow: hidden;
+      // overflow: hidden;
       margin-bottom: 18px;
 
       .pro-img {
@@ -315,19 +318,19 @@ const items = [
         gap: 10px;
 
         img {
-          width: 120px;
+          width: 120px !important;
         }
 
         h2 {
-          font-size: 22px;
+          font-size: 20px !important;
           font-weight: bold;
         }
       }
-
       .desc {
-        font-size: 16px;
-        margin-top: 6px;
+        font-size: 14px !important;
+        margin-top: 10px;
       }
+
     }
 
     .mobile-swiper {

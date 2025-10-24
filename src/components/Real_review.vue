@@ -8,13 +8,18 @@
 
       <!-- 일반 레이아웃 (768px 이상) -->
       <div class="review-list" v-if="!isMobile">
-        <div class="review-item" v-for="(review, index) in reviews" :key="index" :class="{ reverse: index % 2 === 1 }">
+        <div
+          class="review-item"
+          v-for="(review, index) in reviews"
+          :key="index"
+          :class="{ reverse: index % 2 === 1 }">
           <div class="img-box">
             <img :src="review.image" alt="리뷰 이미지" />
           </div>
           <div class="text-box">
             <div class="rating">
-              ★★★★★<span>{{ review.star }}</span>
+              ★★★★★
+              <span>{{ review.star }}</span>
             </div>
             <p class="desc">“{{ review.text }}”</p>
             <p class="writer">- {{ review.writer }}</p>
@@ -25,12 +30,18 @@
       <!-- 390px 이하에서 Swiper 작동 -->
       <div class="review-swiper" v-else>
         <Swiper
-          :modules="[Autoplay, Pagination]"
-          :autoplay="{ delay: 1500, disableOnInteraction: false }"
-          :pagination="{ clickable: true }"
+          :modules="[Autoplay]"
+          direction="vertical"
+          :slides-per-view="3"
+          :space-between="10"
           :loop="true"
-          class="reviewSwiper"
-        >
+          :allowTouchMove="false"
+          :autoplay="{
+            delay: 0,
+            disableOnInteraction: false,
+          }"
+          :speed="1500"
+          class="reviewSwiper">
           <SwiperSlide v-for="(review, index) in reviews" :key="index">
             <div class="review-item">
               <div class="img-box">
@@ -236,35 +247,46 @@ onBeforeUnmount(() => {
   }
 
   .real-review {
-    padding: 30px 0;
+    padding: 30px 0 0;
     .review-swiper {
       // width: 100% !important;
       max-width: 280px;
       margin: auto;
-      gap: 30px;
-      .reviewSwiper {
-        padding-bottom: 40px;
-      }
-      .review-item {
-        height: 400px;
 
-        .text-box {
-          padding: 20px;
-          .desc {
-            font-size: 14px;
-          }
-          .writer {
-            font-size: 12px;
+      .reviewSwiper {
+        width: 100%;
+        height: 400px; /* 세로 길이 - 한 번에 3개가 보일 만큼 */
+        overflow: hidden;
+
+        .review-item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          text-align: center;
+          border-radius: 15px;
+
+          .text-box {
+            padding: 20px 10px;
+            height: 120px;
+            .desc {
+              font-size: 12px;
+              margin-bottom: 5px;
+            }
+            .writer {
+              font-size: 12px;
+            }
           }
         }
       }
 
       .img-box {
-        height: 200px !important;
+        height: 120px !important;
         width: 100%;
         img {
           width: 100%;
-          height: 200px;
+          height: 100%;
+          object-fit: cover;
+          // border-radius: 50%;
         }
       }
     }
