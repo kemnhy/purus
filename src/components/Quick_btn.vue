@@ -1,11 +1,15 @@
 <template>
+  <!-- quick wrap -->
   <ul class="quickMenu">
+    <!-- 견적확인 버튼 -->
     <li>
       <button class="blue estimate" @click="goEstimate">견적<br />확인</button>
     </li>
+    <!-- 고객후기 버튼 -->
     <li>
       <button class="blue" @click="goReview">고객<br />후기</button>
     </li>
+    <!-- 고탑 버튼(스크롤 시 노출) -->
     <li>
       <button class="stroke" v-if="show" @click="goTop">
         <img src="/images/goTop.png" alt="goTop" />
@@ -17,22 +21,31 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+
 // router
 const router = useRouter();
+
+// 견적확인 페이지 이동
 const goEstimate = () => {
   router.push("/estimate");
 };
+
+// 리뷰 페이지 이동
 const goReview = () => {
   router.push("/review");
 };
-// goTop
+
+// goTop 버튼 활성화
 const show = ref(false);
 const handleScroll = () => {
   show.value = window.scrollY > 300;
 };
+
+// 마운트시 이벤트 등록
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
 });
+// 탑으로 이동함수
 const goTop = () => {
   window.scrollTo({
     top: 0,
@@ -81,6 +94,7 @@ const goTop = () => {
         font-weight: bold;
       }
     }
+    // 탑버튼 (테두리형)
     .stroke {
       background-color: transparent;
       border: 2.5px solid $point-color;
@@ -89,6 +103,7 @@ const goTop = () => {
         width: 35%;
       }
     }
+    // 견적버튼 애니메이션
     .estimate {
       animation: floatY 2.5s ease-in-out infinite;
     }
@@ -105,6 +120,7 @@ const goTop = () => {
     transform: translate3d(0, 0, 0);
   }
 }
+
 // responsive
 @media screen and (max-width:1300px) {
   .quickMenu {
