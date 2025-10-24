@@ -16,88 +16,104 @@
         </div>
         <!-- 게이지 -->
         <div class="esti_gauge">
-          <span></span>
+          <span :style="{ width: gaugeWidth }"></span>
         </div>
-        <!-- 주소 입력 -->
-        <div class="addr">
-          <p>
-            서비스 받으실 주소를 입력해주세요.
-            <span>(필수)</span>
-          </p>
-          <div class="form-group">
-            <div class="input-with-button">
+        <div class="data_w">
+          <!-- 주소 입력 -->
+          <div class="addr">
+            <p>
+              서비스 받으실 주소를 입력해주세요.
+              <span>(필수)</span>
+            </p>
+            <div class="form-group">
+              <div class="input-with-button">
+                <input
+                  type="text"
+                  id="address"
+                  v-model="address"
+                  placeholder="지번, 도로명, 건물명으로 검색"
+                  required
+                  @click="handleAddressSearch" />
+              </div>
+            </div>
+            <div class="form-group">
               <input
                 type="text"
-                id="address"
-                v-model="address"
-                placeholder="지번, 도로명, 건물명으로 검색"
-                required
-                @click="handleAddressSearch"
-              />
+                id="detailAddress"
+                v-model="detailAddress"
+                placeholder="상세주소를 입력하세요"
+                required />
             </div>
           </div>
-          <div class="form-group">
-            <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소를 입력하세요" required />
+          <div class="service_date">
+            <p>
+              희망 서비스 날짜를 선택해주세요.
+              <span>(필수)</span>
+            </p>
           </div>
-        </div>
-        <div class="service_date">
-          <p>
-            희망 서비스 날짜를 선택해주세요.
-            <span>(필수)</span>
-          </p>
-        </div>
-        <!-- 달력 -->
-        <div class="calendar-header">
-          <i class="fa-solid fa-square-caret-left" @click="prevMonth"></i>
-          <span>{{ currentYear }}년 {{ currentMonth + 1 }}월</span>
-          <i class="fa-solid fa-square-caret-right" @click="nextMonth"></i>
-        </div>
-        <div class="calendar">
-          <!-- 달력 헤더 -->
-          <div class="calendar_wrap">
-            <!-- 요일 -->
-            <div class="calendar-weekdays">
-              <span v-for="day in weekDays" :key="day" :class="{ sun: day === '일', sat: day === '토' }">
-                {{ day }}
-              </span>
-            </div>
+          <!-- 달력 -->
+          <div class="calendar-header">
+            <i class="fa-solid fa-square-caret-left" @click="prevMonth"></i>
+            <span>{{ currentYear }}년 {{ currentMonth + 1 }}월</span>
+            <i class="fa-solid fa-square-caret-right" @click="nextMonth"></i>
+          </div>
+          <div class="calendar">
+            <!-- 달력 헤더 -->
+            <div class="calendar_wrap">
+              <!-- 요일 -->
+              <div class="calendar-weekdays">
+                <span
+                  v-for="day in weekDays"
+                  :key="day"
+                  :class="{ sun: day === '일', sat: day === '토' }">
+                  {{ day }}
+                </span>
+              </div>
 
-            <!-- 날짜 -->
-            <div class="calendar-days">
-              <span v-for="blank in blanks" :key="'b' + blank"></span>
+              <!-- 날짜 -->
+              <div class="calendar-days">
+                <span v-for="blank in blanks" :key="'b' + blank"></span>
 
-              <div
-                v-for="date in daysInMonth"
-                :key="date"
-                class="calendar-day"
-                :class="{
-                  today: isToday(date),
-                  sun: isSunday(date),
-                  sat: isSaturday(date),
-                  selected: selectedDate === date,
-                  closed: isPastDate(date),
-                }"
-                @click="selectDate(date)"
-              >
-                <p class="date">{{ date }}</p>
-                <div class="day-status">
-                  <span class="status">
-                    {{ isPastDate(date) ? "마감" : "" }}
-                  </span>
+                <div
+                  v-for="date in daysInMonth"
+                  :key="date"
+                  class="calendar-day"
+                  :class="{
+                    today: isToday(date),
+                    sun: isSunday(date),
+                    sat: isSaturday(date),
+                    selected: selectedDate === date,
+                    closed: isPastDate(date),
+                  }"
+                  @click="selectDate(date)">
+                  <p class="date">{{ date }}</p>
+                  <div class="day-status">
+                    <span class="status">
+                      {{ isPastDate(date) ? "마감" : "" }}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <!-- 오전/오후 버튼 -->
+          <div class="calendar-period">
+            <button @click="selectPeriod('오전')" :class="{ active: selectedPeriod === '오전' }">
+              오전
+            </button>
+            <button @click="selectPeriod('오후')" :class="{ active: selectedPeriod === '오후' }">
+              오후
+            </button>
+          </div>
         </div>
-        <!-- 오전/오후 버튼 -->
-        <div class="calendar-period" v-if="selectedDate">
-          <button @click="selectPeriod('오전')" :class="{ active: selectedPeriod === '오전' }">오전</button>
-          <button @click="selectPeriod('오후')" :class="{ active: selectedPeriod === '오후' }">오후</button>
-        </div>
-        <!-- 다음 버튼 -->
-        <div v-if="selectDay !== false" class="infoCheck">
-          <button class="btn" @click="openCheckModal">예약 정보 확인하기</button>
-        </div>
+      </div>
+    </div>
+    <!-- 다음 버튼 -->
+    <div class="fixed_btn">
+      <div class="esti_inner">
+        <button :class="{ active: selectedPeriod }" class="btn" @click="openCheckModal">
+          예약 정보 확인하기
+        </button>
       </div>
     </div>
   </div>
@@ -256,7 +272,10 @@ const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 
 // 이번 달 날짜
 const daysInMonth = computed(() => {
-  return Array.from({ length: new Date(currentYear.value, currentMonth.value + 1, 0).getDate() }, (_, i) => i + 1);
+  return Array.from(
+    { length: new Date(currentYear.value, currentMonth.value + 1, 0).getDate() },
+    (_, i) => i + 1
+  );
 });
 
 // 1일 시작 공백
@@ -321,7 +340,11 @@ const selectedDayName = computed(() => {
 
 // 오늘 강조
 const isToday = (date) => {
-  return date === today.getDate() && currentMonth.value === today.getMonth() && currentYear.value === today.getFullYear();
+  return (
+    date === today.getDate() &&
+    currentMonth.value === today.getMonth() &&
+    currentYear.value === today.getFullYear()
+  );
 };
 
 // ✅ 완성된 문장 계산 (년월일 + 요일 + 오전/오후)
@@ -334,6 +357,13 @@ const formattedSelectedDate = computed(() => {
   const weekday = ["일", "월", "화", "수", "목", "금", "토"][d.getDay()];
   const period = selectedPeriod.value ? ` ${selectedPeriod.value}` : "";
   return `${year}년 ${month}월 ${day}일 (${weekday}요일)${period}`;
+});
+
+// 게이지 계산 (단계별로 3단계)
+const gaugeWidth = computed(() => {
+  if (selectedPeriod.value !== null) return "95%"; // 3단계
+  if (detailAddress.value !== "") return "66%"; // 2단계
+  return "33%"; // 1단계 (브랜드 선택 시작)
 });
 
 // 다음버튼 나오기
@@ -423,8 +453,23 @@ const goToHome = () => {
   width: 100%;
   height: 15px;
   border-radius: 10px;
-  background-color: $point-color;
+  background-color: #ebebeb;
   overflow: hidden;
+
+  span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: $point-color;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+  }
+}
+.data_w {
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  padding-bottom: 20px;
 }
 .addr,
 .service_date {
@@ -549,11 +594,26 @@ const goToHome = () => {
     }
   }
 }
-.infoCheck {
-  margin-top: 60px;
-  .btn {
-    width: 100%;
-    font-weight: 600;
+// 다음 버튼
+.fixed_btn {
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding-top: 30px;
+  .esti_inner {
+    margin-bottom: 30px;
+    .btn {
+      width: 100%;
+      font-weight: 600;
+      text-align: center;
+      background-color: $grey-color;
+      color: $border-color;
+      &.active {
+        background-color: $point-color;
+        color: #fff;
+      }
+    }
   }
 }
 .modal_bg {
